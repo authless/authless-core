@@ -8,8 +8,8 @@
     "test:local": "CHROME_USER_DATA_DIR=/tmp mocha --exit --no-timeouts",
     "test:coverage": "nyc --reporter=lcov npm test"
   },
-  "keywords": [],
   "author": "",
+  "keywords": [],
   "license": "ISC",
   "dependencies": {
     "check-types": "^11.1.2",
