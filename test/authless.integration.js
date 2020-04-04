@@ -95,7 +95,7 @@ describe('Authless', () => {
     }).timeout(15000);
 
     context('acount browser profile', () => {
-      it('receives the usual account Browser', async () => {
+      xit('receives the usual account Browser', async () => {
         const authless = new Authless(testRouter);
         const account = authless.findAccountByUrl('https://example.com');
 
