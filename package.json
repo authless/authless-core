@@ -4,7 +4,7 @@
   "description": "A browserless authentication and service management framework",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo mocha version: $(mocha --version) \\n && CHROME_USER_DATA_DIR=/tmp mocha --exit",
+    "test": "CHROME_USER_DATA_DIR=/tmp mocha --exit --no-timeouts",
     "test:coverage": "nyc --reporter=lcov npm test -- --no-timeouts"
   },
   "keywords": [],
