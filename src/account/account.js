@@ -3,7 +3,7 @@ const pluginStealth = require("puppeteer-extra-plugin-stealth");
 const pluginProxy = require('puppeteer-extra-plugin-proxy');
 const pluginAWS = require('puppeteer-extra-plugin-aws');
 const cloneDeep = require('lodash.clonedeep');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const path = require('path');
 const debug = require('debug')('authless:account');
 
