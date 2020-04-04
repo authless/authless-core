@@ -22,7 +22,7 @@
     "puppeteer-extra-plugin-proxy": "^1.0.2",
     "puppeteer-extra-plugin-stealth": "^2.2.2",
     "puppeteer-extra-plugin-user-data-dir": "^2.1.2",
-    "uuid": "^3.3.3",
+    "uuid": "^7.0.3",
     "verror": "^1.10.0"
   },
   "devDependencies": {
