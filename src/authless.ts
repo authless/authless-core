@@ -76,8 +76,8 @@ export class Authless {
       throw new Error(`Unable to find a registered service for: ${serviceName}`)
     }
     if (typeof potentialService === 'object') {
-      const service = Array.from(potentialService)
-      const account = service.filter(account => account.username === accountUsername).pop()
+      const service: Account[] = Array.from(potentialService)
+      const account = service.filter(account => account.config.username === accountUsername).pop()
       if (account) return account
     }
     throw new Error(`Unable to find a registered account for id: ${id}`)
