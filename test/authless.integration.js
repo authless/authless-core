@@ -7,7 +7,7 @@ const {
   Route,
   ServiceDefault,
   Account,
-} = require('../src');
+} = require('../dist');
 
 const configObj = {
   username: 'test@example.com',
@@ -17,6 +17,7 @@ const configObj = {
 describe('Authless', () => {
   let testService;
   let testRouter;
+
   beforeEach(() => {
     testService = new ServiceDefault();
     testService.add(new Account(configObj));
