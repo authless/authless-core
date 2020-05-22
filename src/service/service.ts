@@ -2,6 +2,9 @@ import { Route, RouteConstructor } from '../router'
 import { Account } from '../account'
 import { SpawnSet } from './spawnSet'
 
+/**
+ * @alpha
+ */
 export class Service extends SpawnSet<Account> {
   serviceDomain!: string
   name!: string

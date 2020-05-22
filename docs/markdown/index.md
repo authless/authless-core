@@ -4,3 +4,9 @@
 
 ## API Reference
 
+## Packages
+
+|  Package | Description |
+|  --- | --- |
+|  [@authless/core](./core.md) | A HTTP data harvesting framework for jobs that require authentication |
+

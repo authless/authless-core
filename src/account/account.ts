@@ -10,6 +10,10 @@ import { v4 as uuid } from 'uuid'
 
 const debug = debugLib('authless:account')
 
+/**
+ *
+ * @alpha
+ */
 export interface AccountConfig {
   username: string
   password: string
@@ -18,6 +22,10 @@ export interface AccountConfig {
   }
 }
 
+/**
+ *
+ * @alpha
+ */
 export class Account {
   debug: any
   config: AccountConfig

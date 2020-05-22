@@ -3,10 +3,16 @@ import { Route } from './route'
 import { Service } from '../service'
 import VError from 'verror'
 
+/**
+ * @alpha
+ */
 export interface Router extends FMW.Instance<FMW.HTTPVersion.V1> {
   serviceMap: Map<string, Service>
 }
 
+/**
+ * @alpha
+ */
 export class Router extends FMW.prototype.constructor {
   constructor (routes) {
     super()

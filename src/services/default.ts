@@ -1,5 +1,8 @@
 import { Service } from '../service'
 
+/**
+ * @alpha
+ */
 export class ServiceDefault extends Service {
   constructor () {
     super()

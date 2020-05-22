@@ -1,4 +1,12 @@
-export class SpawnSet<T> extends Set {
+/**
+ * Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set | Set}  and adds a `spawn` method to rotate through the elements of its Set.
+ *
+ * @remarks
+ * Used in this library to rotate through multiple Accounts.
+ *
+ * @internal
+ */
+export class SpawnSet<T> extends Set<T> {
   _spawnCounter: number
 
   constructor () {
@@ -9,7 +17,7 @@ export class SpawnSet<T> extends Set {
   /**
    * Rotates through the Set and returns its elements
    *
-   * @returns - an item of the Set of type T
+   * @returns an element from its set
    */
   spawn (): T {
     const elements = Array.from(this)

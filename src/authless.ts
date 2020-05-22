@@ -3,6 +3,9 @@ import { Router } from './router'
 import { Service } from './service'
 import http from 'http'
 
+/**
+ * @alpha
+ */
 export class Authless {
   router: Router
 
