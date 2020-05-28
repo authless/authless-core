@@ -17,4 +17,3 @@ node_modules
 token.json
 config/dev.toml
 coverage
-packages/**/test/**/data

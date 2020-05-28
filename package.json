@@ -2,11 +2,18 @@
   "name": "@authless/core",
   "version": "1.0.2",
   "description": "A browserless authentication and service management framework",
-  "main": "src/index.js",
+  "main": "dist/index",
+  "types": "dist/index",
   "scripts": {
-    "test": "mocha --exit --no-timeouts",
-    "test:local": "CHROME_USER_DATA_DIR=/tmp mocha --exit --no-timeouts",
-    "test:coverage": "nyc --reporter=lcov npm test"
+    "test": "CHROME_USER_DATA_DIR=/tmp jest --c jest.config.json --maxWorkers=1",
+    "test:watch": "npm run test -- --watch",
+    "test:coverage": "npm test -- --collectCoverage",
+    "build": "tsc",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "semantic-release": "GITHUB_TOKEN=test semantic-release --no-ci --dry-run",
+    "semantic-release:ci": "npm install && semantic-release",
+    "code:analyze": "docker run --interactive --tty --rm --env CODECLIMATE_CODE=\"$PWD\" --volume \"$PWD\":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze",
+    "docs": "typedoc --out docs src"
   },
   "author": "",
   "keywords": [],
@@ -26,8 +33,27 @@
     "verror": "^1.10.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.4",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
     "assert-throws-async": "^3.0.0",
-    "mocha": "^7.1.1",
-    "nyc": "^15.0.1"
+    "eslint": "^6.8.0",
+    "eslint-config-standard-with-typescript": "^16.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsdoc": "^24.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-tsdoc": "^0.2.5",
+    "jest": "^25.5.3",
+    "semantic-release": "^17.0.7",
+    "ts-jest": "^25.4.0",
+    "typedoc": "^0.17.6",
+    "typescript": "^3.8.3"
   }
 }
