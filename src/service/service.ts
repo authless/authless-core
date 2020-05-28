@@ -12,6 +12,7 @@ export class Service extends SpawnSet<Account> {
     })
   }
 
+  /* eslint-disable-next-line class-methods-use-this */
   getMatchingUrls (): string[] {
     return []
   }
@@ -40,6 +41,7 @@ export class Service extends SpawnSet<Account> {
   }
 
   async hasCookies (page): Promise<boolean> {
+    /* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */
     const cookies = await page.cookies(this.serviceDomain || '.')
     return cookies.length >= 1
   }
@@ -51,6 +53,7 @@ export class Service extends SpawnSet<Account> {
         .map(url => [`http:/${url}`, `https:/${url}`])
         .reduce((a, b) => a.concat(b), [])
     }
+    /* eslint-disable-next-line @typescript-eslint/strict-boolean-expressions */
     const cookies = await page.cookies(...getCookieUrls() || '.')
     return cookies.length >= 1
   }

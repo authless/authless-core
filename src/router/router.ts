@@ -13,7 +13,11 @@ export class Router extends FMW.prototype.constructor {
     if (!(routes instanceof Array)) throw new Error('`routes` must be an Array')
     if (routes.length === 0) throw new Error('`routes` must not be empty')
     if (!routes.every(element => element instanceof Route)) {
-      const e0 = new Error('expected route elements to be Route instances, but found: ' + routes.map(e => { if (e) return e.constructor.name }))
+      const routeTypes: string = routes.reduce((routes, route) => {
+        if (typeof route === 'object') routes.push(route.constructor.name)
+        return routes
+      }, []).join(', ')
+      const e0 = new Error(`expected route elements to be Route instances, but found: ${routeTypes}`)
       const invalidRoutesE = new VError(e0, 'invalid `routes` param')
       throw new VError(invalidRoutesE, 'unable to construct new Router')
     }

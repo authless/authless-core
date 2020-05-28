@@ -6,7 +6,8 @@ export class ServiceDefault extends Service {
     this.name = 'default:default'
   }
 
-  getMatchingUrls () {
+  /* eslint-disable-next-line class-methods-use-this */
+  getMatchingUrls (): string[] {
     return ['/*']
   }
 }

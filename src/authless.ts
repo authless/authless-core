@@ -15,8 +15,8 @@ export class Authless {
   /**
    * Use the router to find the service associated with the url
    *
-   * @param {String} url - the url for which the route should be found
-   * @return {ServiceInterface|Error} - the service associated with the route
+   * @param   url - the url for which the route should be found
+   * @returns the service associated with the route
    */
   $getServiceFromUrl (url: string): Service {
     const convertToRouterURL = (url): string => {
@@ -29,7 +29,9 @@ export class Authless {
       throw new Error(`Did not find route for ${url}`)
     }
     const service = route.handler(
+      /* eslint-disable-next-line @typescript-eslint/consistent-type-assertions */
       {} as http.IncomingMessage,
+      /* eslint-disable-next-line @typescript-eslint/consistent-type-assertions */
       {} as http.ServerResponse,
       {},
       {}
@@ -54,10 +56,10 @@ export class Authless {
 
   /**
    * Return account that can handle the requested url
-   * @param url - the target url for which a matching account should be found
-   * @returns {AccountInterface|Error} - the account that can handle the url
+   * @param   url - the target url for which a matching account should be found
+   * @returns the account that can handle the url
    */
-  findAccountByUrl (url): Account {
+  findAccountByUrl (url: string): Account {
     const service = this.$getServiceFromUrl(url)
     return service.spawnAccount()
   }
@@ -65,12 +67,12 @@ export class Authless {
   /**
    * Return account by its identifier, if it exists
    * ID: serviceName:accountUsername
-   * @param {String} id - the identifier for which a matching account should be found
-   * @return {AccountInterface|Error} - the account that can handle the url
+   * @param   id - the identifier for which a matching account should be found
+   * @returns the account that can handle the url
    */
-  findAccountById (id): Account {
+  findAccountById (id: string): Account {
     const accountUsername = id.split(':').pop()
-    const serviceName = id.split(':').slice(0, -1).join(':')
+    const serviceName: string = id.split(':').slice(0, -1).join(':')
     const potentialService = this.$getService(serviceName)
     if (typeof potentialService === 'undefined') {
       throw new Error(`Unable to find a registered service for: ${serviceName}`)
@@ -78,7 +80,7 @@ export class Authless {
     if (typeof potentialService === 'object') {
       const service: Account[] = Array.from(potentialService)
       const account = service.filter(account => account.config.username === accountUsername).pop()
-      if (account) return account
+      if (typeof account !== 'undefined') return account
     }
     throw new Error(`Unable to find a registered account for id: ${id}`)
   }
@@ -97,7 +99,7 @@ export class Authless {
   async useBrowserWithAccount (accountObject: {account: Account, virginProfile: boolean}, asyncFn): Promise<any> {
     const getAccount = (conf): [Account, boolean] => {
       if (conf instanceof Account) return [conf, false]
-      if (check.object(conf)) {
+      if (check.object(conf) === true) {
         if (!(conf.account instanceof Account)) {
           throw new Error('`accountObject.account` must be an Account instance`')
         }
@@ -108,16 +110,16 @@ export class Authless {
 
     const [account, virginProfile] = getAccount(accountObject)
     const browser = await account.launchBrowser(virginProfile)
-    return asyncFn(browser).
-      then(result => {
-      browser.close()
-      return result
-    }).
-      catch(err => {
-      try {
+    return asyncFn(browser)
+      .then(result => {
         browser.close()
-      } catch (_) { }
-      throw err
-    })
+        return result
+      })
+      .catch(err => {
+        try {
+          browser.close()
+        } catch (_) { }
+        throw err
+      })
   }
 }

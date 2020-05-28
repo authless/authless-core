@@ -9,7 +9,7 @@ export class SpawnSet<T> extends Set {
   /**
    * Rotates through the Set and returns its elements
    *
-   * @return {Object}
+   * @returns - an item of the Set of type T
    */
   spawn (): T {
     const elements = Array.from(this)

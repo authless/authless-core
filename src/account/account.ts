@@ -35,7 +35,8 @@ export class Account {
 
   async isAuthenticated (page): Promise<boolean> {
     const isAuthenticated = await this.service.isAuthenticated(page)
-    this.debug('isAuthenticated? %s', isAuthenticated.toString().toUpperCase())
+    /* eslint-disable-next-line @typescript-eslint/no-base-to-string */
+    this.debug(`isAuthenticated? ${isAuthenticated.toString().toUpperCase()}`)
     return isAuthenticated
   }
 
@@ -45,49 +46,54 @@ export class Account {
     // register stealth
     puppeteer.use(pluginStealth())
     // register proxy optionally
-    if (this.config.proxy) {
+    if (typeof this.config.proxy === 'object') {
       puppeteer.use(pluginProxy(this.config.proxy))
     }
     // register proxy AWS
     puppeteer.use(pluginAWS())
 
     let profileDirName = `${this.service.name}-${this.config.username}`
-    let userDataDir
     if (virginProfile) profileDirName += `-${uuid() as string}`
-    if (process.env.CHROME_USER_DATA_DIR) {
-      userDataDir = path.resolve(
+
+    if (typeof process.env.CHROME_USER_DATA_DIR !== 'undefined') {
+      const userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, profileDirName))
+      this.debug(`launching browser with userDataDir: ${userDataDir}`)
+      const browser = await puppeteer.launch({userDataDir})
+      this.debug(`launched browser: ${await browser.version() as string}`)
+      return browser
     }
 
-    this.debug(`launching browser with userDataDir: ${userDataDir as string}`)
-    const browser = await puppeteer.launch({userDataDir})
+    this.debug('launching browser with userDataDir: [DEFAULT]')
+    const browser = await puppeteer.launch({})
     this.debug(`launched browser: ${await browser.version() as string}`)
     return browser
   }
 
-  getRateLimitId () {
+  getRateLimitId (): string {
     return `${this.service.name}:${this.config.username}`
   }
 
-  async getRateLimitStatus () {
+  async getRateLimitStatus (): Promise<any> {
     let stats = {'remaining': 1000 * 1000, 'reset': null, 'total': 1000 * 1000}
-    if (this.rateLimiter) {
+    if (typeof this.rateLimiter !== 'undefined') {
       stats = await this.rateLimiter.get({id: this.getRateLimitId(), decrease: false})
     }
     return stats
   }
 
-  async isThrottled () {
-    if (!this.rateLimiter) return false
+  async isThrottled (): Promise<boolean> {
+    if (typeof this.rateLimiter === 'undefined') return false
     const stats = await this.getRateLimitStatus()
+    /* eslint-disable-next-line no-ternary */
     const remaining = (typeof stats.remaining === 'number')
       ? stats.remaining
       : 0
     return remaining === 0
   }
 
-  async decreaseRateLimitBy1 () {
-    if (this.rateLimiter) {
+  async decreaseRateLimitBy1 (): Promise<any> {
+    if (typeof this.rateLimiter !== 'undefined') {
       await this.rateLimiter.get({id: this.getRateLimitId()})
     }
   }
