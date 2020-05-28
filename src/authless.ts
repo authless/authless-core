@@ -1,7 +1,6 @@
 import { Account } from './account'
 import { Router } from './router'
 import { Service } from './service'
-import check from 'check-types'
 import http from 'http'
 
 export class Authless {
@@ -96,20 +95,17 @@ export class Authless {
    * ```
    */
   /* eslint-disable-next-line class-methods-use-this */
-  async useBrowserWithAccount (accountObject: {account: Account, virginProfile: boolean}, asyncFn): Promise<any> {
-    const getAccount = (conf): [Account, boolean] => {
-      if (conf instanceof Account) return [conf, false]
-      if (check.object(conf) === true) {
-        if (!(conf.account instanceof Account)) {
-          throw new Error('`accountObject.account` must be an Account instance`')
-        }
-        return [conf.account, accountObject.virginProfile || false]
-      }
-      throw new Error('`accountObject` must be an Account instance or object')
+  async useBrowserWithAccount (accountObject: Account | {account: Account, virginProfile?: boolean}, asyncFn): Promise<any> {
+    let browser: any = {}
+    if (typeof (accountObject as any).account === 'undefined') {
+      const account = accountObject as Account
+      browser = await account.launchBrowser(false)
+    } else {
+      const {account, virginProfile} = accountObject as {account: Account, virginProfile?: boolean}
+      /* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, @typescript-eslint/strict-boolean-expressions */
+      browser = await account.launchBrowser(virginProfile || false)
     }
 
-    const [account, virginProfile] = getAccount(accountObject)
-    const browser = await account.launchBrowser(virginProfile)
     return asyncFn(browser)
       .then(result => {
         browser.close()

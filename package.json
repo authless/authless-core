@@ -5,8 +5,7 @@
   "main": "dist/index",
   "types": "dist/index",
   "scripts": {
-    "test:local": "npm run build && CHROME_USER_DATA_DIR=/tmp mocha --exit --no-timeouts",
-    "test": "jest --c jest.config.json --maxWorkers=1",
+    "test": "CHROME_USER_DATA_DIR=/tmp jest --c jest.config.json --maxWorkers=1",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm test -- --collectCoverage",
     "build": "tsc",
@@ -52,7 +51,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-tsdoc": "^0.2.5",
     "jest": "^25.5.3",
-    "mocha": "^7.1.2",
     "semantic-release": "^17.0.7",
     "ts-jest": "^25.4.0",
     "typedoc": "^0.17.6",

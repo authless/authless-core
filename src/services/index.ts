@@ -1,1 +1,1 @@
-export { ServiceDefault } from './default.js'
+export { ServiceDefault } from './default'

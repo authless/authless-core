@@ -13,7 +13,7 @@ const debug = debugLib('authless:account')
 export interface AccountConfig {
   username: string
   password: string
-  proxy: {
+  proxy?: {
     username: string
   }
 }
