@@ -1,13 +1,17 @@
-import { IEntity, IEntityConstructor } from './entity'
-import { IResourcePayload, IResourceResponse } from './resource'
+import {
+  IResourcePayload,
+  IResourceResponse,
+  ResourcePayload,
+  ResourceResponse
+} from './resource'
 
 /**
  * The raw response from a service including any (xhrs) requests and responses and meta information.
  *
  * @remarks
  *
- * A {@link IResponse} can be transformed into {@link IResourceResponse} or {@link IEntity} responses
- * which extract the more and the most relevant data from an {@link IResponse}.
+ * A {@link IResponse} can be transformed into a {@link IResourceResponse}
+ * which extracts the most relevant data from an {@link IResponse}.
  *
  * Service repositories should create their own response class implementing {@link IResponse}.
  *
@@ -51,11 +55,33 @@ export interface IResponse {
    * Creates a {@link IResponseResponse} from an {@link IResponse} instance.
    */
   toResources(): IResourceResponse<IResourcePayload>
+}
+
+/**
+ * see {@link IResponse}
+ *
+ * @beta
+ */
+export abstract class Response implements IResponse {
+  meta: IResponseMeta
+  page: IResponsePage
+  main: IResponseResponse
+  xhrs: IResponseResponse[]
+
+  constructor (serializedResponse: any) {
+    this.meta = serializedResponse.meta
+    this.page = serializedResponse.page
+    this.main = serializedResponse.main
+    this.xhrs = serializedResponse.xhrs
+  }
 
   /**
-   * Creates an {@link IEntity} from an {@link IResponse} instance.
+   * see {@link IResponse.toResources}. Needs to be implemented by services.
    */
-  toEntity(entity: IEntityConstructor): IEntity
+  /* eslint-disable-next-line class-methods-use-this */
+  toResources (): ResourceResponse<ResourcePayload> {
+    throw new Error('not implemented yet')
+  }
 }
 
 /**

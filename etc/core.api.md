@@ -65,18 +65,6 @@ export class Authless {
     }, asyncFn: any): Promise<any>;
 }
 
-// @beta
-export interface IEntity {
-}
-
-// @beta
-export interface IEntityConstructor {
-    // (undocumented)
-    new (...args: any[]): IEntity;
-    // (undocumented)
-    fromResources: (resources: IResourcePayload[]) => IEntity;
-}
-
 // @beta (undocumented)
 export interface IResourcePayload {
     sha1(): string;
@@ -94,7 +82,6 @@ export interface IResponse {
     main: IResponseResponse;
     meta: IResponseMeta;
     page: IResponsePage;
-    toEntity(entity: IEntityConstructor): IEntity;
     toResources(): IResourceResponse<IResourcePayload>;
     xhrs: IResponseResponse[];
 }
@@ -166,10 +153,31 @@ export const ResourceConstructor: {
     toHashResourcePair<T extends IResourcePayload>(resources: T[]): [string, T][];
 };
 
+// @beta (undocumented)
+export abstract class ResourcePayload implements IResourcePayload {
+    sha1(): string;
+}
+
 // @beta
 export abstract class ResourceResponse<T extends IResourcePayload> extends Map<string, T> {
     toArray(): T[];
 }
+
+// @beta
+abstract class Response_2 implements IResponse {
+    constructor(serializedResponse: any);
+    // (undocumented)
+    main: IResponseResponse;
+    // (undocumented)
+    meta: IResponseMeta;
+    // (undocumented)
+    page: IResponsePage;
+    toResources(): ResourceResponse<ResourcePayload>;
+    // (undocumented)
+    xhrs: IResponseResponse[];
+}
+
+export { Response_2 as Response }
 
 // @alpha (undocumented)
 export class Route {

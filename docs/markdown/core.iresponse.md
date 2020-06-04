@@ -17,7 +17,7 @@ export interface IResponse
 
 ## Remarks
 
-A [IResponse](./core.iresponse.md) can be transformed into [IResourceResponse](./core.iresourceresponse.md) or [IEntity](./core.ientity.md) responses which extract the more and the most relevant data from an [IResponse](./core.iresponse.md)<!-- -->.
+A [IResponse](./core.iresponse.md) can be transformed into a [IResourceResponse](./core.iresourceresponse.md) which extracts the most relevant data from an [IResponse](./core.iresponse.md)<!-- -->.
 
 Service repositories should create their own response class implementing [IResponse](./core.iresponse.md)<!-- -->.
 
@@ -35,6 +35,5 @@ Service repositories should create their own response class implementing [IRespo
 
 |  Method | Description |
 |  --- | --- |
-|  [toEntity(entity)](./core.iresponse.toentity.md) | <b><i>(BETA)</i></b> Creates an [IEntity](./core.ientity.md) from an [IResponse](./core.iresponse.md) instance. |
 |  [toResources()](./core.iresponse.toresources.md) | <b><i>(BETA)</i></b> Creates a [IResponseResponse](./core.iresponseresponse.md) from an [IResponse](./core.iresponse.md) instance. |
 

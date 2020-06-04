@@ -17,119 +17,6 @@
       "members": [
         {
           "kind": "Interface",
-          "canonicalReference": "@authless/core!IEntity:interface",
-          "docComment": "/**\n * A entity usually extracted from a {@link IResponse} via {@link IResponse.toEntity}.\n *\n * @beta\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "export interface IEntity "
-            }
-          ],
-          "releaseTag": "Beta",
-          "name": "IEntity",
-          "members": [],
-          "extendsTokenRanges": []
-        },
-        {
-          "kind": "Interface",
-          "canonicalReference": "@authless/core!IEntityConstructor:interface",
-          "docComment": "/**\n * A EntityConstructor used to build {@link IEntity} from {@link IResourcePayload | Resources}.\n *\n * @example\n * ```ts\n * const response: IResponse = { ... }\n * const resourceResponse = response.toResources()\n * const entity = EntityConstructor.fromResources(resourceResponse.toArray())\n * ```\n *\n * @beta\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "export interface IEntityConstructor "
-            }
-          ],
-          "releaseTag": "Beta",
-          "name": "IEntityConstructor",
-          "members": [
-            {
-              "kind": "ConstructSignature",
-              "canonicalReference": "@authless/core!IEntityConstructor:new(1)",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "new (...args: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any[]"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IEntity",
-                  "canonicalReference": "@authless/core!IEntity:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "returnTypeTokenRange": {
-                "startIndex": 3,
-                "endIndex": 4
-              },
-              "releaseTag": "Beta",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "args",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!IEntityConstructor#fromResources:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "fromResources: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "(resources: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IResourcePayload",
-                  "canonicalReference": "@authless/core!IResourcePayload:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "[]) => "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IEntity",
-                  "canonicalReference": "@authless/core!IEntity:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Beta",
-              "name": "fromResources",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 5
-              }
-            }
-          ],
-          "extendsTokenRanges": []
-        },
-        {
-          "kind": "Interface",
           "canonicalReference": "@authless/core!IResourcePayload:interface",
           "docComment": "/**\n * @beta\n */\n",
           "excerptTokens": [
@@ -239,7 +126,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@authless/core!IResponse:interface",
-          "docComment": "/**\n * The raw response from a service including any (xhrs) requests and responses and meta information.\n *\n * @remarks\n *\n * A {@link IResponse} can be transformed into {@link IResourceResponse} or {@link IEntity} responses which extract the more and the most relevant data from an {@link IResponse}.\n *\n * Service repositories should create their own response class implementing {@link IResponse}.\n *\n * @beta\n */\n",
+          "docComment": "/**\n * The raw response from a service including any (xhrs) requests and responses and meta information.\n *\n * @remarks\n *\n * A {@link IResponse} can be transformed into a {@link IResourceResponse} which extracts the most relevant data from an {@link IResponse}.\n *\n * Service repositories should create their own response class implementing {@link IResponse}.\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -351,51 +238,6 @@
                 "startIndex": 1,
                 "endIndex": 2
               }
-            },
-            {
-              "kind": "MethodSignature",
-              "canonicalReference": "@authless/core!IResponse#toEntity:member(1)",
-              "docComment": "/**\n * Creates an {@link IEntity} from an {@link IResponse} instance.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "toEntity(entity: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IEntityConstructor",
-                  "canonicalReference": "@authless/core!IEntityConstructor:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IEntity",
-                  "canonicalReference": "@authless/core!IEntity:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "returnTypeTokenRange": {
-                "startIndex": 3,
-                "endIndex": 4
-              },
-              "releaseTag": "Beta",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "entity",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ],
-              "name": "toEntity"
             },
             {
               "kind": "MethodSignature",
@@ -1148,6 +990,64 @@
         },
         {
           "kind": "Class",
+          "canonicalReference": "@authless/core!ResourcePayload:class",
+          "docComment": "/**\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare abstract class ResourcePayload implements "
+            },
+            {
+              "kind": "Reference",
+              "text": "IResourcePayload",
+              "canonicalReference": "@authless/core!IResourcePayload:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "ResourcePayload",
+          "members": [
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!ResourcePayload#sha1:member(1)",
+              "docComment": "/**\n * See {@link IResourcePayload.sha1}.\n *\n * @remarks\n *\n * Does not omit any properties of the resource\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "sha1(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "sha1"
+            }
+          ],
+          "implementsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 3
+            }
+          ]
+        },
+        {
+          "kind": "Class",
           "canonicalReference": "@authless/core!ResourceResponse:class",
           "docComment": "/**\n * Abstract implementation of {@link IResourceResponse}. Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map | Map}.\n *\n * @beta\n */\n",
           "excerptTokens": [
@@ -1224,6 +1124,220 @@
             "endIndex": 5
           },
           "implementsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!Response_2:class",
+          "docComment": "/**\n * see {@link IResponse}\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare abstract class Response implements "
+            },
+            {
+              "kind": "Reference",
+              "text": "IResponse",
+              "canonicalReference": "@authless/core!IResponse:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "Response_2",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!Response_2:constructor(1)",
+              "docComment": "/**\n * Constructs a new instance of the `Response` class\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(serializedResponse: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "serializedResponse",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Response_2#main:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "main: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IResponseResponse",
+                  "canonicalReference": "@authless/core!IResponseResponse:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "main",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Response_2#meta:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "meta: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IResponseMeta",
+                  "canonicalReference": "@authless/core!IResponseMeta:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "meta",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Response_2#page:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "page: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IResponsePage",
+                  "canonicalReference": "@authless/core!IResponsePage:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "page",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Response_2#toResources:member(1)",
+              "docComment": "/**\n * see {@link IResponse.toResources}. Needs to be implemented by services.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "toResources(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ResourceResponse",
+                  "canonicalReference": "@authless/core!ResourceResponse:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ResourcePayload",
+                  "canonicalReference": "@authless/core!ResourcePayload:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 5
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "toResources"
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Response_2#xhrs:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "xhrs: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IResponseResponse",
+                  "canonicalReference": "@authless/core!IResponseResponse:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "xhrs",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            }
+          ],
+          "implementsTokenRanges": [
+            {
+              "startIndex": 1,
+              "endIndex": 3
+            }
+          ]
         }
       ]
     }

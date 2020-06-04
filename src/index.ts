@@ -13,4 +13,18 @@ export { Service } from './service'
 export { Route, Router } from './router'
 export { Authless } from './authless'
 export { ServiceDefault } from './services'
-export * from './response'
+export {
+  IResourcePayload,
+  IResourceResponse,
+  ResourceConstructor,
+  ResourceResponse,
+  ResourcePayload
+} from './resource'
+export {
+  Response,
+  IResponse,
+  IResponseResponse,
+  IResponseRequest,
+  IResponsePage,
+  IResponseMeta
+} from './response'

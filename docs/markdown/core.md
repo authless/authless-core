@@ -14,14 +14,14 @@ Provides the core abstractions and functionality.
 
 |  Class | Description |
 |  --- | --- |
+|  [ResourcePayload](./core.resourcepayload.md) | <b><i>(BETA)</i></b> |
 |  [ResourceResponse](./core.resourceresponse.md) | <b><i>(BETA)</i></b> Abstract implementation of [IResourceResponse](./core.iresourceresponse.md)<!-- -->. Extends [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)<!-- -->. |
+|  [Response\_2](./core.response_2.md) | <b><i>(BETA)</i></b> see [IResponse](./core.iresponse.md) |
 
 ## Interfaces
 
 |  Interface | Description |
 |  --- | --- |
-|  [IEntity](./core.ientity.md) | <b><i>(BETA)</i></b> A entity usually extracted from a [IResponse](./core.iresponse.md) via [IResponse.toEntity()](./core.iresponse.toentity.md)<!-- -->. |
-|  [IEntityConstructor](./core.ientityconstructor.md) | <b><i>(BETA)</i></b> A EntityConstructor used to build [IEntity](./core.ientity.md) from [Resources](./core.iresourcepayload.md)<!-- -->. |
 |  [IResourcePayload](./core.iresourcepayload.md) | <b><i>(BETA)</i></b> |
 |  [IResourceResponse](./core.iresourceresponse.md) | <b><i>(BETA)</i></b> Holds none, one, or many [Resources](./core.iresourcepayload.md) and is usually created via [IResponse.toResources()](./core.iresponse.toresources.md)<!-- -->. |
 |  [IResponse](./core.iresponse.md) | <b><i>(BETA)</i></b> The raw response from a service including any (xhrs) requests and responses and meta information. |
