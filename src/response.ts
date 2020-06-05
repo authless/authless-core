@@ -100,21 +100,48 @@ export interface IResponseMeta {
 }
 
 /**
- * Sub-type of {@link IResponse}.
+ * Sub-type of {@link IResponsePage}.
  *
  * @privateRemarks
  *
- * - Serializable: TRUE
- * - Serialization Format: Avro
+ * @beta
+ */
+interface IViewport {
+  width: number
+  height: number
+  deviceScaleFactor: number
+  isMobile: boolean
+  hasTouch: boolean
+  isLandscape: boolean
+}
+
+/**
+ * Sub-type of {@link ICookie}.
+ *
+ * @privateRemarks
  *
  * @beta
  */
-export interface IResponsePage {
-  url: string
-  viewport?: any
-  content: string
-  cookies: any[]
-  title: string
+type ISameSiteSetting = 'Strict' | 'Lax'
+
+/**
+ * Sub-type of {@link IResponsePage}.
+ *
+ * @privateRemarks
+ *
+ * @beta
+ */
+interface ICookie {
+  name: string
+  value: string
+  domain: string
+  path: string
+  expires: number
+  size: number
+  httpOnly: boolean
+  session: boolean
+  secure: boolean
+  sameSite: ISameSiteSetting
 }
 
 /**
@@ -127,14 +154,93 @@ export interface IResponsePage {
  *
  * @beta
  */
+export interface IResponsePage {
+  url: string
+  viewport?: IViewport
+  content: string
+  cookies: ICookie[]
+  title: string
+}
+
+/**
+ * Possible HTTP-Header values.
+ *
+ * @privateRemarks
+ *
+ * @beta
+ */
+type IHeaders = Record<string, string>
+
+/**
+ * Possible HTTP-Method values.
+ *
+ * @privateRemarks
+ *
+ * @beta
+ */
+type IHttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PATCH'
+  | 'PUT'
+  | 'DELETE'
+  | 'OPTIONS'
+
+/**
+ * Possible HTTP-Request Resource-types.
+ *
+ * @privateRemarks
+ *
+ * @beta
+ */
+type IResourceType =
+| 'document'
+| 'stylesheet'
+| 'image'
+| 'media'
+| 'font'
+| 'script'
+| 'texttrack'
+| 'xhr'
+| 'fetch'
+| 'eventsource'
+| 'websocket'
+| 'manifest'
+| 'other'
+
+/**
+ * Sub-type of {@link IResponse}.
+ *
+ * @privateRemarks
+ *
+ * - Serializable: TRUE
+ * - Serialization Format: Avro
+ *
+ * @beta
+ */
 export interface IResponseRequest {
-  headers: string
+  headers: IHeaders
   isNavigationRequest: boolean
-  method: string
+  method: IHttpMethod
   postData: any
-  resourceType: string
+  resourceType: IResourceType
   url: string
   redirectChain: IResponseRequest[]
+}
+
+/**
+ * Security-details for {@link IResponseResponse}
+ *
+ * @privateRemarks
+ *
+ * @beta
+ */
+interface ISecurityDetails {
+  issuer: string
+  validTo: number
+  protocol: string
+  validFrom: number
+  subjectName: string
 }
 
 /**
@@ -149,12 +255,12 @@ export interface IResponseRequest {
  */
 export interface IResponseResponse {
   request: IResponseRequest
-  url: number
-  status: string
+  url: string
+  status: number
   statusText: string
-  headers: any
-  securityDetails: any
-  fromCache: string
-  fromServiceWorker: string
+  headers: IHeaders
+  securityDetails: ISecurityDetails
+  fromCache: boolean
+  fromServiceWorker: boolean
   text: string
 }
