@@ -50,7 +50,7 @@ export interface IResourcePayload {
    * function sha1 (object): string {
    *   const clone = { ...object }
    *   Reflect.deleteProperty(clone, 'trackingNumber')
-   *   return hash(clone, { algorithm: 'sha1' })
+   *   return super.sha1(clone, { algorithm: 'sha1' })
    * }
    *
    * // Returns true
@@ -71,8 +71,8 @@ export abstract class ResourcePayload implements IResourcePayload {
    * @remarks
    * Does not omit any properties of the resource
    */
-  sha1 (): string {
-    return hash(this, { algorithm: 'sha1' })
+  sha1 (input = this): string {
+    return hash(input, { algorithm: 'sha1' })
   }
 }
 

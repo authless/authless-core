@@ -30,7 +30,7 @@ If the resource has noisy attributes such as trackingIDs or debugging info that 
 function sha1 (object): string {
   const clone = { ...object }
   Reflect.deleteProperty(clone, 'trackingNumber')
-  return hash(clone, { algorithm: 'sha1' })
+  return super.sha1(clone, { algorithm: 'sha1' })
 }
 
 // Returns true

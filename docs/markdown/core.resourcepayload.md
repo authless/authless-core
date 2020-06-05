@@ -18,5 +18,5 @@ export declare abstract class ResourcePayload implements IResourcePayload
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [sha1()](./core.resourcepayload.sha1.md) |  | <b><i>(BETA)</i></b> See [IResourcePayload.sha1()](./core.iresourcepayload.sha1.md)<!-- -->. |
+|  [sha1(input)](./core.resourcepayload.sha1.md) |  | <b><i>(BETA)</i></b> See [IResourcePayload.sha1()](./core.iresourcepayload.sha1.md)<!-- -->. |
 

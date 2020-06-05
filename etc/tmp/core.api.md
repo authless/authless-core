@@ -155,7 +155,7 @@ export const ResourceConstructor: {
 
 // @beta (undocumented)
 export abstract class ResourcePayload implements IResourcePayload {
-    sha1(): string;
+    sha1(input?: this): string;
 }
 
 // @beta

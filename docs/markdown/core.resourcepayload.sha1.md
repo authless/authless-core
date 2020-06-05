@@ -12,8 +12,15 @@ See [IResourcePayload.sha1()](./core.iresourcepayload.sha1.md)<!-- -->.
 <b>Signature:</b>
 
 ```typescript
-sha1(): string;
+sha1(input?: this): string;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  input | this |  |
+
 <b>Returns:</b>
 
 string

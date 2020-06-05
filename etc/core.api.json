@@ -31,7 +31,7 @@
             {
               "kind": "MethodSignature",
               "canonicalReference": "@authless/core!IResourcePayload#sha1:member(1)",
-              "docComment": "/**\n * Creates the sha1 hash of the resource.\n *\n * @remarks\n *\n * If the resource has noisy attributes such as trackingIDs or debugging info that is not relevant to the resource as such, the implementation may decide to omit such attributes to produce the same sha1 hash for resources that would e.g. otherwise have different trackingID values.\n *\n * @example\n * ```ts\n * // example implementation of the sha1 function which omits the `trackingNumber` property\n * function sha1 (object): string {\n *   const clone = { ...object }\n *   Reflect.deleteProperty(clone, 'trackingNumber')\n *   return hash(clone, { algorithm: 'sha1' })\n * }\n *\n * // Returns true\n * sha1({value: 1, trackingNumber: '123'}) === sha1({value: 1, trackingNumber: '456'})\n * ```\n *\n */\n",
+              "docComment": "/**\n * Creates the sha1 hash of the resource.\n *\n * @remarks\n *\n * If the resource has noisy attributes such as trackingIDs or debugging info that is not relevant to the resource as such, the implementation may decide to omit such attributes to produce the same sha1 hash for resources that would e.g. otherwise have different trackingID values.\n *\n * @example\n * ```ts\n * // example implementation of the sha1 function which omits the `trackingNumber` property\n * function sha1 (object): string {\n *   const clone = { ...object }\n *   Reflect.deleteProperty(clone, 'trackingNumber')\n *   return super.sha1(clone, { algorithm: 'sha1' })\n * }\n *\n * // Returns true\n * sha1({value: 1, trackingNumber: '123'}) === sha1({value: 1, trackingNumber: '456'})\n * ```\n *\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1017,7 +1017,15 @@
               "excerptTokens": [
                 {
                   "kind": "Content",
-                  "text": "sha1(): "
+                  "text": "sha1(input?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "this"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
                 },
                 {
                   "kind": "Content",
@@ -1030,12 +1038,20 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
+                "startIndex": 3,
+                "endIndex": 4
               },
               "releaseTag": "Beta",
               "overloadIndex": 1,
-              "parameters": [],
+              "parameters": [
+                {
+                  "parameterName": "input",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
               "name": "sha1"
             }
           ],
