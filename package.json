@@ -9,6 +9,7 @@
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm test -- --collectCoverage",
     "build": "tsc && npm run docs",
+    "prepare": "npm run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "semantic-release": "GITHUB_TOKEN=test semantic-release --no-ci --dry-run",
     "semantic-release:ci": "npm install && semantic-release",
