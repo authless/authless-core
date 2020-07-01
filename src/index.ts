@@ -8,11 +8,12 @@
  * @packageDocumentation
  */
 
-export { Account, AccountConfig } from './account'
-export { Service } from './service'
-export { Route, Router } from './router'
+export { Bot } from './bots/bot'
+export { BotRouter } from './bots/botrouter'
+export { DomainPath } from './domainPaths/domainPath'
+export { DomainPathRouter } from './domainPaths/domainPathRouter'
 export { Authless } from './authless'
-export { ServiceDefault } from './services'
+
 export {
   IResourcePayload,
   IResourceResponse,
