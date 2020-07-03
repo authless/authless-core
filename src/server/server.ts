@@ -1,10 +1,12 @@
+/* eslint-disable no-invalid-this */
 /* eslint-disable no-multi-spaces */
 /* eslint-disable no-warning-comments */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import * as express from 'express'
 import * as path from 'path'
+import { Browser, Response, Page } from 'puppeteer'
 import { IBot, IDomainPath, IDomainPathRouter, IResponse } from '../types'
+import express from 'express'
 import puppeteer from 'puppeteer-extra'
 
 interface UrlParams {
@@ -26,22 +28,34 @@ export class AuthlessServer {
     this.puppeteerParams = puppeteerParams
     this.puppeteerPlugins = puppeteerPlugins
     this.responses = []
+    this.logger = {
+      log: (data) => console.log(data)
+    }
   }
 
   // TODO - simplify getJsonResponse and makeExpressResponse
   // eslint-disable-next-line max-params
-  async getJsonResponse (bot, page, response, responses): Promise<void> {
-    console.log('to do')
+  getJsonResponse = async (bot, page: Page, response, responses): Promise<string> => {
+    return JSON.stringify({
+      meta: {
+        url: await page.url(),
+      },
+      content: await page.content(),
+      xhrs: this.responses
+    })
   }
 
   // eslint-disable-next-line max-params
-  async makeExpressResponse (expressResponse, response, page, bot, urlParams): Promise<void> {
+  makeExpressResponse = async (expressResponse, response, page, bot, urlParams): Promise<void> => {
     const responseFormat = urlParams.responseFormat || 'html'
     if (responseFormat === 'json') {
       expressResponse.set('Content-Type', 'application/json; charset=utf-8')
       const jsonResponse = await this.getJsonResponse(bot, page, response, this.responses)
       return expressResponse.status(200).send(jsonResponse)
-    } else if (expressResponse.query.responseFormat === 'png') {
+    }
+
+    expressResponse.set('Content-Type', 'text/html')
+    if (expressResponse.query.responseFormat === 'png') {
       return expressResponse.end(await page.screenshot({fullPage: true}), 'binary')
     }
     expressResponse.set('Content-Type', 'text/html')
@@ -52,13 +66,17 @@ export class AuthlessServer {
   }
 
   // TODO - how do we handle anonymous users(bot is undefined)
-  async launchBrowser (domainPath: IDomainPath, bot: IBot): Promise<any> {
+  launchBrowser = async (domainPath: IDomainPath, bot?: IBot): Promise<Browser> => {
     this.puppeteerPlugins.forEach(plugin => {
       puppeteer.use(plugin)
     })
 
+    let username = 'anon'
+    if(typeof bot !== 'undefined') {
+      username = bot.username
+    }
     // calculate data-dir to store Chrome user data
-    const dataDirName = this.getProfileDirName(domainPath.domain, bot.username)
+    const dataDirName = this.getProfileDirName(domainPath.domain, username)
     // eslint-disable-next-line init-declarations
     let userDataDir: string | undefined
     if(this.puppeteerParams.userDataDir) {
@@ -68,30 +86,34 @@ export class AuthlessServer {
       userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
     }
-    this.logger(`launching browser with userDataDir: ${userDataDir ?? 'not-found'}`)
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this.logger.log(`launching browser with userDataDir: ${userDataDir || 'not-found'}`)
     const browser = await puppeteer.launch({
       ...this.puppeteerParams,
       userDataDir
     })
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    this.logger(`launched browser: ${await browser.version()}`)
+    this.logger.log(`launched browser: ${await browser.version()}`)
     return browser
   }
 
-  ping (expressRequest, expressResponse): string {
-    const name = expressRequest.params.name || 'anonymous user'
-    return `hello ${name as string}`
+  ping = (expressRequest, expressResponse): void => {
+    const name = expressRequest.query.name || 'anonymous user'
+    expressResponse.send(`hello ${name as string}`)
+    expressResponse.end()
   }
 
-  speedtest (expressRequest, expressResponse): string {
+  speedtest = (expressRequest, expressResponse): void => {
     // start puppeteer with this.puppeteerParams
     // run speedtest
-    return JSON.stringify({'speed': '1000'})
+    expressResponse.send(JSON.stringify({'speed': '1000'}))
+    expressResponse.end()
   }
 
-  async scrape (expressRequest, expressResponse): Promise<IResponse> {
-    const urlParams = expressRequest.params
-    const { url, referrer, username } = urlParams
+  scrape = async (expressRequest, expressResponse): Promise<IResponse> => {
+    const urlParams = expressRequest.query
+    console.log(`urlParams = ${JSON.stringify(urlParams)}`)
+    const { url, username } = urlParams
 
     // try to fetch the sevice for this url
     const selectedDomainPath = this.domainPathRouter.getDomainPathFromUrl(url)
@@ -101,9 +123,9 @@ export class AuthlessServer {
 
     // get bot when username not provided explicitly
     let selectedBot = selectedDomainPath.botRouter.getBot()
-    if(typeof selectedBot === 'undefined') {
-      throw new Error(`User not found for domainPath ${selectedDomainPath.domain}`)
-    }
+    // if(typeof selectedBot === 'undefined') {
+    //   throw new Error(`User not found for domainPath ${selectedDomainPath.domain}`)
+    // }
     // get bot when username is provided
     if(typeof username !== 'undefined') {
       selectedBot = selectedDomainPath.botRouter.getBotByUsername(username)
@@ -117,29 +139,42 @@ export class AuthlessServer {
     const page = await browser.newPage()
 
     if(this.puppeteerParams.viewPort) {
-      page.setViewPort(this.puppeteerParams.viewPort)
+      await page.setViewport(this.puppeteerParams.viewPort)
     }
 
     // move into selectedDomainPath.prePagePlugs?()
     // TODO - save only xhr responses?
-    const saveResponse = async (response: any): Promise<void> => {
-      this.responses.push(await response.json())
+    const saveResponse = async (response: Response): Promise<void> => {
+      let parsedResponse: string | unknown = ''
+      try {
+        parsedResponse = await response.json()
+        console.log(`${response.url()}: response was json`)
+      } catch(e1) {
+        console.log(`${response.url()}: response was not json`)
+        try {
+          parsedResponse = await response.text()
+          console.log(`${response.url()}: response was text`)
+        } catch (e2) {
+          console.log(`${response.url()}: response was not json`)
+        }
+      }
+
+      this.responses.push(parsedResponse)
     }
     // attach handler to save responses
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.on('response', saveResponse)
 
-    const response = await page.goto(
-      url,
-      referrer
+    // let service handle the page
+    const response = await selectedDomainPath.pageHandler(
+      selectedDomainPath,
+      selectedBot,
+      {
+        puppeteerParams: this.puppeteerParams, puppeteerPlugins: this.puppeteerPlugins
+      }
     )
 
-    const isAuthenticated = await selectedDomainPath.isAuthenticated(page)
-    if(!isAuthenticated) {
-      await selectedDomainPath.authenticate(page, selectedBot)
-    }
-    // let service handle the page
-    await selectedDomainPath.pageHandler(page, selectedBot, urlParams)
-
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.off('response', saveResponse)
 
     await this.makeExpressResponse(expressResponse, response, page, selectedBot, urlParams)
@@ -151,10 +186,17 @@ export class AuthlessServer {
   run (): void {
     // start express
     const app = express()
-    app.set('port', process.env.PORT ?? 3000)
+    app.use(express.json())
+    app.use(express.urlencoded())
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const PORT = process.env.PORT || 3000
 
     app.get('/ping',      this.ping)
-    app.get('/speedtest', this.speedTest)
+    app.get('/speedtest', this.speedtest)
     app.get('/url',       this.scrape)
+
+    app.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}`)
+    })
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable no-warning-comments */
-import { IBot } from '../types2'
+import { IBot } from '../types'
 
 // 1 minutes = 60_000 milliseconds
 const ONE_MINUTE = 60_000

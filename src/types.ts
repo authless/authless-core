@@ -1,4 +1,4 @@
-import { Cookie, Headers, HttpMethod, ResourceType } from 'puppeteer'
+import { Browser, Cookie, Headers, HttpMethod, Response as PuppeteerResponse, ResourceType } from 'puppeteer'
 import { Viewport } from 'puppeteer/DeviceDescriptors'
 
 interface IAuthlessCore {
@@ -7,10 +7,11 @@ interface IAuthlessCore {
 }
 
 interface IBotRouter {
-  bots: IBot[]
-  botIndex: number
-  getBot(): IBot | undefined
-  getBotByUsername(username: string): IBot | undefined
+  botMap: {[url: string ]: IBot[]}
+  botIndices: {[url: string ]: number}
+  getBotForUrl(url: string)
+  // getBot(): IBot | undefined
+  // getBotByUsername(username: string): IBot | undefined
 }
 
 interface IBot {
@@ -34,20 +35,21 @@ interface IResponse {
   meta: any
   page: any
   content: any
+  xhrs: PuppeteerResponse[]
 }
 
 interface IDomainPathRouter {
-  domainPaths: IDomainPath[]
-  getDomainPathFromUrl: (url: string) => IDomainPath | undefined
+  domainMap: {[url: string ]: IDomainPath}
+  getDomainPathForUrl: (url: string) => IDomainPath | undefined
 }
 
 interface IDomainPath {
   domain: string
-  urls: string[]
-  botRouter: IBotRouter
-  isAuthenticated: (page: any) => Promise<Boolean>
-  authenticate: (page: any, bot?: IBot) => Promise<Boolean | string>
-  pageHandler: (page: any, bot?: IBot, params?: any) => Promise<void>
+  // urls: string[]
+  // botRouter: IBotRouter
+  // isAuthenticated: (page: any) => Promise<Boolean>
+  // authenticate: (page: any, bot?: IBot) => Promise<Boolean | string>
+  pageHandler: (browser: Browser, bot?: IBot, config?: any) => Promise<IResponse | null>
 }
 
 interface IServer {
