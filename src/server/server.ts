@@ -4,8 +4,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import * as path from 'path'
-import { Browser, Response, Page } from 'puppeteer'
-import { IBot, IDomainPath, IDomainPathRouter, IResponse } from '../types'
+import { Browser, Page, Response } from 'puppeteer'
+import { IBot, IBotRouter, IDomainPath, IDomainPathRouter, IResponse } from '../types'
 import express from 'express'
 import puppeteer from 'puppeteer-extra'
 
@@ -21,10 +21,13 @@ export class AuthlessServer {
   puppeteerParams: any
   puppeteerPlugins: any[]
   domainPathRouter: IDomainPathRouter
+  botRouter: IBotRouter
   responses: any[]
 
-  constructor (domainPathRouter: IDomainPathRouter, puppeteerParams: any, puppeteerPlugins: any) {
+  // eslint-disable-next-line max-params
+  constructor (domainPathRouter: IDomainPathRouter, botRouter: IBotRouter, puppeteerParams: any, puppeteerPlugins: any) {
     this.domainPathRouter = domainPathRouter
+    this.botRouter = botRouter
     this.puppeteerParams = puppeteerParams
     this.puppeteerPlugins = puppeteerPlugins
     this.responses = []
@@ -61,13 +64,50 @@ export class AuthlessServer {
     expressResponse.set('Content-Type', 'text/html')
   }
 
-  getProfileDirName (serviceName: string, username: string): string {
-    return `${serviceName}-${username}`
-  }
+  // // eslint-disable-next-line class-methods-use-this
+  // getProfileDirName (serviceName: string, username: string): string {
+  //   return `${serviceName}-${username}`
+  // }
+
+  // launchBrowser = async (domainPath: IDomainPath, bot?: IBot, config?: any): Promise<Browser> => {
+  //   const { puppeteerParams, puppeteerPlugins } = config
+
+  //   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  //   puppeteerPlugins.forEach(plugin => {
+  //     puppeteer.use(plugin)
+  //   })
+
+  //   let username = 'anon'
+  //   if(typeof bot !== 'undefined') {
+  //     username = bot.username
+  //   }
+  //   // calculate data-dir to store Chrome user data
+  //   // eslint-disable-next-line no-invalid-this
+  //   const dataDirName = this.getProfileDirName(domainPath.domain, username)
+  //   // eslint-disable-next-line init-declarations
+  //   let userDataDir: string | undefined
+  //   if(typeof puppeteerParams.userDataDir !== 'undefined') {
+  //     userDataDir = puppeteerParams.userDataDir
+  //   }
+  //   if (typeof process.env.CHROME_USER_DATA_DIR !== 'undefined') {
+  //     userDataDir = path.resolve(
+  //       path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
+  //   }
+  //   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  //   // this.logger.log(`launching browser with userDataDir: ${userDataDir || 'not-found'}`)
+  //   const browser = await puppeteer.launch({
+  //     ...puppeteerParams,
+  //     userDataDir
+  //   })
+  //   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  //   // this.logger.log(`launched browser: ${await browser.version()}`)
+  //   return browser
+  // }
 
   // TODO - how do we handle anonymous users(bot is undefined)
-  launchBrowser = async (domainPath: IDomainPath, bot?: IBot): Promise<Browser> => {
-    this.puppeteerPlugins.forEach(plugin => {
+  static async launchBrowser (domainPath: IDomainPath, bot?: IBot, config?: any): Promise<Browser> {
+    const { puppeteerParams, puppeteerPlugins } = config || {}
+    puppeteerPlugins.forEach(plugin => {
       puppeteer.use(plugin)
     })
 
@@ -76,24 +116,24 @@ export class AuthlessServer {
       username = bot.username
     }
     // calculate data-dir to store Chrome user data
-    const dataDirName = this.getProfileDirName(domainPath.domain, username)
+    const dataDirName = `${domainPath.domain}-${username}`
     // eslint-disable-next-line init-declarations
     let userDataDir: string | undefined
-    if(this.puppeteerParams.userDataDir) {
-      userDataDir = this.puppeteerParams.userDataDir
+    if(puppeteerParams.userDataDir) {
+      userDataDir = puppeteerParams.userDataDir
     }
     if (process.env.CHROME_USER_DATA_DIR) {
       userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
     }
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this.logger.log(`launching browser with userDataDir: ${userDataDir || 'not-found'}`)
+    // this.logger.log(`launching browser with userDataDir: ${userDataDir || 'not-found'}`)
     const browser = await puppeteer.launch({
-      ...this.puppeteerParams,
+      ...puppeteerParams,
       userDataDir
     })
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    this.logger.log(`launched browser: ${await browser.version()}`)
+    // this.logger.log(`launched browser: ${await browser.version()}`)
     return browser
   }
 
@@ -116,26 +156,26 @@ export class AuthlessServer {
     const { url, username } = urlParams
 
     // try to fetch the sevice for this url
-    const selectedDomainPath = this.domainPathRouter.getDomainPathFromUrl(url)
+    const selectedDomainPath = this.domainPathRouter.getDomainPathForUrl(url)
     if(typeof selectedDomainPath === 'undefined') {
       throw new Error('Service not found')
     }
 
     // get bot when username not provided explicitly
-    let selectedBot = selectedDomainPath.botRouter.getBot()
+    let selectedBot = this.botRouter.getBotForUrl(url)
     // if(typeof selectedBot === 'undefined') {
     //   throw new Error(`User not found for domainPath ${selectedDomainPath.domain}`)
     // }
     // get bot when username is provided
     if(typeof username !== 'undefined') {
-      selectedBot = selectedDomainPath.botRouter.getBotByUsername(username)
+      selectedBot = this.botRouter.getBotByUsername(username)
       if(typeof selectedBot === 'undefined') {
         throw new Error(`User not found for user ${username as string}`)
       }
     }
 
     // initiate the browser
-    const browser = await this.launchBrowser(selectedDomainPath, selectedBot)
+    const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot)
     const page = await browser.newPage()
 
     if(this.puppeteerParams.viewPort) {
@@ -167,7 +207,7 @@ export class AuthlessServer {
 
     // let service handle the page
     const response = await selectedDomainPath.pageHandler(
-      selectedDomainPath,
+      page,
       selectedBot,
       {
         puppeteerParams: this.puppeteerParams, puppeteerPlugins: this.puppeteerPlugins

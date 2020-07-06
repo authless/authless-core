@@ -1,11 +1,12 @@
 /* eslint-disable max-params */
 // import { Authless } from '../src/index'
 // import { BotRouter } from '../src/bots/botrouter'
-import { IResponse as IAuthlessResponse, IBotRouter, IBot } from '../src/types'
+import { Browser, Page } from 'puppeteer'
+import { IResponse as IAuthlessResponse, IBot } from '../src/types'
 // import { AuthlessServer } from '../src/server/server'
+import { AuthlessServer } from '../src/server/server'
 import { Bot } from '../src'
 import { BotRouter } from '../src/bots/botrouter'
-import { Browser } from 'puppeteer'
 import { DomainPath } from '../src/domainPaths/domainPath'
 import { DomainPathRouter } from '../src/domainPaths/domainPathRouter'
 // import { Bot } from '../src/bots/bot'
@@ -36,19 +37,19 @@ class SampleDomainPath extends DomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async pageHandler (browser: Browser, selectedDomainPath, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
+  async pageHandler (page: Page, selectedDomainPath, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
 
     const { puppeteerParams, urlParams } = config
 
     // const browser = await this.launchBrowser(selectedDomainPath, selectedBot, {puppeteerParams, puppeteerPlugins})
-    const page = await browser.newPage()
+    // const page = await browser.newPage()
     await this.setupPage(page, puppeteerParams)
 
-    const url = 'google.com'
+    const url = urlParams.url
     console.log(`going to url ${url as string}`)
     const response = await page.goto(
       `https://www.${url}`,
-      {referer: 'google.com'}
+      {referer: urlParams.referer}
     )
 
     const pageUrl = await page.url()
@@ -66,18 +67,18 @@ class SampleDomainPath extends DomainPath {
 }
 
 const botRouter = new BotRouter({
-  'google': [new Bot('usernmae', 'password')],
-  'crunchbase': [new Bot('usernmae', 'password')],
   'crunchbase-free': [new Bot('usernmae', 'password')],
+  'crunchbase': [new Bot('usernmae', 'password')],
+  'google': [new Bot('usernmae', 'password')],
 })
 
 // const cbBotRouter = new BotRouter([new Bot('cbusername', 'cbpassword')])
 // const cbDomainPath = new SampleDomainPath('crunchbase.com', cbBotRouter, ['crunchbase.com'])
 const domainPathRouter = new DomainPathRouter({
-  'google.com': new SampleDomainPath('google-home'),
-  'crunchbase.com': new SampleDomainPath('crunchbase-home'),
   'crunchbase.com/person/..': new SampleDomainPath('crunchbase-person'),
+  'crunchbase.com': new SampleDomainPath('crunchbase-home'),
   'linkedin.com': new SampleDomainPath('linkedin-home'),
+  'google.com': new SampleDomainPath('google-home'),
 })
 
 console.log(domainPathRouter)
@@ -109,10 +110,14 @@ const url = 'google.com'
 const domainPath = domainPathRouter.getDomainPathForUrl(url)
 const bot = botRouter.getBotForUrl(url)
 if(typeof domainPath !== 'undefined') {
-  domainPathRouter.launchBrowser(domainPath, bot, {puppeteerParams, puppeteerPlugins})
-    .then(browser => {
-      domainPath.pageHandler(browser, bot, {urlParams: {}})
-        .then(res => console.log(res))
+  AuthlessServer.launchBrowser(domainPath, bot, {puppeteerParams, puppeteerPlugins})
+    .then((browser: Browser) => {
+      browser.newPage()
+        .then((page: Page) => {
+          domainPath.pageHandler(page, bot, {urlParams: {}})
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+        })
         .catch(err => console.log(err))
     })
     .catch(err => {
@@ -120,6 +125,7 @@ if(typeof domainPath !== 'undefined') {
       console.log(err)
     })
 }
+
 // eslint-disable-next-line multiline-comment-style
 /*
 // level 1 - domainPath level
