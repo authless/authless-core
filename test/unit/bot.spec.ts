@@ -4,14 +4,12 @@ test('hello with correct name', () => {
   expect('Hello Jon').toBe('Hello Jon')
 })
 
-// ------ tests to do ------
-// -- create bot
 test('create bot', () => {
   const bot = new Bot('username', 'password', 100)
   expect(bot).toBeDefined()
 })
 // -- login hit count
-test('create bot', () => {
+test('check login hit count is correct', () => {
   const times = Math.ceil(Math.random() * 10)
 
   const bot1 = new Bot('username', 'password', 100)
@@ -25,10 +23,10 @@ test('create bot', () => {
   // simulating alternate login hit count
   Array(times).fill(1).forEach((x, i) => {
     if(i % 2 === 0) {
-      console.log('--calling foundLogin(true)')
+      // console.log('--calling foundLogin(true)')
       bot2.foundLogin(true)
     } else {
-      console.log('--calling foundLogin(false)')
+      // console.log('--calling foundLogin(false)')
       bot2.foundLogin(false)
     }
   })
@@ -36,8 +34,7 @@ test('create bot', () => {
   expect(bot1.getLoginHitCount()).toBe(100 * loginFoundTimes / times)
 })
 
-// -- captcha hit count
-test('create bot', () => {
+test('test captcha hit count is correct', () => {
   const bot = new Bot('username', 'password', 100)
   const times = Math.ceil(Math.random() * 10)
   Array(times).fill(1).forEach(x => {
@@ -46,9 +43,8 @@ test('create bot', () => {
   expect(bot.getCaptchaHitCount()).toBe(100)
 })
 
-// -- rate limit
 // -- TODO
-test('create bot', () => {
+test('test rate limit works ', () => {
   const bot = new Bot('username', 'password', 100)
   expect(bot).toBeDefined()
 })
