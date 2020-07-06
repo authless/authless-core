@@ -1,5 +1,5 @@
-import { Browser, Cookie, Headers, HttpMethod, Response as PuppeteerResponse, ResourceType } from 'puppeteer'
-import { Viewport } from 'puppeteer/DeviceDescriptors'
+import { Cookie, Headers, HttpMethod, Page, ResourceType, Viewport } from 'puppeteer'
+// import { Viewport } from 'puppeteer/DeviceDescriptors'
 
 interface IAuthlessCore {
   name: string
@@ -11,7 +11,7 @@ interface IBotRouter {
   botIndices: {[url: string ]: number}
   getBotForUrl(url: string)
   // getBot(): IBot | undefined
-  // getBotByUsername(username: string): IBot | undefined
+  getBotByUsername(username: string): IBot | undefined
 }
 
 interface IBot {
@@ -27,15 +27,18 @@ interface IBot {
   getCaptchaHitCount: () => number
 }
 
-// interface IBotRouter {
-//     bots: IBot[]
-// }
+interface IResponseMeta {
+  url: string
+  viewport: Viewport
+  title: string
+}
 
 interface IResponse {
-  meta: any
+  meta: IResponseMeta
   page: any
   content: any
-  xhrs: PuppeteerResponse[]
+  cookies: Cookie[]
+  xhrs: Xhr[]
 }
 
 interface IDomainPathRouter {
@@ -49,7 +52,7 @@ interface IDomainPath {
   // botRouter: IBotRouter
   // isAuthenticated: (page: any) => Promise<Boolean>
   // authenticate: (page: any, bot?: IBot) => Promise<Boolean | string>
-  pageHandler: (browser: Browser, bot?: IBot, config?: any) => Promise<IResponse | null>
+  pageHandler: (page: Page, bot?: IBot, config?: any) => Promise<IResponse | null>
 }
 
 interface IServer {
@@ -65,11 +68,11 @@ type URL = string
 type URLs = URL[]
 
 interface SecurityDetails {
-  issuer: string
-  validTo: number
-  protocol: string
-  validFrom: number
-  subjectName: string
+  issuer: string | undefined
+  validTo: number | undefined
+  protocol: string | undefined
+  validFrom: number | undefined
+  subjectName: string | undefined
 }
 
 interface RequestContainer {
@@ -82,14 +85,14 @@ interface RequestContainer {
 
 interface Xhr {
   url: string
-  text: string
+  text: string | undefined
   status: number
   statusText: string
   headers: Headers
-  securityDetails: SecurityDetails
+  securityDetails: SecurityDetails | null
   fromCache: boolean
   fromServiceWorker: boolean
-  request: RequestContainer
+  request: RequestContainer | undefined
 }
 
 interface RequestElementText {
@@ -174,5 +177,6 @@ export {
   CodeElement,
   HttpStateVal,
   RequestElement,
+  RequestContainer,
   ResponseContainer,
 }

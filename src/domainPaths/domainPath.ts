@@ -1,12 +1,12 @@
 /* eslint-disable no-invalid-this */
 /* eslint-disable max-params */
-import { Browser, Page as PuppeteerPage, Response as XHRResponse } from 'puppeteer'
-import { IResponse as IAuthlessResponse, IBot, IDomainPath } from '../types'
+import { IResponse as IAuthlessResponse, IBot, IDomainPath, RequestContainer, Xhr } from '../types'
+import { Page as PuppeteerPage, Response as XHRResponse } from 'puppeteer'
 import { Response as ExpressResponse } from 'express'
 
 export class DomainPath implements IDomainPath {
   domain: string
-  responses: XHRResponse[]
+  responses: Xhr[]
 
   constructor (domain) {
     this.domain = domain
@@ -20,9 +20,12 @@ export class DomainPath implements IDomainPath {
     return {
       meta: {
         url: page.url(),
+        viewport: page.viewport(),
+        title: await page.title(),
       },
       page: 'what goes herre?',
       content: await page.content(),
+      cookies: await page.cookies(),
       xhrs: this.responses
     }
   }
@@ -45,35 +48,59 @@ export class DomainPath implements IDomainPath {
     expressResponse.set('Content-Type', 'text/html')
   }
 
+  getRequestAsJson = async (response: XHRResponse): Promise<RequestContainer | undefined> => {
+    try{
+      const request = await response.request()
+      const requestData = {
+        headers: request.headers(),
+        isNavigationRequest: request.isNavigationRequest(),
+        method: request.method(),
+        postData: request.postData(),
+        resourceType: request.resourceType(),
+        url: request.url()
+      }
+      return requestData
+    } catch (e) {
+      console.log('error: unable to extract request data from Xhr response')
+    }
+  }
+
   setupPage = async (page: PuppeteerPage, puppeteerParams: any): Promise<void> => {
 
     if(typeof puppeteerParams.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)
     }
 
-    // move into selectedDomainPath.prePagePlugs?()
     // eslint-disable-next-line no-warning-comments
     // TODO - save only xhr responses?
     const saveResponse = async (response: XHRResponse): Promise<void> => {
-      let parsedResponse: string | unknown = ''
+      const securityDetails = {
+        issuer: response.securityDetails()?.issuer(),
+        protocol: response.securityDetails()?.protocol(),
+        subjectName: response.securityDetails()?.subjectName(),
+        validFrom: response.securityDetails()?.validFrom(),
+        validTo: response.securityDetails()?.validTo(),
+      }
+      const returnObj: Xhr = {
+        url: response.url(),
+        status: response.status(),
+        statusText: response.statusText(),
+        headers: response.headers(),
+        securityDetails: securityDetails,
+        fromCache: response.fromCache(),
+        fromServiceWorker: response.fromServiceWorker(),
+        // eslint-disable-next-line no-undefined
+        text: undefined,
+        // eslint-disable-next-line no-undefined
+        request: undefined,
+      }
+      returnObj.request = await this.getRequestAsJson(response)
       try {
-        parsedResponse = await response.json()
-        console.log(`${response.url()}: response was json`)
-        console.log(`parsedResponse = ${JSON.stringify(parsedResponse)}`)
-      } catch(e1) {
-        console.log(`${response.url()}: response was not json`)
-        try {
-          parsedResponse = await response.text()
-          console.log(`${response.url()}: response was text`)
-          console.log(`parsedResponse = ${JSON.stringify(parsedResponse)}`)
-        } catch (e2) {
-          console.log(`${response.url()}: response was not json`)
-        }
+        returnObj.text = await response.text()
+      } catch (e) {
+        console.log('error: response.text() failed')
       }
-
-      if(typeof parsedResponse !== 'undefined' && parsedResponse !== null) {
-        this.responses.push(parsedResponse as XHRResponse)
-      }
+      this.responses.push(returnObj)
     }
     // attach handler to save responses
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -92,7 +119,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async pageHandler (browser: Browser, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
+  async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
     // process the page
     return null
   }

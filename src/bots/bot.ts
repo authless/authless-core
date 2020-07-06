@@ -44,7 +44,7 @@ export class Bot implements IBot {
   foundCaptcha (found: Boolean): void {
     this.hitCount += 1
     if(found === true) {
-      this.loginCount += 1
+      this.captchaCount += 1
     }
   }
 
@@ -66,11 +66,11 @@ export class Bot implements IBot {
 
   // TODO, save with timeStamps?
   getLoginHitCount (): number {
-    return 100 * this.hitCount / this.loginCount
+    return 100 * this.loginCount / this.hitCount
   }
 
   // TODO, save with timeStamps?
   getCaptchaHitCount (): number {
-    return 100 * this.hitCount / this.captchaCount
+    return 100 * this.captchaCount / this.hitCount
   }
 }

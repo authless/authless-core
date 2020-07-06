@@ -19,12 +19,10 @@ export class BotRouter implements IBotRouter {
   // }
 
   getBotForUrl (url: string): IBot | undefined {
-    console.log(`url = ${url}`)
     const matchedUrlKeys = Object.keys(this.botMap)
       .sort((a, b) => a.length - b.length)
       .filter(domainUrl => url.includes(domainUrl))
 
-    console.log(`matchedUrlKeys = ${JSON.stringify(matchedUrlKeys)}`)
     if(matchedUrlKeys.length > 0) {
       const matchedUrl = matchedUrlKeys[0]
       const matchedBots = this.botMap[matchedUrlKeys[0]]
@@ -44,7 +42,19 @@ export class BotRouter implements IBotRouter {
 
   // eslint-disable-next-line no-warning-comments
   // TODO - get only if bot.isBelowRateLimit() is true
-  // getBotByUsername (name: string): IBot | undefined {
-  //   return this.bots.find(bot => bot.username === name)
-  // }
+  getBotByUsername (name: string): IBot | undefined {
+    // console.log('Object.values(this.botMap)')
+    // console.log(Object.values(this.botMap))
+
+    const matchedBots = Object.values(this.botMap)
+      .find(bots => {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        // console.log(`bots.findIndex(bot => bot.username === ${name}) !== -1 = ${bots.findIndex(bot => bot.username === name) !== -1}`)
+        return bots.findIndex(bot => bot.username === name) !== -1
+      })
+    // console.log(`matchedBots = ${JSON.stringify(matchedBots)}`)
+    if(typeof matchedBots !== 'undefined' && matchedBots.length > 0) {
+      return matchedBots[0]
+    }
+  }
 }
