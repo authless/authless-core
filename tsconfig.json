@@ -10,10 +10,12 @@
         "preserveConstEnums": true,
         "esModuleInterop": true,
         "sourceMap": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "skipLibCheck": true,
     },
     "include": [
         "src/**/*",
+        "scripts/**/*",
         "**/*.spec.ts"
     ],
     "exclude": [
