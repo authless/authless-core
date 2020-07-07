@@ -3,13 +3,17 @@
 // import { BotRouter } from '../src/bots/botrouter'
 import { Browser, Page } from 'puppeteer'
 import { IResponse as IAuthlessResponse, IBot } from '../src/types'
+import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 // import { AuthlessServer } from '../src/server/server'
 import { AuthlessServer } from '../src/server/server'
 import { Bot } from '../src'
 import { BotRouter } from '../src/bots/botrouter'
 import { DomainPath } from '../src/domainPaths/domainPath'
 import { DomainPathRouter } from '../src/domainPaths/domainPathRouter'
+import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 // import { Bot } from '../src/bots/bot'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { writeFileSync } from 'fs'
 
 // use this service and pass it to authless server
 class SampleDomainPath extends DomainPath {
@@ -37,15 +41,19 @@ class SampleDomainPath extends DomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async pageHandler (page: Page, selectedDomainPath, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
+  async pageHandler (page: Page, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
 
-    const { puppeteerParams, urlParams } = config
+    console.log(`-- config  = ${JSON.stringify(config)}`)
+    const { puppeteerParams, urlParams } = config ?? {}
 
     // const browser = await this.launchBrowser(selectedDomainPath, selectedBot, {puppeteerParams, puppeteerPlugins})
     // const page = await browser.newPage()
     await this.setupPage(page, puppeteerParams)
 
-    const url = urlParams.url
+    const url = urlParams?.url
+    if(typeof url === 'undefined') {
+      throw new Error('url cannot be empty')
+    }
     console.log(`going to url ${url as string}`)
     const response = await page.goto(
       `https://www.${url}`,
@@ -81,13 +89,21 @@ const domainPathRouter = new DomainPathRouter({
   'google.com': new SampleDomainPath('google-home'),
 })
 
-console.log(domainPathRouter)
+// console.log(domainPathRouter)
 
 const puppeteerParams = {
   executablePath: '/Applications/Chromium.app/Contents/MacOS/Chromium',
   headless: false,
 }
-const puppeteerPlugins = []
+const puppeteerPlugins = [
+  StealthPlugin(),
+  AdblockerPlugin({ blockTrackers: true }),
+  // ProxyPlugin({
+  //   address: '123.123.123.123',
+  //   port: 1001,
+  //   credentials: {username: 'username1', password: 'password1'}
+  // }),
+]
 // const server = new AuthlessServer(
 //   domainPathRouter,
 //   {
@@ -114,8 +130,12 @@ if(typeof domainPath !== 'undefined') {
     .then((browser: Browser) => {
       browser.newPage()
         .then((page: Page) => {
-          domainPath.pageHandler(page, bot, {urlParams: {}})
-            .then(res => console.log(res))
+          domainPath.pageHandler(page, bot, {urlParams: {url}})
+            .then(res => {
+              // console.log(res)
+              writeFileSync(`response.${url}.json`, JSON.stringify(res, null, 4))
+              console.log('-- done')
+            })
             .catch(err => console.log(err))
         })
         .catch(err => console.log(err))

@@ -6,8 +6,8 @@
 import * as path from 'path'
 import { Browser, Page, Response } from 'puppeteer'
 import { IBot, IBotRouter, IDomainPath, IDomainPathRouter, IResponse } from '../types'
+import  puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import express from 'express'
-import puppeteer from 'puppeteer-extra'
 
 interface UrlParams {
   url: string
@@ -107,7 +107,7 @@ export class AuthlessServer {
   // TODO - how do we handle anonymous users(bot is undefined)
   static async launchBrowser (domainPath: IDomainPath, bot?: IBot, config?: any): Promise<Browser> {
     const { puppeteerParams, puppeteerPlugins } = config || {}
-    puppeteerPlugins.forEach(plugin => {
+    puppeteerPlugins.forEach((plugin: PuppeteerExtraPlugin) => {
       puppeteer.use(plugin)
     })
 
