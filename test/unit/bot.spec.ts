@@ -1,12 +1,12 @@
 import { Bot } from '../../src/bots/bot'
 
-test('create bot', () => {
+test('Bot is instantiated correctly', () => {
   const bot = new Bot('username', 'password', 100)
   expect(bot).toBeDefined()
 })
 
 // -- login hit count
-test('check if login hit count is correct', () => {
+test('Login hit count is correctly calculated', () => {
   const times = Math.ceil(Math.random() * 10)
 
   const bot1 = new Bot('username', 'password', 100)
@@ -31,7 +31,7 @@ test('check if login hit count is correct', () => {
   expect(bot1.getLoginHitCount()).toBe(100 * loginFoundTimes / times)
 })
 
-test('check if captcha hit count is correct', () => {
+test('Captcha hit count is correctly calculated', () => {
   const bot = new Bot('username', 'password', 100)
   const times = Math.ceil(Math.random() * 10)
   Array(times).fill(1).forEach(x => {
@@ -41,7 +41,7 @@ test('check if captcha hit count is correct', () => {
 })
 
 // -- TODO
-test('check if rate limit works ', () => {
+test('Rate limiting works ', () => {
   const bot = new Bot('username', 'password', 100)
   expect(bot).toBeDefined()
 })

@@ -19,17 +19,22 @@ const botRouter = new BotRouter({
 // ----------------------------------------------------------------
 
 test('create botRouter with multiple bots', () => {
-  expect(botRouter).toBeDefined()
+  const br = new BotRouter({
+    'url1': bots1,
+    'url2': [],
+    'url2/subdomain/': bots2,
+  })
+  expect(br).toBeDefined()
 })
 
 test('get bot when bots is not empty', () => {
-  const bot = botRouter.getBotForUrl('url1')
-  expect(bot).toBeDefined()
+  const nonEmptyBot = botRouter.getBotForUrl('url1')
+  expect(nonEmptyBot).toBeDefined()
 })
 
 test('get bot when bots is empty', () => {
-  const bot = botRouter.getBotForUrl('url2')
-  expect(bot).toBeUndefined()
+  const noBot = botRouter.getBotForUrl('url2')
+  expect(noBot).toBeUndefined()
 })
 
 test('getBotByUsername when username is available', () => {
