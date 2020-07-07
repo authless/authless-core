@@ -15,8 +15,8 @@ const botRouter = new BotRouter({
   'url2': [],
   'url2/subdomain/': bots2,
 })
-// ----------------------------------------------------------------
 // ------------------------- end setup ----------------------------
+// ----------------------------------------------------------------
 
 test('create botRouter with multiple bots', () => {
   expect(botRouter).toBeDefined()
@@ -27,7 +27,7 @@ test('get bot when bots is not empty', () => {
   expect(bot).toBeDefined()
 })
 
-test('getBot when bots is empty', () => {
+test('get bot when bots is empty', () => {
   const bot = botRouter.getBotForUrl('url2')
   expect(bot).toBeUndefined()
 })
