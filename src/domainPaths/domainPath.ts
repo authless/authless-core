@@ -67,7 +67,7 @@ export class DomainPath implements IDomainPath {
 
   setupPage = async (page: PuppeteerPage, puppeteerParams: any): Promise<void> => {
 
-    if(typeof puppeteerParams.viewPort !== 'undefined') {
+    if(typeof puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)
     }
 
