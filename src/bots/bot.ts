@@ -7,11 +7,12 @@ const ONE_MINUTE = 60_000
 export class Bot implements IBot {
   username: string
   password: string
-  hitCount = 0
-  loginCount = 0
-  captchaCount = 0
+  private hitCount = 0
+  private loginCount = 0
+  private captchaCount = 0
   // rateLimit of 0 means no rate limiting
-  rateLimit = 0
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private rateLimit = 0
   usageTimeStamps: number[]
 
   constructor (username: string, password: string, rateLimit?: number) {
@@ -20,7 +21,7 @@ export class Bot implements IBot {
     this.usageTimeStamps = []
     if(typeof rateLimit === 'number') {
       // TODO, calculate number of times account was used per minute
-      this.rateLimit = rateLimit
+      this.rateLimit = rateLimit ?? 0
     }
   }
 
@@ -35,10 +36,12 @@ export class Bot implements IBot {
   }
 
   foundLogin (found: Boolean): void {
+    console.log(`before: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
     this.hitCount += 1
     if(found === true) {
       this.loginCount += 1
     }
+    console.log(`after: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
   }
 
   foundCaptcha (found: Boolean): void {
@@ -66,11 +69,14 @@ export class Bot implements IBot {
 
   // TODO, save with timeStamps?
   getLoginHitCount (): number {
+    console.log(`starting: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
+    console.log(`-- getLoginHitCount(): return 100 * ${this.loginCount} / ${this.hitCount} = ${100 * this.loginCount / this.hitCount}`)
     return 100 * this.loginCount / this.hitCount
   }
 
   // TODO, save with timeStamps?
   getCaptchaHitCount (): number {
+    console.log(`-- getCaptchaHitCount(): return 100 * ${this.captchaCount} / ${this.hitCount} = ${100 * this.captchaCount / this.hitCount}`)
     return 100 * this.captchaCount / this.hitCount
   }
 }
