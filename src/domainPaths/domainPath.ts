@@ -111,14 +111,14 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async isAuthenticated (page: any): Promise<Boolean> {
-    return true
-  }
+  // async isAuthenticated (page: any): Promise<Boolean> {
+  //   return true
+  // }
 
   // eslint-disable-next-line class-methods-use-this
-  async authenticate (page: any): Promise<string> {
-    return 'to be implemented'
-  }
+  // async authenticate (page: any): Promise<string> {
+  //   return 'to be implemented'
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
