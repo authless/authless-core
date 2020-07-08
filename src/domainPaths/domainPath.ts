@@ -19,13 +19,15 @@ export class DomainPath implements IDomainPath {
   getJsonResponse = async (page: PuppeteerPage): Promise<IAuthlessResponse> => {
     return {
       meta: {
+        timestamp: Date.now()
+      },
+      page: {
         url: page.url(),
         viewport: page.viewport(),
+        content: await page.content(),
+        cookies: await page.cookies(),
         title: await page.title(),
       },
-      page: 'what goes herre?',
-      content: await page.content(),
-      cookies: await page.cookies(),
       xhrs: this.responses
     }
   }

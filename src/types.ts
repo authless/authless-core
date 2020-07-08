@@ -17,9 +17,9 @@ interface IBotRouter {
 interface IBot {
   username: string
   password: string
-  hitCount: number
-  loginCount: number
-  captchaCount: number
+  // hitCount: number
+  // loginCount: number
+  // captchaCount: number
   foundLogin: (found: Boolean) => void
   foundCaptcha: (found: Boolean) => void
   getHitCount: () => number
@@ -28,16 +28,20 @@ interface IBot {
 }
 
 interface IResponseMeta {
+  timestamp: number
+}
+
+interface IResponsePage {
   url: string
-  viewport: Viewport
   title: string
+  viewport: Viewport
+  content: string
+  cookies: Cookie[]
 }
 
 interface IResponse {
   meta: IResponseMeta
-  page: any
-  content: any
-  cookies: Cookie[]
+  page: IResponsePage
   xhrs: Xhr[]
 }
 
