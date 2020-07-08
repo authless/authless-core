@@ -1,28 +1,19 @@
 /* eslint-disable max-params */
 // import { Authless } from '../src/index'
 // import { BotRouter } from '../src/bots/botrouter'
+import { AuthlessServer, BrowserConfig } from '../src/server/server'
 import { Browser, Page } from 'puppeteer'
 import { IResponse as IAuthlessResponse, IBot } from '../src/types'
-import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
-// import { AuthlessServer } from '../src/server/server'
-import { AuthlessServer } from '../src/server/server'
 import { Bot } from '../src'
 import { BotRouter } from '../src/bots/botrouter'
 import { DomainPath } from '../src/domainPaths/domainPath'
 import { DomainPathRouter } from '../src/domainPaths/domainPathRouter'
-import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
-// import { Bot } from '../src/bots/bot'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { writeFileSync } from 'fs'
 
 // use this service and pass it to authless server
 class SampleDomainPath extends DomainPath {
 
-  // domain = 'https://www.crunchbase.com'
   domain = 'google.com'
-  // urls = ['http://www.crunchbase.com']
-  // urls = ['google.com']
-  // botRouter: IBotRouter
 
   constructor (domain: string) {
     super(domain)
@@ -60,9 +51,6 @@ class SampleDomainPath extends DomainPath {
       {referer: urlParams.referer}
     )
 
-    const pageUrl = await page.url()
-    console.log(`-- pageUrl: ${pageUrl}`)
-
     // const isAuthenticated = await selectedDomainPath.isAuthenticated(page)
     // if(isAuthenticated === false) {
     //   await selectedDomainPath.authenticate(page, selectedBot)
@@ -91,19 +79,10 @@ const domainPathRouter = new DomainPathRouter({
 
 // console.log(domainPathRouter)
 
-const puppeteerParams = {
+const puppeteerParams: BrowserConfig['puppeteerParams'] = {
   executablePath: '/Applications/Chromium.app/Contents/MacOS/Chromium',
   headless: false,
 }
-const puppeteerPlugins = [
-  StealthPlugin(),
-  AdblockerPlugin({ blockTrackers: true }),
-  // ProxyPlugin({
-  //   address: '123.123.123.123',
-  //   port: 1001,
-  //   credentials: {username: 'username1', password: 'password1'}
-  // }),
-]
 // const server = new AuthlessServer(
 //   domainPathRouter,
 //   {
@@ -126,7 +105,22 @@ const url = 'google.com'
 const domainPath = domainPathRouter.getDomainPathForUrl(url)
 const bot = botRouter.getBotForUrl(url)
 if(typeof domainPath !== 'undefined') {
-  AuthlessServer.launchBrowser(domainPath, bot, {puppeteerParams, puppeteerPlugins})
+  AuthlessServer.launchBrowser(domainPath, bot, {
+    puppeteerParams,
+    useStealthPlugin: true,
+    useAdBlockerPlugin: true,
+    adBlockerConfig: {
+      blockTrackers: true
+    },
+    proxy: {
+      address: 'x.x.x.x',
+      port: 9999,
+      credentials: {
+        username: 'user1',
+        password: 'password1',
+      },
+    }
+  })
     .then((browser: Browser) => {
       browser.newPage()
         .then((page: Page) => {

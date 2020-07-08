@@ -4,9 +4,13 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import * as path from 'path'
-import { Browser, Page, Response } from 'puppeteer'
+import { Browser, LaunchOptions, Page, Response } from 'puppeteer'
 import { IBot, IBotRouter, IDomainPath, IDomainPathRouter, IResponse } from '../types'
 import  puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
+import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
+import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { Viewport } from 'puppeteer/DeviceDescriptors'
 import express from 'express'
 
 interface UrlParams {
@@ -16,16 +20,40 @@ interface UrlParams {
   username?: string
 }
 
+interface ProxyConfig {
+  address: string
+  port: number
+  credentials: {
+    username: string
+    password: string
+  }
+}
+
+type PuppeteerParams = LaunchOptions & {
+  viewPort?: Viewport
+}
+
+export interface BrowserConfig {
+  puppeteerParams?: PuppeteerParams
+  puppeteerPlugins?: PuppeteerExtraPlugin[]
+  useStealthPlugin?: boolean
+  useAdBlockerPlugin?: boolean
+  adBlockerConfig?: {
+    blockTrackers: boolean
+  }
+  proxy?: ProxyConfig
+}
+
 export class AuthlessServer {
   logger: any
-  puppeteerParams: any
-  puppeteerPlugins: any[]
+  puppeteerParams?: PuppeteerParams
+  puppeteerPlugins?: PuppeteerExtraPlugin[]
   domainPathRouter: IDomainPathRouter
   botRouter: IBotRouter
   responses: any[]
 
   // eslint-disable-next-line max-params
-  constructor (domainPathRouter: IDomainPathRouter, botRouter: IBotRouter, puppeteerParams: any, puppeteerPlugins: any) {
+  constructor (domainPathRouter: IDomainPathRouter, botRouter: IBotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]) {
     this.domainPathRouter = domainPathRouter
     this.botRouter = botRouter
     this.puppeteerParams = puppeteerParams
@@ -105,9 +133,20 @@ export class AuthlessServer {
   // }
 
   // TODO - how do we handle anonymous users(bot is undefined)
-  static async launchBrowser (domainPath: IDomainPath, bot?: IBot, config?: any): Promise<Browser> {
-    const { puppeteerParams, puppeteerPlugins } = config || {}
-    puppeteerPlugins.forEach((plugin: PuppeteerExtraPlugin) => {
+  static async launchBrowser (domainPath: IDomainPath, bot?: IBot, config?: BrowserConfig): Promise<Browser> {
+    const { puppeteerParams } = config ?? {}
+    let defaultPlugins: PuppeteerExtraPlugin[] = []
+    if(config?.useStealthPlugin) {
+      defaultPlugins.push(StealthPlugin())
+    }
+    if(config?.useAdBlockerPlugin) {
+      defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
+    }
+    if(typeof config?.proxy !== 'undefined') {
+      defaultPlugins.push(ProxyPlugin(config?.proxy))
+    }
+    const plugins = [...defaultPlugins, ...(config?.puppeteerPlugins ?? [])]
+    plugins.forEach((plugin: PuppeteerExtraPlugin) => {
       puppeteer.use(plugin)
     })
 
@@ -119,7 +158,7 @@ export class AuthlessServer {
     const dataDirName = `${domainPath.domain}-${username}`
     // eslint-disable-next-line init-declarations
     let userDataDir: string | undefined
-    if(puppeteerParams.userDataDir) {
+    if(puppeteerParams?.userDataDir) {
       userDataDir = puppeteerParams.userDataDir
     }
     if (process.env.CHROME_USER_DATA_DIR) {
@@ -178,8 +217,8 @@ export class AuthlessServer {
     const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot)
     const page = await browser.newPage()
 
-    if(this.puppeteerParams.viewPort) {
-      await page.setViewport(this.puppeteerParams.viewPort)
+    if(this.puppeteerParams?.viewPort) {
+      await page.setViewport(this.puppeteerParams?.viewPort)
     }
 
     // move into selectedDomainPath.prePagePlugs?()
