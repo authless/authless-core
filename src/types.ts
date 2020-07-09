@@ -1,4 +1,5 @@
-import { Cookie, Headers, HttpMethod, Page, ResourceType, Viewport } from 'puppeteer'
+import { Cookie, Headers, HttpMethod, LaunchOptions, Page, ResourceType, Viewport } from 'puppeteer'
+import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 // import { Viewport } from 'puppeteer/DeviceDescriptors'
 
 interface IAuthlessCore {
@@ -50,22 +51,47 @@ interface IDomainPathRouter {
   getDomainPathForUrl: (url: string) => IDomainPath | undefined
 }
 
+interface ProxyConfig {
+  address: string
+  port: number
+  credentials: {
+    username: string
+    password: string
+  }
+}
+
+type PuppeteerParams = LaunchOptions & {
+  viewPort?: Viewport
+}
+
+interface URLParams {
+  url: string
+  inputs?: string
+  alphabetSelector?: string
+  responseFormat: string
+  referer?: string
+  username?: string
+}
+
+interface BrowserConfig {
+  puppeteerParams?: PuppeteerParams
+  puppeteerPlugins?: PuppeteerExtraPlugin[]
+  useStealthPlugin?: boolean
+  useAdBlockerPlugin?: boolean
+  adBlockerConfig?: {
+    blockTrackers: boolean
+  }
+  proxy?: ProxyConfig
+  urlParams?: URLParams
+}
+
 interface IDomainPath {
   domain: string
   // urls: string[]
   // botRouter: IBotRouter
   // isAuthenticated: (page: any) => Promise<Boolean>
   // authenticate: (page: any, bot?: IBot) => Promise<Boolean | string>
-  pageHandler: (page: Page, bot?: IBot, config?: any) => Promise<IResponse | null>
-}
-
-interface IServer {
-  puppeteerParams: any
-  proxyParams: any
-  prePagePlugs?: (page: any) => void
-  resourceTypes: string[]
-  authless: IAuthlessCore
-  fetch: (url: string, responseType: string, params: any) => IResponse
+  pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
 
 type URL = string
@@ -167,6 +193,9 @@ interface Resource {
 }
 
 export {
+  URLParams,
+  PuppeteerParams,
+  BrowserConfig,
   IBot,
   IDomainPath,
   IResponse,
