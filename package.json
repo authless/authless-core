@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "description": "",
   "private": true,
-  "main": "dist/index",
-  "types": "dist/index",
+  "main": "dist/src/index",
+  "types": "dist/src/index",
   "dependencies": {
     "@types/express": "^4.17.6",
     "express": "^4.17.1",
