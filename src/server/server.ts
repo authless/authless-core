@@ -4,13 +4,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import * as path from 'path'
-import { Browser, LaunchOptions, Page, Response } from 'puppeteer'
-import { IBot, IBotRouter, IDomainPath, IDomainPathRouter, IResponse } from '../types'
+import { Browser, Page, Response } from 'puppeteer'
+import { BrowserConfig, IBot, IBotRouter, IDomainPath, IDomainPathRouter, IResponse, PuppeteerParams } from '../types'
 import  puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
-import { Viewport } from 'puppeteer/DeviceDescriptors'
 import express from 'express'
 
 interface UrlParams {
@@ -18,30 +17,6 @@ interface UrlParams {
   responseFormat: string
   referrer?: string
   username?: string
-}
-
-interface ProxyConfig {
-  address: string
-  port: number
-  credentials: {
-    username: string
-    password: string
-  }
-}
-
-type PuppeteerParams = LaunchOptions & {
-  viewPort?: Viewport
-}
-
-export interface BrowserConfig {
-  puppeteerParams?: PuppeteerParams
-  puppeteerPlugins?: PuppeteerExtraPlugin[]
-  useStealthPlugin?: boolean
-  useAdBlockerPlugin?: boolean
-  adBlockerConfig?: {
-    blockTrackers: boolean
-  }
-  proxy?: ProxyConfig
 }
 
 export class AuthlessServer {
@@ -249,7 +224,7 @@ export class AuthlessServer {
       page,
       selectedBot,
       {
-        puppeteerParams: this.puppeteerParams, puppeteerPlugins: this.puppeteerPlugins
+        urlParams: { url: url, responseFormat: 'json' }
       }
     )
 

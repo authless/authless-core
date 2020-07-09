@@ -7,8 +7,6 @@ export class DomainPathRouter implements IDomainPathRouter {
     this.domainMap = domainMap
   }
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO - try to get service whose URL matches and is the longest(most specific)?
   getDomainPathForUrl (url: string): IDomainPath | undefined {
     const matchedUrlKeys = Object.keys(this.domainMap)
       .sort((a, b) => b.length - a.length)

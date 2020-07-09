@@ -1,6 +1,6 @@
 /* eslint-disable no-invalid-this */
 /* eslint-disable max-params */
-import { IResponse as IAuthlessResponse, IBot, IDomainPath, RequestContainer, Xhr } from '../types'
+import { IResponse as IAuthlessResponse, IBot, IDomainPath, PuppeteerParams, RequestContainer, URLParams, Xhr } from '../types'
 import { Page as PuppeteerPage, Response as XHRResponse } from 'puppeteer'
 import { Response as ExpressResponse } from 'express'
 
@@ -13,8 +13,6 @@ export class DomainPath implements IDomainPath {
     this.responses = []
   }
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO - simplify getJsonResponse and makeExpressResponse
   // eslint-disable-next-line max-params
   getJsonResponse = async (page: PuppeteerPage): Promise<IAuthlessResponse> => {
     return {
@@ -33,9 +31,8 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line max-params
-  makeAuthlessResponse = async (expressResponse: ExpressResponse, page: PuppeteerPage, bot: IBot, urlParams): Promise<void> => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const responseFormat = urlParams.responseFormat || 'html'
+  makeAuthlessResponse = async (expressResponse: ExpressResponse, page: PuppeteerPage, bot: IBot, urlParams: URLParams): Promise<void> => {
+    const responseFormat = urlParams.responseFormat ?? 'html'
     if (responseFormat === 'json') {
       expressResponse.set('Content-Type', 'application/json; charset=utf-8')
       const jsonResponse = await this.getJsonResponse(page)
@@ -67,14 +64,12 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  setupPage = async (page: PuppeteerPage, puppeteerParams: any): Promise<void> => {
+  setupPage = async (page: PuppeteerPage, puppeteerParams?: PuppeteerParams): Promise<void> => {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)
     }
 
-    // eslint-disable-next-line no-warning-comments
-    // TODO - save only xhr responses?
     const saveResponse = async (response: XHRResponse): Promise<void> => {
       const securityDetails = {
         issuer: response.securityDetails()?.issuer(),
@@ -111,18 +106,8 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  // async isAuthenticated (page: any): Promise<Boolean> {
-  //   return true
-  // }
-
-  // eslint-disable-next-line class-methods-use-this
-  // async authenticate (page: any): Promise<string> {
-  //   return 'to be implemented'
-  // }
-
-  // eslint-disable-next-line class-methods-use-this
   async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
-    // process the page
+    // default implementation to process the page
     return null
   }
 
