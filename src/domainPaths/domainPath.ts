@@ -13,7 +13,6 @@ export class DomainPath implements IDomainPath {
     this.responses = []
   }
 
-  // eslint-disable-next-line max-params
   getJsonResponse = async (page: PuppeteerPage): Promise<IAuthlessResponse> => {
     return {
       meta: {
@@ -28,23 +27,6 @@ export class DomainPath implements IDomainPath {
       },
       xhrs: this.responses
     }
-  }
-
-  // eslint-disable-next-line max-params
-  makeAuthlessResponse = async (expressResponse: ExpressResponse, page: PuppeteerPage, bot: IBot, urlParams: URLParams): Promise<void> => {
-    const responseFormat = urlParams.responseFormat ?? 'html'
-    if (responseFormat === 'json') {
-      expressResponse.set('Content-Type', 'application/json; charset=utf-8')
-      const jsonResponse = await this.getJsonResponse(page)
-      expressResponse.status(200).send(jsonResponse)
-      return
-    }
-
-    expressResponse.set('Content-Type', 'text/html')
-    if (responseFormat === 'png') {
-      return expressResponse.end(await page.screenshot({fullPage: true}), 'binary')
-    }
-    expressResponse.set('Content-Type', 'text/html')
   }
 
   getRequestAsJson = async (response: XHRResponse): Promise<RequestContainer | undefined> => {
@@ -102,7 +84,6 @@ export class DomainPath implements IDomainPath {
     // attach handler to save responses
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.on('response', saveResponse)
-
   }
 
   // eslint-disable-next-line class-methods-use-this
