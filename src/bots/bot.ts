@@ -36,12 +36,10 @@ export class Bot implements IBot {
   }
 
   foundLogin (found: Boolean): void {
-    console.log(`before: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
     this.hitCount += 1
     if(found === true) {
       this.loginCount += 1
     }
-    console.log(`after: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
   }
 
   foundCaptcha (found: Boolean): void {
@@ -69,14 +67,11 @@ export class Bot implements IBot {
 
   // TODO, save with timeStamps?
   getLoginHitCount (): number {
-    console.log(`starting: loginCount: ${this.loginCount} : hitcount = ${this.hitCount}`)
-    console.log(`-- getLoginHitCount(): return 100 * ${this.loginCount} / ${this.hitCount} = ${100 * this.loginCount / this.hitCount}`)
     return 100 * this.loginCount / this.hitCount
   }
 
   // TODO, save with timeStamps?
   getCaptchaHitCount (): number {
-    console.log(`-- getCaptchaHitCount(): return 100 * ${this.captchaCount} / ${this.hitCount} = ${100 * this.captchaCount / this.hitCount}`)
     return 100 * this.captchaCount / this.hitCount
   }
 }
