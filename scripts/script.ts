@@ -8,7 +8,7 @@ import { DomainPath } from '../src/domainPaths/domainPath'
 import { DomainPathRouter } from '../src/domainPaths/domainPathRouter'
 import { writeFileSync } from 'fs'
 
-// use this service and pass it to authless server
+// sample domainPath implementation
 class SampleDomainPath extends DomainPath {
 
   domain = 'google.com'
@@ -16,17 +16,6 @@ class SampleDomainPath extends DomainPath {
   constructor (domain: string) {
     super(domain)
     this.domain = domain
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async isAuthenticated (page: any): Promise<boolean> {
-    return true
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async authenticate (page: any): Promise<any> {
-    // do authentication here
-    return true
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -106,39 +95,3 @@ if(typeof domainPath !== 'undefined') {
       console.log(err)
     })
 }
-
-// eslint-disable-next-line multiline-comment-style
-/*
-// level 1 - domainPath level
-const bot = new CrunchbaseFreeBot('username', 'password')
-const cbCompanyProfileDomainPath = new CruchBaseProfileDomainPath()
-const response = await cbCompanyProfileDomainPath.pageHandler(page, bot)
-const resource = response.toResources(response)
-
-// level 2 - domain level
-import { domainPathRouter } from '...'
-const response = await domainPathRouter.pageHandler(browser, 'https://crunchbase.com/profiles/1234', bot)
-const response = await domainPathRouter.apiHandler(api, 'https://api.crunchbase.com/profiles/1234', bot)
-
-const domainPathRouter = new DomainPathRouter([domainPath, cbDomainPath, liDomainPath])
-
-const domainsHash = {
-  'crunchbase.com': cbDomainPathRouter,
-  'linkedin.com': liDomainPathRouter,
-  'google.com': ggDomainPathRouter,
-}
-
-const botsHash = {
-  'crunchbase.com': cbBotRouter,
-  'linkedin.com': liBotRouter,
-  'google.com': ggBotRouter,
-}
-
-// level 3 - multi-domainPath level
-const {url, referer} = expressRequest.query
-const domainRouter = domainsHash[url.toDomain()]
-const bot = botsHash[url.toDomain()].getBot()
-domainRouter.pageHandler(url, bot, {puppeteerParams, puppeteerPlugins})
-
-domainRouter.pageHandler(url, botRouter.getBot(url), {puppeteerParams, puppeteerPlugins})
-*/
