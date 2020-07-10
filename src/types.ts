@@ -44,7 +44,7 @@ interface IResponse {
 
 interface IDomainPathRouter {
   domainMap: {[url: string ]: IDomainPath}
-  getDomainPathForUrl: (url: string) => IDomainPath | undefined
+  getDomainPath: (url: string) => IDomainPath | undefined
 }
 
 interface ProxyConfig {

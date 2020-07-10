@@ -22,19 +22,19 @@ test('create domainPathRouter', () => {
   expect(domainPath.domain).toBe(domainName)
 })
 
-test('getDomainPathForUrl - when url is present', () => {
-  const domainPath = dpRouter.getDomainPathForUrl('url1')
+test('getDomainPath - when url is present', () => {
+  const domainPath = dpRouter.getDomainPath('url1')
   expect(domainPath).toBeDefined()
 })
 
-test('getDomainPathForUrl - when url missing', () => {
-  const domainPath = dpRouter.getDomainPathForUrl('invalid-url')
+test('getDomainPath - when url missing', () => {
+  const domainPath = dpRouter.getDomainPath('invalid-url')
   expect(domainPath).toBeUndefined()
 })
 
-test('getDomainPathForUrl - find best url match', () => {
+test('getDomainPath - find best url match', () => {
   const url = 'url2/subdomain/resource-name/seo-text'
-  const domainPath = dpRouter.getDomainPathForUrl(url)
+  const domainPath = dpRouter.getDomainPath(url)
   expect(domainPath).toBeDefined()
   expect(domainPath?.domain).toBe('third-domainpath')
 })

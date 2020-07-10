@@ -58,7 +58,7 @@ const puppeteerParams: BrowserConfig['puppeteerParams'] = {
   headless: false,
 }
 const url = 'google.com'
-const domainPath = domainPathRouter.getDomainPathForUrl(url)
+const domainPath = domainPathRouter.getDomainPath(url)
 const bot = botRouter.getBotForUrl(url)
 if(typeof domainPath !== 'undefined') {
   AuthlessServer.launchBrowser(domainPath, bot, {

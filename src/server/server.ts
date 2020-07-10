@@ -147,7 +147,7 @@ export class AuthlessServer {
     }
 
     // try to fetch the sevice for this url
-    const selectedDomainPath = this.domainPathRouter.getDomainPathForUrl(url)
+    const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
     if(typeof selectedDomainPath === 'undefined') {
       throw new Error('Service not found')
     }

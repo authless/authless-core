@@ -7,7 +7,7 @@ export class DomainPathRouter implements IDomainPathRouter {
     this.domainMap = domainMap
   }
 
-  getDomainPathForUrl (url: string): IDomainPath | undefined {
+  getDomainPath (url: string): IDomainPath | undefined {
     const matchedUrlKeys = Object.keys(this.domainMap)
       .sort((a, b) => b.length - a.length)
       .filter(domainUrl => url.includes(domainUrl))
