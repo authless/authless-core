@@ -11,16 +11,12 @@ interface IBotRouter {
   botMap: {[url: string ]: IBot[]}
   botIndices: {[url: string ]: number}
   getBotForUrl(url: string)
-  // getBot(): IBot | undefined
   getBotByUsername(username: string): IBot | undefined
 }
 
 interface IBot {
   username: string
   password: string
-  // hitCount: number
-  // loginCount: number
-  // captchaCount: number
   foundLogin: (found: Boolean) => void
   foundCaptcha: (found: Boolean) => void
   getHitCount: () => number
@@ -87,10 +83,6 @@ interface BrowserConfig {
 
 interface IDomainPath {
   domain: string
-  // urls: string[]
-  // botRouter: IBotRouter
-  // isAuthenticated: (page: any) => Promise<Boolean>
-  // authenticate: (page: any, bot?: IBot) => Promise<Boolean | string>
   pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
 
@@ -125,91 +117,17 @@ interface Xhr {
   request: RequestContainer | undefined
 }
 
-interface RequestElementText {
-  body: string
-  request: any
-  status: number
-}
-
-interface RequestElement {
-  text: RequestElementText
-}
-
-interface Input {
-  id: string
-  text: string
-}
-
-interface HttpStateVal {
-  text: string
-}
-
-interface HttpState {
-  [index: string]: HttpStateVal
-}
-
-interface AppState {
-  HttpState: HttpState
-}
-
-interface CodeElement {
-  id: string
-  text: string | RequestElementText
-}
-
-interface ResponseContainerMeta {
-  account: string
-  time: number
-}
-
-interface ResponseContainerPage {
-  title: string
-  url: URL
-  viewport: Viewport | null
-  content: string
-  cookies: Cookie[]
-}
-
-interface ResponseContainer {
-  meta: ResponseContainerMeta
-  content: string
-  page: ResponseContainerPage
-  xhrs: Xhr[]
-  main: Xhr
-}
-
-interface Identifier {
-  // eslint-disable-next-line camelcase
-  entity_def_id: string
-}
-interface Property {
-  identifier: Identifier
-}
-
-// type Resource = crunchbasePerson | crunchbaseFundingRound | crunchbaseOrganization
-interface Resource {
-  entities: any
-  properties: Property
-}
-
 export {
+  URLs,
   URLParams,
   PuppeteerParams,
   BrowserConfig,
   IBot,
-  IDomainPath,
-  IResponse,
   IBotRouter,
-  IAuthlessCore,
+  IDomainPath,
   IDomainPathRouter,
   Xhr,
-  URLs,
-  Input,
-  Resource,
-  AppState,
-  CodeElement,
-  HttpStateVal,
-  RequestElement,
   RequestContainer,
-  ResponseContainer,
+  IResponse,
+  IAuthlessCore,
 }

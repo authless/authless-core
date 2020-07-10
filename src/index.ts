@@ -41,12 +41,5 @@ export {
   IDomainPathRouter,
   Xhr,
   URLs,
-  Input,
-  Resource,
-  AppState,
-  CodeElement,
-  HttpStateVal,
-  RequestElement,
   RequestContainer,
-  ResponseContainer,
 } from './types'
