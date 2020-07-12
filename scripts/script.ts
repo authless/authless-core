@@ -24,7 +24,7 @@ class SampleDomainPath extends DomainPath {
     const { puppeteerParams, urlParams } = config ?? {}
 
     // add response listeners to save ajax/onchange responses
-    await this.setupPage(page, puppeteerParams)
+    await this.setupPage(page, puppeteerParams ?? {})
 
     const url = urlParams?.url
     if(typeof url === 'undefined') {
