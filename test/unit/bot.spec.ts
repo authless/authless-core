@@ -7,37 +7,46 @@ test('Bot is instantiated correctly', () => {
 
 // -- login hit count
 test('Login hit count is correctly calculated', () => {
-  const times = Math.ceil(Math.random() * 10)
 
-  const bot1 = new Bot('username', 'password', 100)
   // simulating 100% login hit count
-  Array(times).fill(1).forEach(x => {
-    bot1.foundLogin(true)
-  })
+  const bot1 = new Bot('username', 'password', 100)
+  bot1.foundLogin(true)
+  bot1.foundLogin(true)
+  bot1.foundLogin(true)
+  bot1.foundLogin(true)
+  bot1.foundLogin(true)
   expect(bot1.getLoginHitCount()).toBe(100)
 
+  // simulating 40% login hit count
   const bot2 = new Bot('username', 'password', 100)
-  // simulating alternate login hit count
-  Array(times).fill(1).forEach((x, i) => {
-    if(i % 2 === 0) {
-      // console.log('--calling foundLogin(true)')
-      bot2.foundLogin(true)
-    } else {
-      // console.log('--calling foundLogin(false)')
-      bot2.foundLogin(false)
-    }
-  })
-  const loginFoundTimes = Array(times).fill(1).filter((x, i) => i % 2 === 0).length
-  expect(bot1.getLoginHitCount()).toBe(100 * loginFoundTimes / times)
+  bot2.foundLogin(true)
+  bot2.foundLogin(true)
+  bot2.foundLogin(false)
+  bot2.foundLogin(false)
+  bot2.foundLogin(false)
+  expect(bot2.getLoginHitCount()).toBe(40)
 })
 
 test('Captcha hit count is correctly calculated', () => {
-  const bot = new Bot('username', 'password', 100)
-  const times = Math.ceil(Math.random() * 10)
-  Array(times).fill(1).forEach(x => {
-    bot.foundCaptcha(true)
-  })
-  expect(bot.getCaptchaHitCount()).toBe(100)
+
+  // simulating 100% login hit count
+  const bot1 = new Bot('username', 'password', 100)
+  bot1.foundCaptcha(true)
+  bot1.foundCaptcha(true)
+  bot1.foundCaptcha(true)
+  bot1.foundCaptcha(true)
+  bot1.foundCaptcha(true)
+  expect(bot1.getCaptchaHitCount()).toBe(100)
+
+  // simulating 60% login hit count
+  const bot2 = new Bot('username', 'password', 100)
+  bot2.foundCaptcha(true)
+  bot2.foundCaptcha(true)
+  bot2.foundCaptcha(true)
+  bot2.foundCaptcha(false)
+  bot2.foundCaptcha(false)
+  expect(bot2.getCaptchaHitCount()).toBe(60)
+
 })
 
 // -- TODO
