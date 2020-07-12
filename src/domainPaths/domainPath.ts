@@ -1,8 +1,7 @@
 /* eslint-disable no-invalid-this */
 /* eslint-disable max-params */
-import { IResponse as IAuthlessResponse, IBot, IDomainPath, PuppeteerParams, RequestContainer, URLParams, Xhr } from '../types'
-import { Page as PuppeteerPage, Response as XHRResponse } from 'puppeteer'
-import { Response as ExpressResponse } from 'express'
+import { IResponse as IAuthlessResponse, IBot, IDomainPath, PuppeteerParams, RequestContainer, Xhr } from '../types'
+import { Page as PuppeteerPage, Response as PuppeteerResponse } from 'puppeteer'
 
 export class DomainPath implements IDomainPath {
   domain: string
@@ -29,9 +28,9 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  getRequestAsJson = async (response: XHRResponse): Promise<RequestContainer | undefined> => {
+  getRequestAsJson = async (response: PuppeteerResponse): Promise<RequestContainer | undefined> => {
     try{
-      const request = await response.request()
+      const request = response.request()
       const requestData = {
         headers: request.headers(),
         isNavigationRequest: request.isNavigationRequest(),
@@ -46,13 +45,9 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  setupPage = async (page: PuppeteerPage, puppeteerParams?: PuppeteerParams): Promise<void> => {
+  addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
+    const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
 
-    if(typeof puppeteerParams?.viewPort !== 'undefined') {
-      await page.setViewport(puppeteerParams.viewPort)
-    }
-
-    const saveResponse = async (response: XHRResponse): Promise<void> => {
       const securityDetails = {
         issuer: response.securityDetails()?.issuer(),
         protocol: response.securityDetails()?.protocol(),
@@ -73,17 +68,66 @@ export class DomainPath implements IDomainPath {
         // eslint-disable-next-line no-undefined
         request: undefined,
       }
+      // eslint-disable-next-line no-invalid-this
       returnObj.request = await this.getRequestAsJson(response)
-      try {
-        returnObj.text = await response.text()
-      } catch (e) {
-        console.log('error: response.text() failed')
+      if(typeof returnObj.request !== 'undefined') {
+        if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
+          try {
+            returnObj.text = await response.text()
+          } catch (e) {
+            console.log(`error: response.text() failed for ${returnObj.request.url}`)
+          }
+          // eslint-disable-next-line no-invalid-this
+          this.responses.push(returnObj)
+        }
       }
-      this.responses.push(returnObj)
     }
     // attach handler to save responses
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.on('response', saveResponse)
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async addRequestBlockers (page: PuppeteerPage, blockedDomains: string[]): Promise<void> {
+    // block any domains we dont want to load from
+    await page.setRequestInterception(true)
+    page.on('request', (request) => {
+      if(blockedDomains.filter(urlPart => request.url().includes(urlPart)).length > 0) {
+        request.abort()
+          .then(() => {
+            console.log(`blocked request from ${request.url()}`)
+          })
+          .catch((err) => {
+            console.log(`error blocking request from ${request.url()}: ${JSON.stringify(err)}`)
+          })
+      } else {
+        request.continue()
+          .catch(() => {
+            console.log('error calling request.continue()')
+          })
+      }
+    })
+  }
+
+  // override setupPage to allow responses of only some types
+  // and block some domains from loading scripts/assets/trackers
+  setupPage = async (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> => {
+
+    if(typeof puppeteerParams?.viewPort !== 'undefined') {
+      await page.setViewport(puppeteerParams.viewPort)
+    }
+
+    // add hooks to save responses
+    // const blockResourceTypes = ['image', 'media', 'stylesheet', 'font']
+    if(typeof puppeteerParams.blockResourceTypes !== 'undefined') {
+      this.addResponseHook(page, puppeteerParams.blockResourceTypes)
+    }
+
+    // add request blockers for domains to ignore
+    // example blockeDomains: ['split.io', 'px-cloud']
+    if(typeof puppeteerParams.blockDomains !== 'undefined') {
+      await this.addRequestBlockers(page, puppeteerParams.blockDomains)
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

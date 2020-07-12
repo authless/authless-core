@@ -56,7 +56,12 @@ interface ProxyConfig {
   }
 }
 
-type PuppeteerParams = LaunchOptions & {
+interface InterceptOptions {
+  blockDomains?: string[]
+  blockResourceTypes?: string[]
+}
+
+type PuppeteerParams = LaunchOptions & InterceptOptions & {
   viewPort?: Viewport
 }
 
