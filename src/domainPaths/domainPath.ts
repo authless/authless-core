@@ -118,13 +118,11 @@ export class DomainPath implements IDomainPath {
     }
 
     // add hooks to save responses
-    // const blockResourceTypes = ['image', 'media', 'stylesheet', 'font']
     if(typeof puppeteerParams.blockResourceTypes !== 'undefined') {
       this.addResponseHook(page, puppeteerParams.blockResourceTypes)
     }
 
     // add request blockers for domains to ignore
-    // example blockeDomains: ['split.io', 'px-cloud']
     if(typeof puppeteerParams.blockDomains !== 'undefined') {
       await this.addRequestBlockers(page, puppeteerParams.blockDomains)
     }
