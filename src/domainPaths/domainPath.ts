@@ -115,11 +115,7 @@ export class DomainPath implements IDomainPath {
     }
 
     // add hooks to save responses
-    if(typeof puppeteerParams.blockResourceTypes !== 'undefined' &&
-      puppeteerParams.blockResourceTypes.length > 0
-    ) {
-      this.addResponseHook(page, puppeteerParams.blockResourceTypes)
-    }
+    this.addResponseHook(page, puppeteerParams.blockResourceTypes ?? [])
 
     // add request blockers for domains to ignore
     if(typeof puppeteerParams.blockDomains !== 'undefined' &&
