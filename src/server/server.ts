@@ -30,8 +30,7 @@ export class AuthlessServer {
     }
   }
 
-  // eslint-disable-next-line max-params
-  getJsonResponse = async (bot, page: Page): Promise<string> => {
+  getJsonResponse = async (bot: IBot, page: Page): Promise<string> => {
     return JSON.stringify({
       meta: {
         url: await page.url(),
@@ -214,7 +213,6 @@ export class AuthlessServer {
   }
 
   run (): void {
-    // start express
     const app = express()
     app.use(express.json())
     app.use(express.urlencoded())
@@ -224,6 +222,7 @@ export class AuthlessServer {
     app.get('/speedtest', this.speedtest)
     app.get('/url', this.scrape)
 
+    // start express
     app.listen(PORT, () => {
       console.log(`Listening on port ${PORT}`)
     })
