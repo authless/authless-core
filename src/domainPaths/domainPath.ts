@@ -1,5 +1,3 @@
-/* eslint-disable no-invalid-this */
-/* eslint-disable max-params */
 import { IResponse as IAuthlessResponse, IBot, IDomainPath, PuppeteerParams, RequestContainer, Xhr } from '../types'
 import { Page as PuppeteerPage, Response as PuppeteerResponse } from 'puppeteer'
 
@@ -12,7 +10,7 @@ export class DomainPath implements IDomainPath {
     this.responses = []
   }
 
-  getJsonResponse = async (page: PuppeteerPage): Promise<IAuthlessResponse> => {
+  async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
     return {
       meta: {
         timestamp: Date.now()
@@ -69,7 +67,6 @@ export class DomainPath implements IDomainPath {
         // eslint-disable-next-line no-undefined
         request: undefined,
       }
-      // eslint-disable-next-line no-invalid-this
       returnObj.request = await this.getRequestAsJson(response)
       if(typeof returnObj.request !== 'undefined') {
         if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
@@ -78,7 +75,6 @@ export class DomainPath implements IDomainPath {
           } catch (e) {
             console.log(`error: response.text() failed for ${returnObj.request.url}`)
           }
-          // eslint-disable-next-line no-invalid-this
           this.responses.push(returnObj)
         }
       }
@@ -112,7 +108,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // setup the page to avoid some domain requests and avoid saving some resourceTypes
-  setupPage = async (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> => {
+  async setupPage (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)

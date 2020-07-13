@@ -1,6 +1,5 @@
 import { Cookie, Headers, HttpMethod, LaunchOptions, Page, ResourceType, Viewport } from 'puppeteer'
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
-// import { Viewport } from 'puppeteer/DeviceDescriptors'
 
 interface IAuthlessCore {
   name: string
@@ -88,6 +87,7 @@ interface BrowserConfig {
 
 interface IDomainPath {
   domain: string
+  setupPage: (page: Page, puppeteerParams: PuppeteerParams) => Promise<void>
   pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
 
