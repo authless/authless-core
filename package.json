@@ -1,8 +1,7 @@
 {
-  "name": "authless-core",
+  "name": "@authless/core",
   "version": "2.0.0",
-  "description": "",
-  "private": true,
+  "description": "A browserless authentication and service management framework",
   "main": "dist/src/index",
   "types": "dist/src/index",
   "dependencies": {
