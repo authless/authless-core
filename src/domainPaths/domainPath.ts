@@ -46,6 +46,7 @@ export class DomainPath implements IDomainPath {
   }
 
   addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
+    console.log(`-- setting up to block resourceTypes: ${JSON.stringify(blockResourceTypes)}`)
     const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
 
       const securityDetails = {
@@ -89,6 +90,7 @@ export class DomainPath implements IDomainPath {
 
   // eslint-disable-next-line class-methods-use-this
   async addRequestBlockers (page: PuppeteerPage, blockedDomains: string[]): Promise<void> {
+    console.log(`-- setting up to block requests from domains: ${JSON.stringify(blockedDomains)}`)
     // block any domains we dont want to load from
     await page.setRequestInterception(true)
     page.on('request', (request) => {
@@ -109,8 +111,7 @@ export class DomainPath implements IDomainPath {
     })
   }
 
-  // override setupPage to allow responses of only some types
-  // and block some domains from loading scripts/assets/trackers
+  // setup the page to avoid some domain requests and avoid saving some resourceTypes
   setupPage = async (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> => {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
@@ -118,12 +119,16 @@ export class DomainPath implements IDomainPath {
     }
 
     // add hooks to save responses
-    if(typeof puppeteerParams.blockResourceTypes !== 'undefined') {
+    if(typeof puppeteerParams.blockResourceTypes !== 'undefined' &&
+      puppeteerParams.blockResourceTypes.length > 0
+    ) {
       this.addResponseHook(page, puppeteerParams.blockResourceTypes)
     }
 
     // add request blockers for domains to ignore
-    if(typeof puppeteerParams.blockDomains !== 'undefined') {
+    if(typeof puppeteerParams.blockDomains !== 'undefined' &&
+      puppeteerParams.blockDomains.length > 0
+    ) {
       await this.addRequestBlockers(page, puppeteerParams.blockDomains)
     }
   }
