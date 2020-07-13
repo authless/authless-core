@@ -3,13 +3,13 @@ import { DomainPathRouter } from '../../src/domainPaths/domainPathRouter'
 
 // ----------------------------------------------------------------
 // --------------------------- setup ------------------------------
-const dp1 = new DomainPath('domainpath')
+const dp1 = new DomainPath('first-domainpath')
 const dp2 = new DomainPath('alt-domainpath')
 const dp3 = new DomainPath('third-domainpath')
 const dpRouter = new DomainPathRouter({
-  'url1': dp1,
-  'url2': dp2,
-  'url2/subdomain/': dp3,
+  'https://example.com': dp1,
+  'https://example.com/2': dp2,
+  'https://example.com/subdomain/': dp3,
 })
 // ----------------------------------------------------------------
 // ------------------------- end setup ----------------------------
@@ -23,20 +23,19 @@ test('create domainPathRouter', () => {
 })
 
 test('getDomainPath - when url is present', () => {
-  const domainPath = dpRouter.getDomainPath('url1')
+  const domainPath = dpRouter.getDomainPath('https://example.com')
   expect(domainPath).toBeDefined()
+  expect(domainPath?.domain).toBe('first-domainpath')
 })
 
 test('getDomainPath - when url missing', () => {
-  const domainPath = dpRouter.getDomainPath('invalid-url')
+  const domainPath = dpRouter.getDomainPath('https://example.net/invalid-url')
   expect(domainPath).toBeUndefined()
 })
 
 test('getDomainPath - find best url match', () => {
-  const url = 'url2/subdomain/resource-name/seo-text'
+  const url = 'https://example.com/subdomain/resource-name/seo-text'
   const domainPath = dpRouter.getDomainPath(url)
   expect(domainPath).toBeDefined()
   expect(domainPath?.domain).toBe('third-domainpath')
 })
-
-// -- getdomainPathByUrl - url priority ? TODO should the service with longer url be returned?
