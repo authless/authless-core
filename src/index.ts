@@ -36,6 +36,7 @@ export {
   PuppeteerParams,
   BrowserConfig,
   IBot,
+  IAnonBot,
   IDomainPath,
   IBotRouter,
   IAuthlessCore,
