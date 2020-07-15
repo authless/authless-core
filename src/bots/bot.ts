@@ -1,4 +1,3 @@
-/* eslint-disable no-warning-comments */
 import { IBot } from '../types'
 
 // 1 minutes = 60_000 milliseconds
@@ -35,6 +34,7 @@ export class Bot implements IBot {
     this.password = password
     this.usageTimeStamps = []
     if(typeof rateLimit === 'number') {
+      // eslint-disable-next-line no-warning-comments
       // TODO, calculate number of times account was used per minute
       this.rateLimit = rateLimit ?? 0
     }
