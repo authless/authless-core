@@ -13,8 +13,23 @@ export class Bot implements IBot {
   // rateLimit of 0 means no rate limiting
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private rateLimit = 0
-  usageTimeStamps: number[]
+  private usageTimeStamps: number[]
 
+  /**
+   * Create a Bot instance.
+   *
+   * @param username - The username or key for the account
+   * @param password - The password or secret for the account
+   * @param rateLimit - The rate-limit(per minute) under which this bot must be used
+   * @returns An instance of the Bot class
+   *
+   * * @example
+   * ```ts
+   * const bot = new Bot('username', 'password', 100)
+   * ```
+   *
+   * @beta
+   */
   constructor (username: string, password: string, rateLimit?: number) {
     this.username = username
     this.password = password
@@ -25,31 +40,31 @@ export class Bot implements IBot {
     }
   }
 
-  setUsageTimeStamps (): void {
+  private setUsageTimeStamps (): void {
     const now = Date.now()
     this.usageTimeStamps.push(now)
     this.usageTimeStamps = this.usageTimeStamps.filter(ts => (now - ts) <= ONE_MINUTE)
   }
 
-  wasUsed (): void {
+  public wasUsed (): void {
     this.setUsageTimeStamps()
   }
 
-  foundLogin (found: Boolean): void {
+  public foundLogin (found: Boolean): void {
     this.hitCount += 1
     if(found === true) {
       this.loginCount += 1
     }
   }
 
-  foundCaptcha (found: Boolean): void {
+  public foundCaptcha (found: Boolean): void {
     this.hitCount += 1
     if(found === true) {
       this.captchaCount += 1
     }
   }
 
-  isBelowRateLimit (): Boolean {
+  public isBelowRateLimit (): Boolean {
     if(this.rateLimit === 0) {
       return true
     }
@@ -61,17 +76,11 @@ export class Bot implements IBot {
     return false
   }
 
-  getHitCount (): number {
-    return this.hitCount
-  }
-
-  // TODO, save with timeStamps?
-  getLoginHitCount (): number {
+  public getLoginHitCount (): number {
     return 100 * this.loginCount / this.hitCount
   }
 
-  // TODO, save with timeStamps?
-  getCaptchaHitCount (): number {
+  public getCaptchaHitCount (): number {
     return 100 * this.captchaCount / this.hitCount
   }
 }

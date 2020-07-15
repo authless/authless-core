@@ -5,7 +5,20 @@ export class DomainPath implements IDomainPath {
   domain: string
   responses: Xhr[]
 
-  constructor (domain) {
+  /**
+   * Create a DomainPath instance.
+   *
+   * @param domain - The name of the domain, useful for logging
+   * @returns An instance of the DomainPath class
+   *
+   * @example
+   * ```ts
+   * const dpath = new DomainPath('my-domain')
+   * ```
+   *
+   * @beta
+   */
+  constructor (domain: string) {
     this.domain = domain
     this.responses = []
   }

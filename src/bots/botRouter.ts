@@ -4,6 +4,22 @@ export class BotRouter implements IBotRouter {
   botMap: {[url: string]: IBot[]}
   botIndices: {[url: string]: number}
 
+  /**
+   * Create a BotRouter instance.
+   *
+   * @param botMap - The map of url to Bot instance
+   * @returns An instance of the BotRouter class
+   *
+   * @example
+   * ```ts
+   * const botRouter = new BotRouter({
+   *   'www.example.com/basic-access/': new Bot('basic-username', 'basic-password'),
+   *   'www.example.com/pro-access/': new Bot('pro-username', 'pro-password'),
+   * })
+   * ```
+   *
+   * @beta
+   */
   constructor (botMap: {[url: string]: IBot[]}) {
     this.botMap = botMap
     this.botIndices = Object.keys(botMap).reduce((map, url) => {
