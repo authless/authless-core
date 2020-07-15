@@ -1,6 +1,3 @@
-/* eslint-disable no-invalid-this */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import * as path from 'path'
 import { Browser, Page, Response } from 'puppeteer'
 import { BrowserConfig, IBot, IBotRouter, IDomainPath, IDomainPathRouter, PuppeteerParams, URLParams } from '../types'
@@ -30,10 +27,10 @@ export class AuthlessServer {
     }
   }
 
-  getJsonResponse = async (bot: IBot, page: Page): Promise<string> => {
+  private async getJsonResponse (page: Page, bot?: IBot): Promise<string> {
     return JSON.stringify({
       meta: {
-        url: await page.url(),
+        url: page.url(),
         username: bot?.username ?? 'anonymous',
       },
       content: await page.content(),
@@ -42,16 +39,16 @@ export class AuthlessServer {
   }
 
   // eslint-disable-next-line max-params
-  makeExpressResponse = async (expressResponse: ExpressResponse, page: Page, bot: IBot, urlParams: URLParams): Promise<any> => {
-    const responseFormat = urlParams.responseFormat ?? 'html'
+  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: IBot, urlParams?: URLParams): Promise<any> {
+    const responseFormat = urlParams?.responseFormat ?? 'html'
     if (responseFormat === 'json') {
       expressResponse.set('Content-Type', 'application/json; charset=utf-8')
-      const jsonResponse = await this.getJsonResponse(bot, page)
+      const jsonResponse = await this.getJsonResponse(page, bot)
       return expressResponse.status(200).send(jsonResponse)
     }
 
     expressResponse.set('Content-Type', 'text/html')
-    if (urlParams.responseFormat === 'png') {
+    if (urlParams?.responseFormat === 'png') {
       return expressResponse.end(await page.screenshot({fullPage: true}), 'binary')
     }
     expressResponse.set('Content-Type', 'text/html')
@@ -62,10 +59,10 @@ export class AuthlessServer {
   static async launchBrowser (domainPath: IDomainPath, bot?: IBot, config?: BrowserConfig): Promise<Browser> {
     const { puppeteerParams } = config ?? {}
     let defaultPlugins: PuppeteerExtraPlugin[] = []
-    if(config?.useStealthPlugin) {
+    if(config?.useStealthPlugin ?? false) {
       defaultPlugins.push(StealthPlugin())
     }
-    if(config?.useAdBlockerPlugin) {
+    if(config?.useAdBlockerPlugin ?? false) {
       defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
     }
     if(typeof config?.proxy !== 'undefined') {
@@ -83,7 +80,7 @@ export class AuthlessServer {
     // calculate data-dir to store Chrome user data
     const dataDirName = `${domainPath.domain}-${username}`
     let userDataDir = puppeteerParams?.userDataDir ?? 'chrome-default-user-data-dir'
-    if (process.env.CHROME_USER_DATA_DIR) {
+    if (typeof process.env.CHROME_USER_DATA_DIR === 'string') {
       userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
     }
@@ -94,7 +91,7 @@ export class AuthlessServer {
     return browser
   }
 
-  ping = (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void => {
+  private static ping (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void {
     const name = expressRequest.query.name ?? 'anonymous user'
     if(typeof name !== 'string') {
       const error = `error: url must be provided as a query parameter string. invalid value: ${name?.toLocaleString() ?? 'undefined'}`
@@ -111,7 +108,7 @@ export class AuthlessServer {
       .end()
   }
 
-  speedtest = (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void => {
+  private static speedtest (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void {
     // start puppeteer with this.puppeteerParams
     // run speedtest
     // eslint-disable-next-line no-warning-comments
@@ -121,7 +118,7 @@ export class AuthlessServer {
       .end()
   }
 
-  scrape = async (expressRequest: ExpressRequest, expressResponse: ExpressResponse): Promise<void> => {
+  private async scrape (expressRequest: ExpressRequest, expressResponse: ExpressResponse): Promise<void> {
     const urlParams = expressRequest.query
     const { url, username } = urlParams
 
@@ -165,7 +162,7 @@ export class AuthlessServer {
     const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot)
     const page = await browser.newPage()
 
-    if(this.puppeteerParams?.viewPort) {
+    if(typeof this.puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(this.puppeteerParams?.viewPort)
     }
 
@@ -190,8 +187,8 @@ export class AuthlessServer {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     page.on('response', saveResponse)
 
-    let responseFormat = 'json'
-    if(typeof urlParams.responseFormat === 'string') {
+    let responseFormat: URLParams['responseFormat'] = 'json'
+    if(urlParams.responseFormat === 'png') {
       responseFormat = urlParams.responseFormat
     }
     // let service handle the page
@@ -212,14 +209,14 @@ export class AuthlessServer {
       .send(await page.content())
   }
 
-  run (): void {
+  public run (): void {
     const app = express()
     app.use(express.json())
     app.use(express.urlencoded())
     const PORT = process.env.PORT ?? 3000
 
-    app.get('/ping', this.ping)
-    app.get('/speedtest', this.speedtest)
+    app.get('/ping', AuthlessServer.ping)
+    app.get('/speedtest', AuthlessServer.speedtest)
     app.get('/url', this.scrape)
 
     // start express
