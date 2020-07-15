@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Cookie, Headers, HttpMethod, LaunchOptions, Page, ResourceType, Viewport } from 'puppeteer'
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 
@@ -37,7 +38,7 @@ interface IBotRouter {
    * @returns a valid bot if found, else returns undefined
    *
    */
-  getBotForUrl(url: string): IBot | undefined
+  getBotForUrl(url: string): IBot | IAnonBot
 
   /**
    * Provides a bot with a particular username
@@ -52,7 +53,25 @@ interface IBotRouter {
    * @returns a valid bot if found, else returns undefined
    *
    */
-  getBotByUsername(username: string): IBot | undefined
+  getBotByUsername(username: string): IBot | IAnonBot
+}
+
+/**
+ * Represents a anonymous user
+ *
+ * @remarks
+ * For pages that do not need an authenticated user,
+ * or URLs for which we do not have a Bot, we use an anonymous bot
+ * which has no fields except for a static 'type = "anon"'
+ *
+ * @beta
+ */
+interface IAnonBot {
+
+  /**
+   * The type of bot(is alwasys 'anonymous')
+   */
+  type: string
 }
 
 /**
@@ -586,7 +605,7 @@ interface IDomainPath {
    * @param bot - Optional. The {@link IBot} to use for authentication.
    * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
-  pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
+  pageHandler: (page: Page, bot?: IBot | IAnonBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
 
 type URL = string
@@ -693,6 +712,7 @@ export {
   PuppeteerParams,
   BrowserConfig,
   IBot,
+  IAnonBot,
   IBotRouter,
   IDomainPath,
   IDomainPathRouter,

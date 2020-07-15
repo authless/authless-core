@@ -1,3 +1,4 @@
+import { AnonBot } from '../../src/bots/anonBot'
 import { Bot } from '../../src/bots/bot'
 import { BotRouter } from '../../src/bots/botrouter'
 
@@ -33,7 +34,7 @@ test('get bot when bots is not empty', () => {
 
 test('get bot when bots is empty', () => {
   const noBot = botRouter.getBotForUrl('https://example.com/domain-2')
-  expect(noBot).toBeUndefined()
+  expect(noBot).toBeInstanceOf(AnonBot)
 })
 
 test('getBotByUsername when username is available', () => {
@@ -43,5 +44,5 @@ test('getBotByUsername when username is available', () => {
 
 test('getBotByUsername when username is not available', () => {
   const bot = botRouter.getBotByUsername('invaliduser')
-  expect(bot).toBeUndefined()
+  expect(bot).toBeInstanceOf(AnonBot)
 })

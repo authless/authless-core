@@ -9,6 +9,7 @@
  */
 
 export { Bot } from './bots/bot'
+export { AnonBot } from './bots/anonBot'
 export { BotRouter } from './bots/botrouter'
 export { DomainPath } from './domainPaths/domainPath'
 export { DomainPathRouter } from './domainPaths/domainPathRouter'
