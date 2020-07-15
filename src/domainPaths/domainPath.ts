@@ -1,5 +1,15 @@
-import { IResponse as IAuthlessResponse, IBot, IDomainPath, PuppeteerParams, RequestContainer, Xhr } from '../types'
-import { Page as PuppeteerPage, Response as PuppeteerResponse } from 'puppeteer'
+import {
+  IResponse as IAuthlessResponse,
+  IBot,
+  IDomainPath,
+  PuppeteerParams,
+  RequestContainer,
+  Xhr
+} from '../types'
+import {
+  Page as PuppeteerPage,
+  Response as PuppeteerResponse
+} from 'puppeteer'
 
 export class DomainPath implements IDomainPath {
   domain: string
@@ -21,22 +31,6 @@ export class DomainPath implements IDomainPath {
   constructor (domain: string) {
     this.domain = domain
     this.responses = []
-  }
-
-  private async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
-    return {
-      meta: {
-        timestamp: Date.now()
-      },
-      page: {
-        url: page.url(),
-        viewport: page.viewport(),
-        content: await page.content(),
-        cookies: await page.cookies(),
-        title: await page.title(),
-      },
-      xhrs: this.responses
-    }
   }
 
   private static async getRequestAsJson (response: PuppeteerResponse): Promise<RequestContainer | undefined> {
@@ -118,6 +112,22 @@ export class DomainPath implements IDomainPath {
           })
       }
     })
+  }
+
+  public async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
+    return {
+      meta: {
+        timestamp: Date.now()
+      },
+      page: {
+        url: page.url(),
+        viewport: page.viewport(),
+        content: await page.content(),
+        cookies: await page.cookies(),
+        title: await page.title(),
+      },
+      xhrs: this.responses
+    }
   }
 
   // setup the page to avoid some domain requests and avoid saving some resourceTypes

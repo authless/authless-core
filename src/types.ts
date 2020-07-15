@@ -538,6 +538,14 @@ interface IDomainPath {
   domain: string
 
   /**
+   * Form a {@link IResponse} object from the puppeteer page
+   *
+   * @remarks
+   * Override this to add custom data/metadata to your Authless response {@link IResponse}
+   */
+  getJsonResponse: (page: Page) => Promise<IResponse>
+
+  /**
    * Over-ride default page setup
    *
    * @remarks
