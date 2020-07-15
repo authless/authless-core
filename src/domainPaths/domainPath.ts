@@ -23,7 +23,7 @@ export class DomainPath implements IDomainPath {
     this.responses = []
   }
 
-  async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
+  private async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
     return {
       meta: {
         timestamp: Date.now()
@@ -39,7 +39,7 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  getRequestAsJson = async (response: PuppeteerResponse): Promise<RequestContainer | undefined> => {
+  private static async getRequestAsJson (response: PuppeteerResponse): Promise<RequestContainer | undefined> {
     try{
       const request = response.request()
       const requestData = {
@@ -56,7 +56,7 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
+  private addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
     console.log(`-- setting up to block resourceTypes: ${JSON.stringify(blockResourceTypes)}`)
     const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
 
@@ -80,7 +80,7 @@ export class DomainPath implements IDomainPath {
         // eslint-disable-next-line no-undefined
         request: undefined,
       }
-      returnObj.request = await this.getRequestAsJson(response)
+      returnObj.request = await DomainPath.getRequestAsJson(response)
       if(typeof returnObj.request !== 'undefined') {
         if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
           try {
@@ -98,7 +98,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async addRequestBlockers (page: PuppeteerPage, blockedDomains: string[]): Promise<void> {
+  private async addRequestBlockers (page: PuppeteerPage, blockedDomains: string[]): Promise<void> {
     console.log(`-- setting up to block requests from domains: ${JSON.stringify(blockedDomains)}`)
     // block any domains we dont want to load from
     await page.setRequestInterception(true)
@@ -121,7 +121,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // setup the page to avoid some domain requests and avoid saving some resourceTypes
-  async setupPage (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> {
+  public async setupPage (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)
@@ -139,7 +139,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
+  public async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
     // default implementation to process the page
     return null
   }

@@ -26,7 +26,7 @@ export class DomainPathRouter implements IDomainPathRouter {
     this.domainMap = domainMap
   }
 
-  getDomainPath (url: string): IDomainPath | undefined {
+  public getDomainPath (url: string): IDomainPath | undefined {
     const matchedUrlKeys = Object.keys(this.domainMap)
       .sort((a, b) => b.length - a.length)
       .filter(domainUrl => url.includes(domainUrl))
