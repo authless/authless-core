@@ -322,6 +322,8 @@ interface InterceptOptions {
  *    viewPort: { width: 1020, height: 800 }
  * }
  * ```
+ *
+ * @beta
  */
 type PuppeteerParams = LaunchOptions & InterceptOptions & {
 
@@ -506,7 +508,7 @@ interface BrowserConfig {
  * If different behaviours are required for different URLs
  * (say some pages have pagination, while others require you to expand links)
  * then, you should have multiple DomainPaths and attach them to the requried URL
- * via a DomainPathHandler {@link DomainPathHandler}
+ * via a DomainPathHandler {@link DomainPathRouter}
  *
  * @example
  * ```ts

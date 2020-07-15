@@ -11,6 +11,14 @@ import {
   Response as PuppeteerResponse
 } from 'puppeteer'
 
+/**
+ * Implementation of the IDomainPath interface
+ *
+ * @remarks Extend this class to create custom DomainPath behaviours
+ * You can add custom behaviour in the getJsonResponse(), setupPage() and pageHandler() functions
+ *
+ * @beta
+ */
 export class DomainPath implements IDomainPath {
   domain: string
   responses: Xhr[]

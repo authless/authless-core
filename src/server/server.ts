@@ -7,6 +7,23 @@ import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
+/**
+ * Helper class to start your running Authless server
+ *
+ * @remarks
+ * This class can be used to create a configurable puppeteer instance with
+ * some built-in functionality and plugins
+ *
+ * @example
+ * ```ts
+ * await browser = AuthlessServer.launchBrowser(myDomainPath, myBot, {puppeteerParams, puppeteerPlugins, ..})
+ * await page = browser.newPage()
+ *
+ * await domainPath.pageHandler(page, ..)
+ * ```
+ *
+ * @beta
+ */
 export class AuthlessServer {
   logger: any
   puppeteerParams?: PuppeteerParams
@@ -15,6 +32,11 @@ export class AuthlessServer {
   botRouter: IBotRouter
   responses: any[]
 
+  /**
+   * Create a Authless server instance
+   *
+   * @beta
+   */
   // eslint-disable-next-line max-params
   constructor (domainPathRouter: IDomainPathRouter, botRouter: IBotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]) {
     this.domainPathRouter = domainPathRouter

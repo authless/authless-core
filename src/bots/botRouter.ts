@@ -1,5 +1,10 @@
 import { IBot, IBotRouter } from '../types'
 
+/**
+ * Implementation of the IBotRouter interface
+ *
+ * @beta
+ */
 export class BotRouter implements IBotRouter {
   botMap: {[url: string]: IBot[]}
   botIndices: {[url: string]: number}

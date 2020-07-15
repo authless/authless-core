@@ -3,6 +3,13 @@ import { IBot } from '../types'
 // 1 minutes = 60_000 milliseconds
 const ONE_MINUTE = 60_000
 
+/**
+ * Implementation of the IBot interface
+ *
+ * @remarks Extend this class to create custom Bots
+ *
+ * @beta
+ */
 export class Bot implements IBot {
   username: string
   password: string

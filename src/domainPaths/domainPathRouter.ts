@@ -1,5 +1,11 @@
 import { IDomainPath, IDomainPathRouter } from '../types'
 
+/**
+ * Implementation of the IDomainPathRouter interface
+ *
+ * @beta
+ */
+
 export class DomainPathRouter implements IDomainPathRouter {
   domainMap: {[url: string ]: IDomainPath}
 
