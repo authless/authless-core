@@ -81,10 +81,6 @@ interface IBot {
    * @remarks
    * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.
    *
-   * @param x - The first input number
-   * @param y - The second input number
-   * @returns The arithmetic mean of `x` and `y`
-   *
    * @beta
    */
   wasUsed: () => void
@@ -230,6 +226,10 @@ interface IDomainPathRouter {
 
   /**
    * returns a {@link IDomainPath} that matches the url, else returns undefined
+   *
+   * @param url - the HTTP URL which is to be fetched
+   * @returns a {@link IDomainPath} if found, else returns undefined
+   *
    */
   getDomainPath: (url: string) => IDomainPath | undefined
 }
@@ -353,6 +353,8 @@ type PuppeteerParams = LaunchOptions & InterceptOptions & {
  *    responseFormat: 'json', // will return an object in JSON format
  * }
  * ```
+ *
+ * @beta
  */
 interface URLParams {
 
@@ -438,6 +440,8 @@ interface URLParams {
 
 /**
  * Config to control puppeteer launch, default plugins, proxy and page handling config
+ *
+ * @beta
  */
 interface BrowserConfig {
 
@@ -468,6 +472,8 @@ interface BrowserConfig {
    * @remarks
    * Uses a pre-setup puppeteer-extra-adblocker-plugin with \{blockTrackers: all\} option by default
    * If you would like to override it, you can do so here
+   *
+   * @beta
    */
   adBlockerConfig?: {
     blockTrackers: boolean
@@ -531,6 +537,8 @@ interface BrowserConfig {
  *
  * Now, get the right domainPath by url and use it. Refer to docs
  * ```
+ *
+ * @beta
  */
 interface IDomainPath {
 
@@ -544,6 +552,9 @@ interface IDomainPath {
    *
    * @remarks
    * Override this to add custom data/metadata to your Authless response {@link IResponse}
+   *
+   * @param page - the puppeteer page from which to extract the response object
+   * @returns a {@link IResponse} if found, else returns undefined
    */
   getJsonResponse: (page: Page) => Promise<IResponse>
 
@@ -554,6 +565,9 @@ interface IDomainPath {
    * Override this to add custom page listeners on response etc.
    * This happens before we navigate to the target URL.
    * Call super.setupPage if you would like to use default response/resourceType blocking
+   *
+   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
+   * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user
    */
   setupPage: (page: Page, puppeteerParams: PuppeteerParams) => Promise<void>
 
@@ -566,6 +580,11 @@ interface IDomainPath {
    * You can have different DomainPaths with different behaviour
    * and call the appropriate one based on the URL you wish to fetch
    * The puppeteer instance will be reused and only new pages are instantiated here
+   *
+   *
+   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
+   * @param bot - Optional. The {@link IBot} to use for authentication.
+   * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
   pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
@@ -623,6 +642,8 @@ interface RequestContainer {
 
 /**
  * Details of the ajax/asset requests made by the puppeteer page
+ *
+ * @beta
  */
 interface Xhr {
 
