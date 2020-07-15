@@ -42,7 +42,7 @@
     "test": "jest --c jest.config.json --maxWorkers=1",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm test -- --collectCoverage",
-    "build": "tsc",
+    "build": "tsc && npm run docs",
     "prepare": "npm run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "semantic-release": "GITHUB_TOKEN=test semantic-release --no-ci --dry-run",
@@ -53,13 +53,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MichaelHirn/ts-template.git"
+    "url": "git+https://github.com/authless/authless-core.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MichaelHirn/ts-template/issues"
+    "url": "https://github.com/authless/authless-core/issues"
   },
-  "homepage": "https://github.com/MichaelHirn/ts-template#readme"
+  "homepage": "https://github.com/authless/authless-core#readme"
 }
