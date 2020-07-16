@@ -95,6 +95,11 @@ interface IBot {
   password: string
 
   /**
+   * The URLs to be handled by this bot
+   */
+  urls: string[]
+
+  /**
    * Tells the bot that it was used for authentication.
    *
    * @remarks

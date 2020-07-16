@@ -13,6 +13,7 @@ const ONE_MINUTE = 60_000
 export class Bot implements IBot {
   username: string
   password: string
+  urls: string[]
   private hitCount = 0
   private loginCount = 0
   private captchaCount = 0
@@ -26,6 +27,7 @@ export class Bot implements IBot {
    *
    * @param username - The username or key for the account
    * @param password - The password or secret for the account
+   * @param urls - A non empty array of HTTP URLs as a list of strings
    * @param rateLimit - The rate-limit(per minute) under which this bot must be used
    * @returns An instance of the Bot class
    *
@@ -36,9 +38,14 @@ export class Bot implements IBot {
    *
    * @beta
    */
-  constructor (username: string, password: string, rateLimit?: number) {
+  // eslint-disable-next-line max-params
+  constructor (username: string, password: string, urls: string[], rateLimit?: number) {
     this.username = username
     this.password = password
+    if(urls.length === 0) {
+      throw new Error('urls cannot be an empty array as the Bot will never be selected otherwise')
+    }
+    this.urls = urls
     this.usageTimeStamps = []
     if(typeof rateLimit === 'number') {
       // eslint-disable-next-line no-warning-comments

@@ -7,8 +7,7 @@ import { AnonBot } from './anonBot'
  * @beta
  */
 export class BotRouter implements IBotRouter {
-  botMap: {[url: string]: IBot[]}
-  botIndices: {[url: string]: number}
+  botMap: {[url: string]: IBot}
 
   /**
    * Create a BotRouter instance.
@@ -24,13 +23,38 @@ export class BotRouter implements IBotRouter {
    * })
    * ```
    *
+   * Internally, we store it as a map of \{url: Bot\}
+   * by converting a structure of form
+   * ```ts
+   * [
+   *   Bot1{urls: ['url1', 'url2', 'url3'..]},
+   *   Bot2{urls: ['url4', 'url5', 'url6'..]}
+   * ]
+   * ```
+   * to
+   * ```ts
+   * {
+   *   'url1': Bot1,
+   *   'url2': Bot1,
+   *   'url3': Bot1,
+   *   'url4': Bot2,
+   *   'url5': Bot2,
+   *   'url6': Bot2
+   * }
+   * ```
+   * as it makes it easier to fetch by url
+   *
    * @beta
    */
-  constructor (botMap: {[url: string]: IBot[]}) {
-    this.botMap = botMap
-    this.botIndices = Object.keys(botMap).reduce((map, url) => {
-      map[url] = 0
-      return map
+  constructor (bots: IBot[]) {
+    if(bots.length === 0) {
+      throw new Error('Error: parameter "bots: IBot[]" cannot be empty as there will be no bots to route')
+    }
+    this.botMap = bots.reduce((acc, bot) => {
+      bot.urls.forEach(url => {
+        acc[url] = bot
+      })
+      return acc
     }, {})
   }
 
@@ -41,11 +65,8 @@ export class BotRouter implements IBotRouter {
 
     if(matchedUrlKeys.length > 0) {
       const matchedUrl = matchedUrlKeys[0]
-      const matchedBots = this.botMap[matchedUrlKeys[0]]
-      const botIndex = this.botIndices[matchedUrl]
-      if(botIndex < matchedBots.length) {
-        this.botIndices[matchedUrl] = (this.botIndices[matchedUrl] + 1) % matchedBots.length
-        return matchedBots[botIndex]
+      if(typeof matchedUrl !== 'undefined') {
+        return this.botMap[matchedUrl]
       }
     }
     return new AnonBot()
@@ -55,12 +76,12 @@ export class BotRouter implements IBotRouter {
   // TODO - get only if bot.isBelowRateLimit() is true
   getBotByUsername (name: string): IBot | IAnonBot {
 
-    const matchedBots = Object.values(this.botMap)
-      .find(bots => {
-        return bots.findIndex(bot => bot.username === name) !== -1
-      })
-    if(typeof matchedBots !== 'undefined' && matchedBots.length > 0) {
-      return matchedBots[0]
+    const matchedUrl = Object.keys(this.botMap).find(url => {
+      const bot = this.botMap[url]
+      return bot.username === name
+    })
+    if(typeof matchedUrl !== 'undefined') {
+      return this.botMap[matchedUrl]
     }
     return new AnonBot()
   }
