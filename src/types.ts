@@ -21,6 +21,57 @@ interface IAuthlessCore {
 }
 
 /**
+ * A Cache interface which can be passed to AuthlessClient class
+ */
+interface ICache {
+
+  /**
+   * Add a value to cache
+   *
+   * @param key - The string key of the cache. Will usually be the URL fetched
+   * @param data - The data to be saved
+   *
+   * @returns
+   * 'ok' if successful, else returns an Error object
+   */
+  put: (key: string, data: any) => Promise<'ok' | Error>
+
+  /**
+   * Get a value from the cache
+   *
+   * @param key - The string key of the cache. Will usually be the URL fetched
+   *
+   * * @returns
+   * The data that was fetched if successful, else returns an Error object
+   */
+  get: (key: string) => Promise<any | Error>
+
+  /**
+   * Delete a value from the cache
+   *
+   * @param key - The string key of the cache. Will usually be the URL fetched
+   *
+   * * @returns
+   * The data that was deleted if successful, else returns an Error object
+   */
+  delete: (key: string) => Promise<any | Error>
+
+  /**
+   * Delete all values from the cache
+   *
+   * @param before - Optional. Number representing the Unix timestamp in milliseconds. All data saved before this will be deleted
+   *
+   * * @returns
+   * The number of keys that were removed
+   */
+  deleteAll: (before?: number) => Promise<number | Error>
+}
+
+type FetchParams = URLParams & {
+  serverUrl: string
+}
+
+/**
  * Manages a pool(zero or more) IBots {@link IBot}
  * Is responsible for rotating the bots used in a round-robin fashion.
  *
@@ -753,4 +804,6 @@ export {
   RequestContainer,
   IResponse,
   IAuthlessCore,
+  ICache,
+  FetchParams,
 }
