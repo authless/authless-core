@@ -38,7 +38,7 @@ interface IBotRouter {
    * @returns a valid bot if found, else returns undefined
    *
    */
-  getBotForUrl(url: string): IBot | IAnonBot
+  getBotForUrl(url: string): IBot
 
   /**
    * Provides a bot with a particular username
@@ -53,25 +53,48 @@ interface IBotRouter {
    * @returns a valid bot if found, else returns undefined
    *
    */
-  getBotByUsername(username: string): IBot | IAnonBot
+  getBotByUsername(username: string): IBot
 }
 
 /**
- * Represents a anonymous user
- *
- * @remarks
- * For pages that do not need an authenticated user,
- * or URLs for which we do not have a Bot, we use an anonymous bot
- * which has no fields except for a static 'type = "anon"'
+ * The configuration to instantiate a Bot.
+ * Is passed to a {@link IBot}
  *
  * @beta
  */
-interface IAnonBot {
+interface BotConfig {
 
   /**
-   * The type of bot(is alwasys 'anonymous')
+   * The credentials for a bot.
+   * May be omitted for anonymous bots(no authentication needed)
    */
-  type: string
+  credentials?: {
+    username: string
+    password: string
+  }
+
+  /**
+   * The HTTP URLs the bot is to handle.
+   * Must be a list of string
+   */
+  urls: string[]
+
+  /**
+   * The limit per minute under which a bot can be used.
+   *
+   * @remarks
+   * If the usage is above the limit, the bot-router will not return this bots
+   * till an appropriate amount of time has passed
+   */
+  rateLimit?: number
+
+  /**
+   * The puppeteer specific configuration for the bot. {@link BrowserConfig}
+   *
+   * @remarks
+   * This allows bots to have their own proxy/plugin configurations.
+   */
+  browserConfig?: BrowserConfig
 }
 
 /**
@@ -85,14 +108,14 @@ interface IAnonBot {
 interface IBot {
 
   /**
-   * The username or key of the account
+   * The username or key of the account. May be undefined for anonymous bots
    */
-  username: string
+  username?: string
 
   /**
-   * The password or secret of the account
+   * The password or secret of the account. May be undefined for anonymous bots
    */
-  password: string
+  password?: string
 
   /**
    * The URLs to be handled by this bot
@@ -610,7 +633,7 @@ interface IDomainPath {
    * @param bot - Optional. The {@link IBot} to use for authentication.
    * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
-  pageHandler: (page: Page, bot?: IBot | IAnonBot, config?: BrowserConfig) => Promise<IResponse | null>
+  pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
 }
 
 type URL = string
@@ -716,8 +739,8 @@ export {
   URLParams,
   PuppeteerParams,
   BrowserConfig,
+  BotConfig,
   IBot,
-  IAnonBot,
   IBotRouter,
   IDomainPath,
   IDomainPathRouter,

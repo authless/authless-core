@@ -1,11 +1,10 @@
 import * as path from 'path'
 import { Browser, Page, Response } from 'puppeteer'
-import { BrowserConfig, IAnonBot, IBot, IBotRouter, IDomainPath, IDomainPathRouter, PuppeteerParams, URLParams } from '../types'
+import { BrowserConfig, IBot, IBotRouter, IDomainPath, IDomainPathRouter, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import { AnonBot } from '../bots/anonBot'
-import { Bot } from '../bots/bot'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
@@ -51,11 +50,8 @@ export class AuthlessServer {
     }
   }
 
-  private async getJsonResponse (page: Page, bot?: IBot | AnonBot): Promise<string> {
-    let username = 'anonymous'
-    if(bot instanceof Bot) {
-      username = bot.username
-    }
+  private async getJsonResponse (page: Page, bot?: IBot): Promise<string> {
+    let username = bot?.username ?? 'anonymous'
     return JSON.stringify({
       meta: {
         url: page.url(),
@@ -67,7 +63,7 @@ export class AuthlessServer {
   }
 
   // eslint-disable-next-line max-params
-  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: IBot | IAnonBot, urlParams?: URLParams): Promise<any> {
+  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: IBot, urlParams?: URLParams): Promise<any> {
     const responseFormat = urlParams?.responseFormat ?? 'html'
     if (responseFormat === 'json') {
       expressResponse.set('Content-Type', 'application/json; charset=utf-8')
@@ -84,7 +80,7 @@ export class AuthlessServer {
 
   // eslint-disable-next-line no-warning-comments
   // TODO - how do we handle anonymous users(bot is undefined)
-  static async launchBrowser (domainPath: IDomainPath, bot: IBot | IAnonBot, config?: BrowserConfig): Promise<Browser> {
+  static async launchBrowser (domainPath: IDomainPath, bot: IBot, config?: BrowserConfig): Promise<Browser> {
     const { puppeteerParams } = config ?? {}
     let defaultPlugins: PuppeteerExtraPlugin[] = []
     if(config?.useStealthPlugin ?? false) {
@@ -101,10 +97,7 @@ export class AuthlessServer {
       puppeteer.use(plugin)
     })
 
-    let username = 'anon'
-    if(bot instanceof Bot) {
-      username = bot.username
-    }
+    let username: string = bot?.username ?? 'anon'
     // calculate data-dir to store Chrome user data
     const dataDirName = `${domainPath.domain}-${username}`
     let userDataDir = puppeteerParams?.userDataDir ?? 'chrome-default-user-data-dir'

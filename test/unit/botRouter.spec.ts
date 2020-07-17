@@ -7,8 +7,31 @@ import { BotRouter } from '../../src/bots/botrouter'
 const urls1 = ['https://example.com/domain-1', 'https://example.com/domain-2']
 const urls2 = ['https://example.com/subdomain/']
 
-const bot1 = new Bot('user1', 'pass1', urls1)
-const bot2 = new Bot('user2', 'pass2', urls2)
+const defaultBotConfig = {
+  urls: [],
+  rateLimit: 100,
+  browserConfig: {
+    proxy: {
+      address: '124.100.100.100',
+      port: 9999,
+      credentials: {
+        username: 'proxy_username',
+        password: 'proxy_password'
+      }
+    }
+  }
+}
+
+const bot1 = new Bot({
+  ...defaultBotConfig,
+  urls: urls1,
+  credentials: { username: 'user1', password: 'pass1'}
+})
+const bot2 = new Bot({
+  ...defaultBotConfig,
+  urls: urls2,
+  credentials: { username: 'user2', password: 'pass2'}
+})
 
 const botRouter = new BotRouter([bot1, bot2])
 // ------------------------- end setup ----------------------------

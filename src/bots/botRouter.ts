@@ -1,5 +1,6 @@
-import { IAnonBot, IBot, IBotRouter } from '../types'
-import { AnonBot } from './anonBot'
+import { IBot, IBotRouter } from '../types'
+import { AnonBot } from '../bots/anonBot'
+import { Bot } from '../bots/bot'
 
 /**
  * Implementation of the IBotRouter interface
@@ -7,7 +8,7 @@ import { AnonBot } from './anonBot'
  * @beta
  */
 export class BotRouter implements IBotRouter {
-  botMap: {[url: string]: IBot}
+  botMap: {[url: string]: Bot}
 
   /**
    * Create a BotRouter instance.
@@ -46,9 +47,9 @@ export class BotRouter implements IBotRouter {
    *
    * @beta
    */
-  constructor (bots: IBot[]) {
+  constructor (bots: Bot[]) {
     if(bots.length === 0) {
-      throw new Error('Error: parameter "bots: IBot[]" cannot be empty as there will be no bots to route')
+      throw new Error('Error: parameter "bots: Bot[]" cannot be empty as there will be no bots to route')
     }
     this.botMap = bots.reduce((acc, bot) => {
       bot.urls.forEach(url => {
@@ -58,7 +59,7 @@ export class BotRouter implements IBotRouter {
     }, {})
   }
 
-  getBotForUrl (url: string): IBot | IAnonBot {
+  getBotForUrl (url: string): IBot {
     const matchedUrlKeys = Object.keys(this.botMap)
       .sort((a, b) => a.length - b.length)
       .filter(domainUrl => url.includes(domainUrl))
@@ -74,7 +75,7 @@ export class BotRouter implements IBotRouter {
 
   // eslint-disable-next-line no-warning-comments
   // TODO - get only if bot.isBelowRateLimit() is true
-  getBotByUsername (name: string): IBot | IAnonBot {
+  getBotByUsername (name: string): Bot {
 
     const matchedUrl = Object.keys(this.botMap).find(url => {
       const bot = this.botMap[url]

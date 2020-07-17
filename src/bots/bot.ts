@@ -1,4 +1,4 @@
-import { IBot } from '../types'
+import { BotConfig, IBot } from '../types'
 
 // 1 minutes = 60_000 milliseconds
 const ONE_MINUTE = 60_000
@@ -11,8 +11,8 @@ const ONE_MINUTE = 60_000
  * @beta
  */
 export class Bot implements IBot {
-  username: string
-  password: string
+  username?: string
+  password?: string
   urls: string[]
   private hitCount = 0
   private loginCount = 0
@@ -25,32 +25,55 @@ export class Bot implements IBot {
   /**
    * Create a Bot instance.
    *
-   * @param username - The username or key for the account
-   * @param password - The password or secret for the account
-   * @param urls - A non empty array of HTTP URLs as a list of strings
-   * @param rateLimit - The rate-limit(per minute) under which this bot must be used
+   * @param config - Of type {@link BotConfig}. browserConfig takes type {@link BrowserConfig}
    * @returns An instance of the Bot class
    *
    * * @example
    * ```ts
-   * const bot = new Bot('username', 'password', 100)
+   * const bot = new Bot({
+   *  credentials: { // optional
+   *    username: 'username',
+   *    password: 'password'
+   *  },
+   *  urls: ['www.example.com'],
+   *  rateLimit: 100, // optional, per minute
+   *  browserConfig: {
+   *    executablePath: '/path/to/your/Chromium',
+   *    headless: false,
+   *    useStealthPlugin: true,
+   *    useAdblockerPlugin: true,
+   *    blockDomains: [
+   *      'some-tracker.io',
+   *      'image-host.net',
+   *    ],
+   *    blockResourceTypes: ['image', 'media', 'stylesheet', 'font'],
+   *    proxy: {
+   *      address: '99.99.99.99',
+   *      port: 9999,
+   *      credentials: {
+   *        username: 'proxyuser1',
+   *        password: 'proxypass1',
+   *      },
+   *    }
+   *  }
+   * })
    * ```
    *
    * @beta
    */
   // eslint-disable-next-line max-params
-  constructor (username: string, password: string, urls: string[], rateLimit?: number) {
-    this.username = username
-    this.password = password
-    if(urls.length === 0) {
-      throw new Error('urls cannot be an empty array as the Bot will never be selected otherwise')
+  constructor (botConfig: BotConfig) {
+    this.username = botConfig.credentials?.username
+    this.password = botConfig.credentials?.password
+    if(typeof botConfig.credentials !== 'undefined' && botConfig.urls.length === 0) {
+      throw new Error('Bots with credentials cannot have urls as the Bot will never be selected otherwise')
     }
-    this.urls = urls
+    this.urls = botConfig.urls
     this.usageTimeStamps = []
-    if(typeof rateLimit === 'number') {
+    if(typeof botConfig.rateLimit === 'number') {
       // eslint-disable-next-line no-warning-comments
       // TODO, calculate number of times account was used per minute
-      this.rateLimit = rateLimit ?? 0
+      this.rateLimit = botConfig.rateLimit ?? 0
     }
   }
 
