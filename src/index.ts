@@ -34,6 +34,7 @@ export {
   URLParams,
   PuppeteerParams,
   BrowserConfig,
+  BotConfig,
   IBot,
   IDomainPath,
   IBotRouter,
