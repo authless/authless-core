@@ -5,6 +5,7 @@ const urlParams: FetchParams = {
   serverUrl: 'http://localhost:8080',
   url: 'www.google.com',
   responseFormat: 'json',
+  alphabetSelector: '#some-selector'
 }
 
 const cache: ICache = {
@@ -23,19 +24,24 @@ const cache: ICache = {
 }
 
 test('AuthlessClient is instantiated correctly without cache', () => {
-  const bot = new AuthlessClient()
-  expect(bot).toBeDefined()
+  const client = new AuthlessClient()
+  expect(client).toBeDefined()
 })
 
 test('AuthlessClient is instantiated correctly with cache', () => {
-  const bot = new AuthlessClient(cache)
-  expect(bot).toBeDefined()
-  expect(bot.cache).toBeDefined()
+  const client = new AuthlessClient(cache)
+  expect(client).toBeDefined()
+  expect(client.cache).toBeDefined()
 })
 
 test('fetches a URL correctly', () => {
-  const bot = new AuthlessClient(cache)
-  bot.fetch(urlParams)
+  const queryParams = AuthlessClient.makeParams(urlParams)
+  expect(queryParams).toBe('u=www.google.com&responseFormat=json&alphabetSelector=#some-selector')
+})
+
+test('fetches a URL correctly', () => {
+  const client = new AuthlessClient(cache)
+  client.fetch(urlParams)
     .then(response => {
       expect(response).toBeDefined()
     })

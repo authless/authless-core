@@ -23,7 +23,7 @@ export class AuthlessClient {
    *
    * @param params - Object from which to generate a stringified HTTP Request query
    */
-  private static makeParams (params: FetchParams): string {
+  static makeParams (params: FetchParams): string {
     let retParams = `u=${params.url}`
     retParams += ['responseFormat', 'inputs', 'alphabetSelector', 'referer', 'username'].reduce((acc, key) => {
       const param = params[key]
