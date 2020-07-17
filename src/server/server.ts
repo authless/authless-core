@@ -107,6 +107,7 @@ export class AuthlessServer {
     }
     const browser = await puppeteer.launch({
       ...puppeteerParams,
+      ...bot.browserConfig,
       userDataDir
     })
     return browser

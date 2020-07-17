@@ -1,4 +1,4 @@
-import { BotConfig, IBot } from '../types'
+import { BotConfig, BrowserConfig, IBot } from '../types'
 
 // 1 minutes = 60_000 milliseconds
 const ONE_MINUTE = 60_000
@@ -14,6 +14,7 @@ export class Bot implements IBot {
   username?: string
   password?: string
   urls: string[]
+  browserConfig?: BrowserConfig
   private hitCount = 0
   private loginCount = 0
   private captchaCount = 0
@@ -63,18 +64,19 @@ export class Bot implements IBot {
    */
   // eslint-disable-next-line max-params
   constructor (botConfig: BotConfig) {
-    this.username = botConfig.credentials?.username
-    this.password = botConfig.credentials?.password
     if(typeof botConfig.credentials !== 'undefined' && botConfig.urls.length === 0) {
       throw new Error('Bots with credentials cannot have urls as the Bot will never be selected otherwise')
     }
+    this.username = botConfig.credentials?.username
+    this.password = botConfig.credentials?.password
     this.urls = botConfig.urls
-    this.usageTimeStamps = []
     if(typeof botConfig.rateLimit === 'number') {
       // eslint-disable-next-line no-warning-comments
       // TODO, calculate number of times account was used per minute
       this.rateLimit = botConfig.rateLimit ?? 0
     }
+    this.browserConfig = botConfig.browserConfig
+    this.usageTimeStamps = []
   }
 
   private setUsageTimeStamps (): void {

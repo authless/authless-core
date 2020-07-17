@@ -123,6 +123,11 @@ interface IBot {
   urls: string[]
 
   /**
+   * The puppeteer/page options for the bot {@link BrowserConfig}
+   */
+  browserConfig?: BrowserConfig
+
+  /**
    * Tells the bot that it was used for authentication.
    *
    * @remarks
