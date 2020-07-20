@@ -5,6 +5,7 @@ import express, { Request as ExpressRequest, Response as ExpressResponse } from 
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import { AnonBot } from '../bots/anonBot'
+import { Bot } from '../bots/bot'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
@@ -50,7 +51,7 @@ export class AuthlessServer {
     }
   }
 
-  private async getJsonResponse (page: Page, bot?: IBot): Promise<string> {
+  private async getJsonResponse (page: Page, bot?: Bot): Promise<string> {
     let username = bot?.username ?? 'anonymous'
     return JSON.stringify({
       meta: {
@@ -63,7 +64,7 @@ export class AuthlessServer {
   }
 
   // eslint-disable-next-line max-params
-  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: IBot, urlParams?: URLParams): Promise<any> {
+  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: Bot, urlParams?: URLParams): Promise<any> {
     const responseFormat = urlParams?.responseFormat ?? 'html'
     if (responseFormat === 'json') {
       expressResponse.set('Content-Type', 'application/json; charset=utf-8')
@@ -78,8 +79,6 @@ export class AuthlessServer {
     expressResponse.set('Content-Type', 'text/html')
   }
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO - how do we handle anonymous users(bot is undefined)
   static async launchBrowser (domainPath: IDomainPath, bot: IBot, config?: BrowserConfig): Promise<Browser> {
     const { puppeteerParams } = config ?? {}
     let defaultPlugins: PuppeteerExtraPlugin[] = []
@@ -133,8 +132,6 @@ export class AuthlessServer {
   private static speedtest (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void {
     // start puppeteer with this.puppeteerParams
     // run speedtest
-    // eslint-disable-next-line no-warning-comments
-    // TODO
     expressResponse
       .send(JSON.stringify({'speed': '1000'}))
       .end()

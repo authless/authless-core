@@ -41,7 +41,7 @@ interface ICache {
    *
    * @param key - The string key of the cache. Will usually be the URL fetched
    *
-   * * @returns
+   * @returns
    * The data that was fetched if successful, else returns an Error object
    */
   get: (key: string) => Promise<any | Error>
@@ -51,7 +51,7 @@ interface ICache {
    *
    * @param key - The string key of the cache. Will usually be the URL fetched
    *
-   * * @returns
+   * @returns
    * The data that was deleted if successful, else returns an Error object
    */
   delete: (key: string) => Promise<any | Error>
@@ -61,7 +61,7 @@ interface ICache {
    *
    * @param before - Optional. Number representing the Unix timestamp in milliseconds. All data saved before this will be deleted
    *
-   * * @returns
+   * @returns
    * The number of keys that were removed
    */
   deleteAll: (before?: number) => Promise<number | Error>
@@ -172,6 +172,31 @@ interface IBot {
    * The URLs to be handled by this bot
    */
   urls: string[]
+
+  /**
+   * @internal
+   */
+  hitCount: number
+
+  /**
+   * @internal
+   */
+  loginCount: number
+
+  /**
+   * @internal
+   */
+  captchaCount: number
+
+  /**
+   * @internal
+   */
+  rateLimit: number
+
+  /**
+   * @internal
+   */
+  usageTimeStamps: number[]
 
   /**
    * The puppeteer/page options for the bot {@link BrowserConfig}
@@ -486,7 +511,7 @@ interface URLParams {
    * { inputs: '#input1:my value1;#input2:9999' }
    * ```
    *
-   * * @alpha
+   * @alpha
    */
   inputs?: string
 

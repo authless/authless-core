@@ -1,6 +1,6 @@
-import { IBot, IBotRouter } from '../types'
 import { AnonBot } from '../bots/anonBot'
 import { Bot } from '../bots/bot'
+import { IBotRouter } from '../types'
 
 /**
  * Implementation of the IBotRouter interface
@@ -59,7 +59,7 @@ export class BotRouter implements IBotRouter {
     }, {})
   }
 
-  getBotForUrl (url: string): IBot {
+  getBotForUrl (url: string): Bot {
     const matchedUrlKeys = Object.keys(this.botMap)
       .sort((a, b) => a.length - b.length)
       .filter(domainUrl => url.includes(domainUrl))
@@ -73,8 +73,6 @@ export class BotRouter implements IBotRouter {
     return new AnonBot()
   }
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO - get only if bot.isBelowRateLimit() is true
   getBotByUsername (name: string): Bot {
 
     const matchedUrl = Object.keys(this.botMap).find(url => {

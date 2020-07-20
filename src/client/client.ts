@@ -43,12 +43,21 @@ export class AuthlessClient {
    * to the AuthlessClient constructor
    *
    * @param params - Parameters to access the Authless-Server and scrape the target {@link FetchParams}
+   *
+   * @example
+   * ```ts
+   * const client = new AuthlessClient(cache) // cache is optional
+   * const authlessResponse = client.fetch({
+   *   serverUrl: 'https://your-authless-server-url.com',
+   *   url: 'https://url-to-fetch.com',
+   *   responseFormat: 'json',
+   * })
+   * extractOrSave(authlessResponse)
+   * ```
    */
   async fetch (params: FetchParams): Promise<any> {
     const cachedData = await this.cache?.get(params.url)
     if(typeof cachedData !== 'undefined') {
-      // eslint-disable-next-line no-warning-comments
-      // TODO - check the cachedData.page.status ? If it is not 200, refetch?
       return cachedData
     }
     const body = AuthlessClient.makeParams(params)
@@ -70,7 +79,7 @@ export class AuthlessClient {
     } catch (err) {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       console.log(`-- error in AuthlessClient.fetch(): ${err.message}`)
-      return err
+      throw err
     }
   }
 }

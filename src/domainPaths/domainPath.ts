@@ -1,6 +1,5 @@
 import {
   IResponse as IAuthlessResponse,
-  IBot,
   IDomainPath,
   PuppeteerParams,
   RequestContainer,
@@ -10,6 +9,7 @@ import {
   Page as PuppeteerPage,
   Response as PuppeteerResponse
 } from 'puppeteer'
+import { Bot } from '../bots/bot'
 
 /**
  * Implementation of the IDomainPath interface
@@ -157,7 +157,7 @@ export class DomainPath implements IDomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public async pageHandler (page: PuppeteerPage, selectedBot?: IBot, config?: any): Promise<IAuthlessResponse | null> {
+  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<IAuthlessResponse | null> {
     // default implementation to process the page
     return null
   }
