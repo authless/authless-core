@@ -57,8 +57,8 @@ export class Bot {
   private readonly rateLimit: number = 0
 
   /**
-   * The array containing the timestamps
-   * that this bot was used at in the last one minute
+   * The array containing the timestamps that this bot was used at in the last one minute.
+   * Allows us to check if the rate-limit has been exceeded.
    */
   private usageTimeStamps: number[]
 
@@ -117,6 +117,7 @@ export class Bot {
 
   /**
    * Tells the bot that it was used for authentication.
+   * In turn updates {@link usageTimeStamps}
    *
    * @remarks
    * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.
