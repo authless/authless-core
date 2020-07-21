@@ -6,7 +6,8 @@ import {
 } from '../types'
 import {
   Page as PuppeteerPage,
-  Response as PuppeteerResponse
+  Request as PuppeteerRequest,
+  Response as PuppeteerResponse,
 } from 'puppeteer'
 import { Bot } from '../bots/bot'
 
@@ -82,9 +83,8 @@ export class DomainPath {
     this.responses = []
   }
 
-  private static async getRequestAsJson (response: PuppeteerResponse): Promise<RequestContainer | undefined> {
+  private static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer | undefined> {
     try{
-      const request = response.request()
       const requestData = {
         headers: request.headers(),
         isNavigationRequest: request.isNavigationRequest(),
@@ -99,31 +99,36 @@ export class DomainPath {
     }
   }
 
+  private static async convertResponseToJson (response: PuppeteerResponse): Promise<Xhr> {
+
+    const securityDetails = {
+      issuer: response.securityDetails()?.issuer(),
+      protocol: response.securityDetails()?.protocol(),
+      subjectName: response.securityDetails()?.subjectName(),
+      validFrom: response.securityDetails()?.validFrom(),
+      validTo: response.securityDetails()?.validTo(),
+    }
+    const returnObj: Xhr = {
+      url: response.url(),
+      status: response.status(),
+      statusText: response.statusText(),
+      headers: response.headers(),
+      securityDetails: securityDetails,
+      fromCache: response.fromCache(),
+      fromServiceWorker: response.fromServiceWorker(),
+      // eslint-disable-next-line no-undefined
+      text: undefined,
+      // eslint-disable-next-line no-undefined
+      request: undefined,
+    }
+    returnObj.request = await DomainPath.convertRequestToJson(response.request())
+    return returnObj
+  }
+
   private addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
     console.log(`-- setting up to block resourceTypes: ${JSON.stringify(blockResourceTypes)}`)
     const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
-
-      const securityDetails = {
-        issuer: response.securityDetails()?.issuer(),
-        protocol: response.securityDetails()?.protocol(),
-        subjectName: response.securityDetails()?.subjectName(),
-        validFrom: response.securityDetails()?.validFrom(),
-        validTo: response.securityDetails()?.validTo(),
-      }
-      const returnObj: Xhr = {
-        url: response.url(),
-        status: response.status(),
-        statusText: response.statusText(),
-        headers: response.headers(),
-        securityDetails: securityDetails,
-        fromCache: response.fromCache(),
-        fromServiceWorker: response.fromServiceWorker(),
-        // eslint-disable-next-line no-undefined
-        text: undefined,
-        // eslint-disable-next-line no-undefined
-        request: undefined,
-      }
-      returnObj.request = await DomainPath.getRequestAsJson(response)
+      const returnObj = await DomainPath.convertResponseToJson(response)
       if(typeof returnObj.request !== 'undefined') {
         if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
           try {
@@ -172,7 +177,7 @@ export class DomainPath {
    * @param page - the puppeteer page from which to extract the response object
    * @returns a {@link IResponse} if found, else returns undefined
    */
-  public async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
+  public async convertPageToResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
     return {
       meta: {
         timestamp: Date.now()
