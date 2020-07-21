@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.8.8",
+    "toolVersion": "7.8.15",
     "schemaVersion": 1003,
     "oldestForwardsCompatibleVersion": 1001
   },
@@ -15,6 +15,1993 @@
       "canonicalReference": "@authless/core!",
       "name": "",
       "members": [
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!AuthlessClient:class",
+          "docComment": "/**\n * A helper wrapper to access the running Authless-Server and fetch the response {@link IResponse}\n *\n * @remarks\n *\n * Can use a cache {@link ICache} if available and passed to constructor\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class AuthlessClient "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "AuthlessClient",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!AuthlessClient:constructor(1)",
+              "docComment": "/**\n * Takes an optional Cache as a parameter which should satisfy {@link ICache}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(cache?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ICache",
+                  "canonicalReference": "@authless/core!~ICache:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "cache",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessClient#cache:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "cache?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ICache",
+                  "canonicalReference": "@authless/core!~ICache:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "cache",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!AuthlessClient#fetch:member(1)",
+              "docComment": "/**\n * Fetch the response from the running Authless-Server\n *\n * @remarks\n *\n * Will return a cached value if possible dependind on the cache passed to the AuthlessClient constructor\n *\n * @param params - Parameters to access the Authless-Server and scrape the target {@link FetchParams}\n *\n * @example\n * ```ts\n * const client = new AuthlessClient(cache) // cache is optional\n * const authlessResponse = client.fetch({\n *   serverUrl: 'https://your-authless-server-url.com',\n *   url: 'https://url-to-fetch.com',\n *   responseFormat: 'json',\n * })\n * extractOrSave(authlessResponse)\n * ```\n *\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "fetch(params: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "FetchParams",
+                  "canonicalReference": "@authless/core!~FetchParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<any>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 5
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "fetch"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!AuthlessClient.makeParams:member(1)",
+              "docComment": "/**\n * Makes a HTTP GET query from the passed URLParams {@link URLParams}\n *\n * @param params - Object from which to generate a stringified HTTP Request query\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static makeParams(params: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "FetchParams",
+                  "canonicalReference": "@authless/core!~FetchParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Public",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "params",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "makeParams"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!AuthlessServer:class",
+          "docComment": "/**\n * Helper class to start your running Authless server\n *\n * @remarks\n *\n * This class can be used to create a configurable puppeteer instance with some built-in functionality and plugins\n *\n * @example\n * ```ts\n * await browser = AuthlessServer.launchBrowser(myDomainPath, myBot, {puppeteerParams, puppeteerPlugins, ..})\n * await page = browser.newPage()\n *\n * await domainPath.pageHandler(page, ..)\n * ```\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class AuthlessServer "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "AuthlessServer",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!AuthlessServer:constructor(1)",
+              "docComment": "/**\n * Create a Authless server instance\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(domainPathRouter: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPathRouter",
+                  "canonicalReference": "@authless/core!DomainPathRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", botRouter: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BotRouter",
+                  "canonicalReference": "@authless/core!BotRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", puppeteerParams: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerParams",
+                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", puppeteerPlugins?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerExtraPlugin",
+                  "canonicalReference": "puppeteer-extra!PuppeteerExtraPlugin:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "domainPathRouter",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "botRouter",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  }
+                },
+                {
+                  "parameterName": "puppeteerParams",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  }
+                },
+                {
+                  "parameterName": "puppeteerPlugins",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 7,
+                    "endIndex": 9
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#botRouter:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "botRouter: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BotRouter",
+                  "canonicalReference": "@authless/core!BotRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "botRouter",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#domainPathRouter:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "domainPathRouter: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPathRouter",
+                  "canonicalReference": "@authless/core!DomainPathRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "domainPathRouter",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!AuthlessServer.launchBrowser:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static launchBrowser(domainPath: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPath",
+                  "canonicalReference": "@authless/core!DomainPath:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", bot: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", config?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BrowserConfig",
+                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Browser",
+                  "canonicalReference": "@types/puppeteer!Browser:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 7,
+                "endIndex": 11
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "domainPath",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "bot",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  }
+                },
+                {
+                  "parameterName": "config",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  }
+                }
+              ],
+              "name": "launchBrowser"
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#logger:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "logger: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "logger",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#puppeteerParams:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerParams?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerParams",
+                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerParams",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#puppeteerPlugins:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerPlugins?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerExtraPlugin",
+                  "canonicalReference": "puppeteer-extra!PuppeteerExtraPlugin:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerPlugins",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!AuthlessServer#responses:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "responses: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "responses",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!AuthlessServer#run:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "run"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!Bot:class",
+          "docComment": "/**\n * Represents a user account used in authless.\n *\n * @remarks\n *\n * Extend this class to create custom Bots Is usually managed with a {@link BotRouter} and contains meta information about the credentials, usage-data and health-status of an account\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class Bot "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "Bot",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!Bot:constructor(1)",
+              "docComment": "/**\n * Create a Bot instance.\n *\n * @param config - Of type {@link BotConfig}. browserConfig takes type {@link BrowserConfig}\n *\n * @returns An instance of the Bot class\n *\n * @example\n * ```ts\n * const bot = new Bot({\n *  credentials: { // optional\n *    username: 'username',\n *    password: 'password'\n *  },\n *  urls: ['www.example.com'],\n *  rateLimit: 100, // optional, per minute\n *  browserConfig: {\n *    executablePath: '/path/to/your/Chromium',\n *    headless: false,\n *    useStealthPlugin: true,\n *    useAdblockerPlugin: true,\n *    blockDomains: [\n *      'some-tracker.io',\n *      'image-host.net',\n *    ],\n *    blockResourceTypes: ['image', 'media', 'stylesheet', 'font'],\n *    proxy: {\n *      address: '99.99.99.99',\n *      port: 9999,\n *      credentials: {\n *        username: 'proxyuser1',\n *        password: 'proxypass1',\n *      },\n *    }\n *  }\n * })\n * ```\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(botConfig: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BotConfig",
+                  "canonicalReference": "@authless/core!~BotConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "botConfig",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Bot#browserConfig:member",
+              "docComment": "/**\n * The puppeteer/page options for the bot {@link BrowserConfig}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "browserConfig?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BrowserConfig",
+                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "browserConfig",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#foundCaptcha:member(1)",
+              "docComment": "/**\n * Tells the bot we ran into a captcha\n *\n * @remarks\n *\n * The bot can use this information to calculate detection rates High detection rates could mean the account is in danger of getting blacklisted or we have interactions or extensions which are triggering bot-detection\n *\n * @param found - if the page hit was a captcha page or not\n *\n * @returns nothing\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "foundCaptcha(found: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Boolean",
+                  "canonicalReference": "!Boolean:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "found",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "foundCaptcha"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#foundLogin:member(1)",
+              "docComment": "/**\n * Tells the bot that the login page was found\n *\n * @remarks\n *\n * The bot can use this information to calculate logout rates High logout rates could mean user information is not saved between page hits or the website is logging us out\n *\n * @param found - if the page hit was a login page or not\n *\n * @returns nothing\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "foundLogin(found: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Boolean",
+                  "canonicalReference": "!Boolean:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "found",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "foundLogin"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#getCaptchaHitCount:member(1)",
+              "docComment": "/**\n * Get the captcha hit-rate percentage of the bot\n *\n * @returns number of times the captcha hit-rate percentage of the bot\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getCaptchaHitCount(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "getCaptchaHitCount"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#getLoginHitCount:member(1)",
+              "docComment": "/**\n * Get the login hit-rate percentage of the bot\n *\n * @returns number of times the login hit-rate percentage of the bot\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getLoginHitCount(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "getLoginHitCount"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#isBelowRateLimit:member(1)",
+              "docComment": "/**\n * To check if bot usage-rate is below the allowed limit\n *\n * @remarks\n *\n * If the usage-rate is above the rate-limit we have to add more time between page-fetching or add more accounts else the account may be blacklisted\n *\n * @returns true if current bot is under the usage rate-limit, false otherwise\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "isBelowRateLimit(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Boolean",
+                  "canonicalReference": "!Boolean:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "isBelowRateLimit"
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Bot#password:member",
+              "docComment": "/**\n * The password or secret of the account. May be undefined for anonymous bots\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "password?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "password",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Bot#urls:member",
+              "docComment": "/**\n * The URLs to be handled by this bot\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "urls: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "urls",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!Bot#username:member",
+              "docComment": "/**\n * The username or key of the account. May be undefined for anonymous bots\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "username?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "username",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#wasUsed:member(1)",
+              "docComment": "/**\n * Tells the bot that it was used for authentication.\n *\n * @remarks\n *\n * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "wasUsed(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "wasUsed"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!BotConfig:interface",
+          "docComment": "/**\n * The configuration to instantiate a Bot. Is passed to a {@link Bot}\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface BotConfig "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "BotConfig",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BotConfig#browserConfig:member",
+              "docComment": "/**\n * The puppeteer specific configuration for the bot. {@link BrowserConfig}\n *\n * @remarks\n *\n * This allows bots to have their own proxy/plugin configurations.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "browserConfig?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BrowserConfig",
+                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "browserConfig",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BotConfig#credentials:member",
+              "docComment": "/**\n * The credentials for a bot. May be omitted for anonymous bots(no authentication needed)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "credentials?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n        username: string;\n        password: string;\n    }"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "credentials",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BotConfig#rateLimit:member",
+              "docComment": "/**\n * The limit per minute under which a bot can be used.\n *\n * @remarks\n *\n * If the usage is above the limit, the bot-router will not return this bots till an appropriate amount of time has passed\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "rateLimit?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "rateLimit",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BotConfig#urls:member",
+              "docComment": "/**\n * The HTTP URLs the bot is to handle. Must be a list of string\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "urls: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "urls",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!BotRouter:class",
+          "docComment": "/**\n * Manages a pool(zero or more) Bots {@link Bot} Is responsible for rotating the bots used in a round-robin fashion.\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class BotRouter "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "BotRouter",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!BotRouter:constructor(1)",
+              "docComment": "/**\n * Create a BotRouter instance.\n *\n * @param botMap - The map of url to Bot instance\n *\n * @returns An instance of the BotRouter class\n *\n * @example\n * ```ts\n * const botRouter = new BotRouter({\n *   'www.example.com/basic-access/': new Bot('basic-username', 'basic-password'),\n *   'www.example.com/pro-access/': new Bot('pro-username', 'pro-password'),\n * })\n * ```\n *\n * Internally, we store it as a map of \\{url: Bot\\} by converting a structure of form\n * ```ts\n * [\n *   Bot1{urls: ['url1', 'url2', 'url3'..]},\n *   Bot2{urls: ['url4', 'url5', 'url6'..]}\n * ]\n * ```\n *\n * to\n * ```ts\n * {\n *   'url1': Bot1,\n *   'url2': Bot1,\n *   'url3': Bot1,\n *   'url4': Bot2,\n *   'url5': Bot2,\n *   'url6': Bot2\n * }\n * ```\n *\n * as it makes it easier to fetch by url\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(bots: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "bots",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 3
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!BotRouter#getBotByUsername:member(1)",
+              "docComment": "/**\n * Provides a bot with a particular username\n *\n * @remarks\n *\n * Picks a bot from the pool of {@link Bot} which has the username provided that can handle the url provided. This is useful when we want to check if a bot is healthy in term of its usageRate, loginHitCount, captchaHitCount etc\n *\n * @param username - the username string of the bot to get\n *\n * @returns a valid bot if found, else returns undefined\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getBotByUsername(name: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "name",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "getBotByUsername"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!BotRouter#getBotForUrl:member(1)",
+              "docComment": "/**\n * Provides a bot which can handle a particular url\n *\n * @remarks\n *\n * Picks a bot from the pool of {@link Bot} to return one that can handle the url provided and is below the bots' allowed rate-limit\n *\n * @returns a valid bot if found, else returns undefined\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getBotForUrl(url: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "url",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "getBotForUrl"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!BrowserConfig:interface",
+          "docComment": "/**\n * Config to control puppeteer launch, default plugins, proxy and page handling config\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface BrowserConfig "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "BrowserConfig",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#adBlockerConfig:member",
+              "docComment": "/**\n * Options for the puppeteer-extra-adblocker-plugin\n *\n * @remarks\n *\n * Uses a pre-setup puppeteer-extra-adblocker-plugin with \\{blockTrackers: all\\} option by default If you would like to override it, you can do so here\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "adBlockerConfig?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n        blockTrackers: boolean;\n    }"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "adBlockerConfig",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#proxy:member",
+              "docComment": "/**\n * Proxy configuration for puppeteer {@link ProxyConfig}\n *\n * @remarks\n *\n * If not provided, the puppeteer will run without a proxy\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "proxy?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ProxyConfig",
+                  "canonicalReference": "@authless/core!~ProxyConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "proxy",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#puppeteerParams:member",
+              "docComment": "/**\n * Options to control puppeteer launch {@link PuppeteerParams}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerParams?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerParams",
+                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerParams",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#puppeteerPlugins:member",
+              "docComment": "/**\n * Additional plugins to puppeteer. Must be a valid initialized puppeteer plugin {@link PuppeteerParams}\n *\n * @example\n *\n * puppeteerPlugins: [MyPuppeteerPlugin(), OtherPuppeteerPlugin()]\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerPlugins?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerExtraPlugin",
+                  "canonicalReference": "puppeteer-extra!PuppeteerExtraPlugin:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerPlugins",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#urlParams:member",
+              "docComment": "/**\n * The URL parameters to pass to the running Authless server {@link URLParams}\n *\n * @example\n * ```ts\n * { url: 'http://url.com/to/fetch', 'responseFormat': 'json' }\n * ```\n *\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "urlParams?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "URLParams",
+                  "canonicalReference": "@authless/core!~URLParams:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "urlParams",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#useAdBlockerPlugin:member",
+              "docComment": "/**\n * Use the puppeteer-extra-adblocker-plugin\n *\n * @remarks\n *\n * Uses a pre-setup puppeteer-extra-adblocker-plugin with \\{blockTrackers: all\\} option by default\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "useAdBlockerPlugin?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "useAdBlockerPlugin",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!BrowserConfig#useStealthPlugin:member",
+              "docComment": "/**\n * Use the puppeteer-extra-stealth-plugin\n *\n * @remarks\n *\n * Uses a pre-setup puppeteer-extra-stealth-plugin that gets used with the launched puppeteer instance\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "useStealthPlugin?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "useStealthPlugin",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!DomainPath:class",
+          "docComment": "/**\n * The interface that controls the behaviour and page-handling for a particular domain/subdomain/url\n *\n * @remarks\n *\n * This is responsible for handling the page that is fetched. If different behaviours are required for different URLs (say some pages have pagination, while others require you to expand links) then, you should have multiple DomainPaths and attach them to the requried URL via a DomainPathHandler {@link DomainPathRouter} Extend this class to create custom DomainPath behaviours You can add custom behaviour in the getJsonResponse(), setupPage() and pageHandler() functions\n *\n * @example\n * ```ts\n * // create 2 DomainPaths\n * class PaginationDomainPath extends DomainPath {\n *   pageHandler(page...) {\n *     // handle pagination and other page specific actions here\n *   }\n * }\n * class ExpandableDomainPath extends DomainPath {\n *   pageHandler(page...) {\n *     // handle expanding links or page specific inputs here\n *   }\n * }\n *\n * const domainPathRouter = new DomainPathRouter({\n *   'www.example.com/pagination/': new PaginationDomainPath('pagination'),\n *   'www.example.com/links/': new ExpandableDomainPath('expanding-links')\n * })\n *\n * Now, get the right domainPath by url and use it. Refer to docs\n * ```\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class DomainPath "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "DomainPath",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!DomainPath:constructor(1)",
+              "docComment": "/**\n * Create a DomainPath instance.\n *\n * @param domain - The name of the domain, useful for logging\n *\n * @returns An instance of the DomainPath class\n *\n * @example\n * ```ts\n * const dpath = new DomainPath('my-domain')\n * ```\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(domain: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "domain",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!DomainPath#domain:member",
+              "docComment": "/**\n * Name of the domain. Useful for differentiating DomainPaths while logging\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "domain: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "domain",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!DomainPath#getJsonResponse:member(1)",
+              "docComment": "/**\n * Form a {@link IResponse} object from the puppeteer page\n *\n * @remarks\n *\n * Override this to add custom data/metadata to your Authless response {@link IResponse}\n *\n * @param page - the puppeteer page from which to extract the response object\n *\n * @returns a {@link IResponse} if found, else returns undefined\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getJsonResponse(page: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerPage",
+                  "canonicalReference": "@types/puppeteer!Page:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IAuthlessResponse",
+                  "canonicalReference": "@authless/core!~IResponse:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 7
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "page",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "getJsonResponse"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!DomainPath#pageHandler:member(1)",
+              "docComment": "/**\n * Code to handle page interactions\n *\n * @remarks\n *\n * This is responsible for checking/doing authentication and interacting with the page. You can have different DomainPaths with different behaviour and call the appropriate one based on the URL you wish to fetch The puppeteer instance will be reused and only new pages are instantiated here\n *\n * @param page - The puppeteer page to which we can attach listeners or change behaviour of\n *\n * @param bot - Optional. The {@link Bot} to use for authentication.\n *\n * @param config - Optional. The {@link BrowserConfig} passed by the user\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "pageHandler(page: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerPage",
+                  "canonicalReference": "@types/puppeteer!Page:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", selectedBot?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", config?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IAuthlessResponse",
+                  "canonicalReference": "@authless/core!~IResponse:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | null>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 7,
+                "endIndex": 11
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "page",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "selectedBot",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  }
+                },
+                {
+                  "parameterName": "config",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 5,
+                    "endIndex": 6
+                  }
+                }
+              ],
+              "name": "pageHandler"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!DomainPath#setupPage:member(1)",
+              "docComment": "/**\n * Over-ride default page setup\n *\n * @remarks\n *\n * Override this to add custom page listeners on response etc. This happens before we navigate to the target URL. Call super.setupPage if you would like to use default response/resourceType blocking\n *\n * @param page - The puppeteer page to which we can attach listeners or change behaviour of\n *\n * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "setupPage(page: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerPage",
+                  "canonicalReference": "@types/puppeteer!Page:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", puppeteerParams: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerParams",
+                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 5,
+                "endIndex": 7
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "page",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "puppeteerParams",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 4
+                  }
+                }
+              ],
+              "name": "setupPage"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/core!DomainPathRouter:class",
+          "docComment": "/**\n * Manages a pool of {@link DomainPath} mapped to an url each\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class DomainPathRouter "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "DomainPathRouter",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/core!DomainPathRouter:constructor(1)",
+              "docComment": "/**\n * Create a DomainPathRouter instance.\n *\n * @param domainMap - The map of url to DomainPath instance\n *\n * @returns An instance of the DomainPathRouter class\n *\n * @example\n * ```ts\n * const dpRouter = new DomainPathRouter({\n *   'www.example.com/dogs/': new DogDomainPath('dog-handler'),\n *   'www.example.com/horses/': new HorseDomainPath('horse-handler'),\n * })\n *\n * const dp = dpRouter.getDomainPath(someUrl)\n * const response = dp.pageHandler(page, ...)\n * ```\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(domainMap: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n        [url: string]: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPath",
+                  "canonicalReference": "@authless/core!DomainPath:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n    }"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "domainMap",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 4
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!DomainPathRouter#addDomainPathRouter:member(1)",
+              "docComment": "/**\n * Add DomainPaths from another DomainPathRouter\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "addDomainPathRouter(router: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPathRouter",
+                  "canonicalReference": "@authless/core!DomainPathRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "router",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "addDomainPathRouter"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!DomainPathRouter#getDomainPath:member(1)",
+              "docComment": "/**\n * returns a {@link DomainPath} that matches the url, else returns undefined\n *\n * @param url - the HTTP URL which is to be fetched\n *\n * @returns a {@link DomainPath} if found, else returns undefined\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getDomainPath(url: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPath",
+                  "canonicalReference": "@authless/core!DomainPath:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 5
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "url",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "getDomainPath"
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!ICache:interface",
+          "docComment": "/**\n * A Cache interface which can be passed to AuthlessClient class\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface ICache "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "ICache",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!ICache#delete:member",
+              "docComment": "/**\n * Delete a value from the cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @returns The data that was deleted if successful, else returns an Error object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "delete: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "(key: string) => "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<any | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Error",
+                  "canonicalReference": "!Error:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "delete",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 6
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!ICache#deleteAll:member",
+              "docComment": "/**\n * Delete all values from the cache\n *\n * @param before - Optional. Number representing the Unix timestamp in milliseconds. All data saved before this will be deleted\n *\n * @returns The number of keys that were removed\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "deleteAll: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "(before?: number) => "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<number | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Error",
+                  "canonicalReference": "!Error:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "deleteAll",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 6
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!ICache#get:member",
+              "docComment": "/**\n * Get a value from the cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @returns The data that was fetched if successful, else returns an Error object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "get: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "(key: string) => "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<any | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Error",
+                  "canonicalReference": "!Error:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "get",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 6
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!ICache#put:member",
+              "docComment": "/**\n * Add a value to cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @param data - The data to be saved\n *\n * @returns 'ok' if successful, else returns an Error object\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "put: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "(key: string, data: any) => "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<'ok' | "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Error",
+                  "canonicalReference": "!Error:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "put",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 6
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
         {
           "kind": "Interface",
           "canonicalReference": "@authless/core!IResourcePayload:interface",
@@ -427,8 +2414,13 @@
                   "text": "cookies: "
                 },
                 {
+                  "kind": "Reference",
+                  "text": "ICookie",
+                  "canonicalReference": "@authless/core!~ICookie:interface"
+                },
+                {
                   "kind": "Content",
-                  "text": "any[]"
+                  "text": "[]"
                 },
                 {
                   "kind": "Content",
@@ -439,7 +2431,7 @@
               "name": "cookies",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 2
+                "endIndex": 3
               }
             },
             {
@@ -502,8 +2494,9 @@
                   "text": "viewport?: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "any"
+                  "kind": "Reference",
+                  "text": "IViewport",
+                  "canonicalReference": "@authless/core!~IViewport:interface"
                 },
                 {
                   "kind": "Content",
@@ -543,8 +2536,9 @@
                   "text": "headers: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "string"
+                  "kind": "Reference",
+                  "text": "IHeaders",
+                  "canonicalReference": "@authless/core!~IHeaders:type"
                 },
                 {
                   "kind": "Content",
@@ -593,8 +2587,9 @@
                   "text": "method: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "string"
+                  "kind": "Reference",
+                  "text": "IHttpMethod",
+                  "canonicalReference": "@authless/core!~IHttpMethod:type"
                 },
                 {
                   "kind": "Content",
@@ -673,8 +2668,9 @@
                   "text": "resourceType: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "string"
+                  "kind": "Reference",
+                  "text": "IResourceType",
+                  "canonicalReference": "@authless/core!~IResourceType:type"
                 },
                 {
                   "kind": "Content",
@@ -740,7 +2736,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "boolean"
                 },
                 {
                   "kind": "Content",
@@ -765,7 +2761,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "boolean"
                 },
                 {
                   "kind": "Content",
@@ -789,8 +2785,9 @@
                   "text": "headers: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "any"
+                  "kind": "Reference",
+                  "text": "IHeaders",
+                  "canonicalReference": "@authless/core!~IHeaders:type"
                 },
                 {
                   "kind": "Content",
@@ -840,8 +2837,9 @@
                   "text": "securityDetails: "
                 },
                 {
-                  "kind": "Content",
-                  "text": "any"
+                  "kind": "Reference",
+                  "text": "ISecurityDetails",
+                  "canonicalReference": "@authless/core!~ISecurityDetails:interface"
                 },
                 {
                   "kind": "Content",
@@ -866,7 +2864,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "string"
+                  "text": "number"
                 },
                 {
                   "kind": "Content",
@@ -941,7 +2939,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "number"
+                  "text": "string"
                 },
                 {
                   "kind": "Content",
@@ -949,6 +2947,199 @@
                 }
               ],
               "releaseTag": "Beta",
+              "name": "url",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "TypeAlias",
+          "canonicalReference": "@authless/core!PuppeteerParams:type",
+          "docComment": "/**\n * Config options control puppeteer launch/request-handling options\n *\n * @remarks\n *\n * Puppeteer launch options includes all options that of type {@link LaunchOptions} Options to block domains/resourceTypes from loading {@link InterceptOptions} Options to control theh viewport {@link Viewport}\n *\n * @example\n * ```ts\n * {\n *    executablePath: '/Path/To/Your/Chromium', // optional\n *    headless: false, // default true,\n *    // other options that can be passed to puppeteer(options)\n *\n *    blockDomains: ['social-media-buttons.com', 'large-image-host.com'],\n *    blockResourceTypes: ['image', 'media', 'font'],\n *    viewPort: { width: 1020, height: 800 }\n * }\n * ```\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "declare type PuppeteerParams = "
+            },
+            {
+              "kind": "Reference",
+              "text": "LaunchOptions",
+              "canonicalReference": "@types/puppeteer!LaunchOptions:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " & "
+            },
+            {
+              "kind": "Reference",
+              "text": "InterceptOptions",
+              "canonicalReference": "@authless/core!~InterceptOptions:interface"
+            },
+            {
+              "kind": "Content",
+              "text": " & {\n    viewPort?: "
+            },
+            {
+              "kind": "Reference",
+              "text": "Viewport",
+              "canonicalReference": "@types/puppeteer!Viewport:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ";\n}"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "PuppeteerParams",
+          "typeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 7
+          }
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!RequestContainer:interface",
+          "docComment": "/**\n * HTTP request metadata of the ajax/asset requests made by the puppeteer page\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface RequestContainer "
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "RequestContainer",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!RequestContainer#headers:member",
+              "docComment": "/**\n * An object with HTTP headers associated with the request. All header names are lower-case.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "headers: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Headers",
+                  "canonicalReference": "@types/puppeteer!Headers:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "headers",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!RequestContainer#isNavigationRequest:member",
+              "docComment": "/**\n * Whether this request is driving frame's navigation.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "isNavigationRequest: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "isNavigationRequest",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!RequestContainer#method:member",
+              "docComment": "/**\n * Returns the request's method (GET, POST, etc.)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "method: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "HttpMethod",
+                  "canonicalReference": "@types/puppeteer!HttpMethod:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "method",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!RequestContainer#resourceType:member",
+              "docComment": "/**\n * Contains the request's resource type as it was perceived by the rendering engine. (doc, xhr, image, media, eventsource etc)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "resourceType: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ResourceType",
+                  "canonicalReference": "@types/puppeteer!ResourceType:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
+              "name": "resourceType",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!RequestContainer#url:member",
+              "docComment": "/**\n * Contains the URL of the request.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "url: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "URL",
+                  "canonicalReference": "@authless/core!~URL:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Public",
               "name": "url",
               "propertyTypeTokenRange": {
                 "startIndex": 1,
@@ -1354,6 +3545,404 @@
               "endIndex": 3
             }
           ]
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!URLParams:interface",
+          "docComment": "/**\n * URL parameters accepted by Authless server\n *\n * @remarks\n *\n * URL parameters allow you to run an Authless server and send HTTP requests to it with the url you want it to fetch. Authless server will return an Authless response {@link IResponse} of your choice\n *\n * @example\n * ```ts\n * {\n *    url: 'www.example.net/url/to/fetch',\n *    responseFormat: 'json', // will return an object in JSON format\n * }\n * ```\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface URLParams "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "URLParams",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!URLParams#referer:member",
+              "docComment": "/**\n * The referer URL that will be added to the puppeteer request\n *\n * @remarks\n *\n * Adding a proper referer makes your request much less likely to get flagged as a bot. Try to add a reasonable referer URL\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "referer?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "referer",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!URLParams#responseFormat:member",
+              "docComment": "/**\n * The required response format of Authless response\n *\n * @remarks\n *\n * Currently, only 'json' is supported\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "responseFormat: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "'json' | 'png'"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "responseFormat",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!URLParams#url:member",
+              "docComment": "/**\n * The HTTP url to fetch\n *\n * @example\n * ```ts\n * 'www.example.net/url/to/fetch'\n * ```\n *\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "url: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "url",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!URLParams#username:member",
+              "docComment": "/**\n * The username whose credentials will be used for the fetch\n *\n * @remarks\n *\n * Adding a proper referer makes your request much less likely to get flagged as a bot. Try to add a reasonable referer URL\n *\n * @deprecated\n *\n * Can be avoided as the required bot can be got using botRouter.getBotByUsername(username) and passed to the pageHandler\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "username?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "username",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
+        },
+        {
+          "kind": "TypeAlias",
+          "canonicalReference": "@authless/core!URLs:type",
+          "docComment": "",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "declare type URLs = "
+            },
+            {
+              "kind": "Reference",
+              "text": "URL",
+              "canonicalReference": "@authless/core!~URL:type"
+            },
+            {
+              "kind": "Content",
+              "text": "[]"
+            },
+            {
+              "kind": "Content",
+              "text": ";"
+            }
+          ],
+          "releaseTag": "Public",
+          "name": "URLs",
+          "typeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 3
+          }
+        },
+        {
+          "kind": "Interface",
+          "canonicalReference": "@authless/core!Xhr:interface",
+          "docComment": "/**\n * Details of the ajax/asset requests made by the puppeteer page\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "interface Xhr "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "Xhr",
+          "members": [
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#fromCache:member",
+              "docComment": "/**\n * True if the response was served from either the browser's disk cache or memory cache.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "fromCache: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "fromCache",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#fromServiceWorker:member",
+              "docComment": "/**\n * True if the response was served by a service worker.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "fromServiceWorker: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "fromServiceWorker",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#headers:member",
+              "docComment": "/**\n * An object with HTTP headers associated with the request. All header names are lower-case.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "headers: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Headers",
+                  "canonicalReference": "@types/puppeteer!Headers:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "headers",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#request:member",
+              "docComment": "/**\n * Metadata about the request. Refer to {@link RequestContainer}.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "request: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RequestContainer",
+                  "canonicalReference": "@authless/core!~RequestContainer:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | undefined"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "request",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#securityDetails:member",
+              "docComment": "/**\n * Security or certificate related data. Refer to {@link SecurityDetails}. May be undefined in case of plain HTTP requests\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "securityDetails: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "SecurityDetails",
+                  "canonicalReference": "@authless/core!~SecurityDetails:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": " | null"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "securityDetails",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#status:member",
+              "docComment": "/**\n * The HTTP response code of the request. ex: 200(ok), 404(not-found), 401(unauthorized), 502(internal-server-error)\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "status: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "status",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#statusText:member",
+              "docComment": "/**\n * The text for the HTTP status of the response. ex: \"OK\", \"Not Found\", \"Unauthorized\", \"Internal Server Error\"\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "statusText: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "statusText",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#text:member",
+              "docComment": "/**\n * The contents of the response as a string.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "text: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string | undefined"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "text",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            },
+            {
+              "kind": "PropertySignature",
+              "canonicalReference": "@authless/core!Xhr#url:member",
+              "docComment": "/**\n * Contains the URL of the request.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "url: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "url",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              }
+            }
+          ],
+          "extendsTokenRanges": []
         }
       ]
     }
