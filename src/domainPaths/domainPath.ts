@@ -1,6 +1,5 @@
 import {
   IResponse as IAuthlessResponse,
-  IDomainPath,
   PuppeteerParams,
   RequestContainer,
   Xhr,
@@ -12,16 +11,58 @@ import {
 import { Bot } from '../bots/bot'
 
 /**
- * Implementation of the IDomainPath interface
+ * The interface that controls the behaviour and page-handling for a particular domain/subdomain/url
  *
- * @remarks Extend this class to create custom DomainPath behaviours
+ * @remarks
+ * This is responsible for handling the page that is fetched.
+ * If different behaviours are required for different URLs
+ * (say some pages have pagination, while others require you to expand links)
+ * then, you should have multiple DomainPaths and attach them to the requried URL
+ * via a DomainPathHandler {@link DomainPathRouter}
+ * Extend this class to create custom DomainPath behaviours
  * You can add custom behaviour in the getJsonResponse(), setupPage() and pageHandler() functions
+ *
+ * @example
+ * ```ts
+ * // create 2 DomainPaths
+ * class PaginationDomainPath extends DomainPath {
+ *   pageHandler(page...) {
+ *     // handle pagination and other page specific actions here
+ *   }
+ * }
+ * class ExpandableDomainPath extends DomainPath {
+ *   pageHandler(page...) {
+ *     // handle expanding links or page specific inputs here
+ *   }
+ * }
+ *
+ * const domainPathRouter = new DomainPathRouter({
+ *   'www.example.com/pagination/': new PaginationDomainPath('pagination'),
+ *   'www.example.com/links/': new ExpandableDomainPath('expanding-links')
+ * })
+ *
+ * Now, get the right domainPath by url and use it. Refer to docs
+ * ```
+ *
+ * @beta
+ *
  *
  * @beta
  */
-export class DomainPath implements IDomainPath {
+export class DomainPath {
+
+  /**
+   * Name of the domain. Useful for differentiating DomainPaths while logging
+   */
   domain: string
-  responses: Xhr[]
+
+  /**
+   * Save the array of xhr responses as needed.
+   * Certain resourceTypes can be blocked
+   * by passing blockResourceTypes in {@link PuppeteerParams}
+   */
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private responses: Xhr[]
 
   /**
    * Create a DomainPath instance.
@@ -122,6 +163,15 @@ export class DomainPath implements IDomainPath {
     })
   }
 
+  /**
+   * Form a {@link IResponse} object from the puppeteer page
+   *
+   * @remarks
+   * Override this to add custom data/metadata to your Authless response {@link IResponse}
+   *
+   * @param page - the puppeteer page from which to extract the response object
+   * @returns a {@link IResponse} if found, else returns undefined
+   */
   public async getJsonResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
     return {
       meta: {
@@ -138,7 +188,17 @@ export class DomainPath implements IDomainPath {
     }
   }
 
-  // setup the page to avoid some domain requests and avoid saving some resourceTypes
+  /**
+   * Over-ride default page setup
+   *
+   * @remarks
+   * Override this to add custom page listeners on response etc.
+   * This happens before we navigate to the target URL.
+   * Call super.setupPage if you would like to use default response/resourceType blocking
+   *
+   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
+   * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user
+   */
   public async setupPage (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
@@ -156,6 +216,21 @@ export class DomainPath implements IDomainPath {
     }
   }
 
+  /**
+   * Code to handle page interactions
+   *
+   * @remarks
+   * This is responsible for checking/doing authentication
+   * and interacting with the page.
+   * You can have different DomainPaths with different behaviour
+   * and call the appropriate one based on the URL you wish to fetch
+   * The puppeteer instance will be reused and only new pages are instantiated here
+   *
+   *
+   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
+   * @param bot - Optional. The {@link Bot} to use for authentication.
+   * @param config - Optional. The {@link BrowserConfig} passed by the user
+   */
   // eslint-disable-next-line class-methods-use-this
   public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<IAuthlessResponse | null> {
     // default implementation to process the page

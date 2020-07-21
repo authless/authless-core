@@ -1,11 +1,14 @@
 import * as path from 'path'
 import { Browser, Page, Response } from 'puppeteer'
-import { BrowserConfig, IBot, IBotRouter, IDomainPath, IDomainPathRouter, PuppeteerParams, URLParams } from '../types'
+import { BrowserConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import { AnonBot } from '../bots/anonBot'
 import { Bot } from '../bots/bot'
+import { BotRouter } from '../bots/botRouter'
+import { DomainPath } from '../domainPaths/domainPath'
+import { DomainPathRouter } from '../domainPaths/domainPathRouter'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
@@ -30,8 +33,8 @@ export class AuthlessServer {
   logger: any
   puppeteerParams?: PuppeteerParams
   puppeteerPlugins?: PuppeteerExtraPlugin[]
-  domainPathRouter: IDomainPathRouter
-  botRouter: IBotRouter
+  domainPathRouter: DomainPathRouter
+  botRouter: BotRouter
   responses: any[]
 
   /**
@@ -40,7 +43,7 @@ export class AuthlessServer {
    * @beta
    */
   // eslint-disable-next-line max-params
-  constructor (domainPathRouter: IDomainPathRouter, botRouter: IBotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]) {
+  constructor (domainPathRouter: DomainPathRouter, botRouter: BotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]) {
     this.domainPathRouter = domainPathRouter
     this.botRouter = botRouter
     this.puppeteerParams = puppeteerParams
@@ -79,7 +82,7 @@ export class AuthlessServer {
     expressResponse.set('Content-Type', 'text/html')
   }
 
-  static async launchBrowser (domainPath: IDomainPath, bot: IBot, config?: BrowserConfig): Promise<Browser> {
+  static async launchBrowser (domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser> {
     const { puppeteerParams } = config ?? {}
     let defaultPlugins: PuppeteerExtraPlugin[] = []
     if(config?.useStealthPlugin ?? false) {

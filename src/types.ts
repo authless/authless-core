@@ -1,24 +1,6 @@
 /* eslint-disable max-lines */
-import { Cookie, Headers, HttpMethod, LaunchOptions, Page, ResourceType, Viewport } from 'puppeteer'
+import { Cookie, Headers, HttpMethod, LaunchOptions, ResourceType, Viewport } from 'puppeteer'
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
-
-/**
- * Top level abstraction with a name and holding a {@link IDomainPathRouter}
- *
- * @beta
- */
-interface IAuthlessCore {
-
-  /**
-   * Name to identify this {@link IAuthlessCore}. Useful for logging.
-   */
-  name: string
-
-  /**
-   * see {@link IDomainPathRouter}
-   */
-  domainPathRouter: IDomainPathRouter
-}
 
 /**
  * A Cache interface which can be passed to AuthlessClient class
@@ -72,44 +54,8 @@ type FetchParams = URLParams & {
 }
 
 /**
- * Manages a pool(zero or more) IBots {@link IBot}
- * Is responsible for rotating the bots used in a round-robin fashion.
- *
- * @beta
- */
-interface IBotRouter {
-
-  /**
-   * Provides a bot which can handle a particular url
-   *
-   * @remarks
-   * Picks a bot from the pool of {@link IBot} to return one
-   * that can handle the url provided and is below the bots' allowed rate-limit
-   *
-   * @returns a valid bot if found, else returns undefined
-   *
-   */
-  getBotForUrl(url: string): IBot
-
-  /**
-   * Provides a bot with a particular username
-   *
-   * @remarks
-   * Picks a bot from the pool of {@link IBot} which has the username provided
-   * that can handle the url provided.
-   * This is useful when we want to check if a bot is healthy
-   * in term of its usageRate, loginHitCount, captchaHitCount etc
-   *
-   * @param username - the username string of the bot to get
-   * @returns a valid bot if found, else returns undefined
-   *
-   */
-  getBotByUsername(username: string): IBot
-}
-
-/**
  * The configuration to instantiate a Bot.
- * Is passed to a {@link IBot}
+ * Is passed to a {@link Bot}
  *
  * @beta
  */
@@ -146,135 +92,6 @@ interface BotConfig {
    * This allows bots to have their own proxy/plugin configurations.
    */
   browserConfig?: BrowserConfig
-}
-
-/**
- * Represents a user account used in authless.
- * Is usually managed with a {@link IBotRouter}
- * and contains meta information about the
- * credentials, usage-data and health-status of an account
- *
- * @beta
- */
-interface IBot {
-
-  /**
-   * The username or key of the account. May be undefined for anonymous bots
-   */
-  username?: string
-
-  /**
-   * The password or secret of the account. May be undefined for anonymous bots
-   */
-  password?: string
-
-  /**
-   * The URLs to be handled by this bot
-   */
-  urls: string[]
-
-  /**
-   * @internal
-   */
-  hitCount: number
-
-  /**
-   * @internal
-   */
-  loginCount: number
-
-  /**
-   * @internal
-   */
-  captchaCount: number
-
-  /**
-   * @internal
-   */
-  rateLimit: number
-
-  /**
-   * @internal
-   */
-  usageTimeStamps: number[]
-
-  /**
-   * The puppeteer/page options for the bot {@link BrowserConfig}
-   */
-  browserConfig?: BrowserConfig
-
-  /**
-   * Tells the bot that it was used for authentication.
-   *
-   * @remarks
-   * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.
-   *
-   * @beta
-   */
-  wasUsed: () => void
-
-  /**
-   * Tells the bot that the login page was found
-   *
-   * @remarks
-   * The bot can use this information to calculate logout rates
-   * High logout rates could mean user information is not saved
-   * between page hits or the website is logging us out
-   *
-   * @param found - if the page hit was a login page or not
-   * @returns nothing
-   *
-   * @beta
-   */
-  foundLogin: (found: Boolean) => void
-
-  /**
-   * Tells the bot we ran into a captcha
-   *
-   * @remarks
-   * The bot can use this information to calculate detection rates
-   * High detection rates could mean the account is in danger of getting
-   * blacklisted or we have interactions or extensions which are triggering
-   * bot-detection
-   *
-   * @param found - if the page hit was a captcha page or not
-   * @returns nothing
-   *
-   * @beta
-   */
-  foundCaptcha: (found: Boolean) => void
-
-  /**
-   * To check if bot usage-rate is below the allowed limit
-   *
-   * @remarks
-   * If the usage-rate is above the rate-limit
-   * we have to add more time between page-fetching or add more accounts
-   * else the account may be blacklisted
-   *
-   * @returns true if current bot is under the usage rate-limit, false otherwise
-   *
-   * @beta
-   */
-  isBelowRateLimit: () => Boolean
-
-  /**
-   * Get the login hit-rate percentage of the bot
-   *
-   * @returns number of times the login hit-rate percentage of the bot
-   *
-   * @beta
-   */
-  getLoginHitCount: () => number
-
-  /**
-   * Get the captcha hit-rate percentage of the bot
-   *
-   * @returns number of times the captcha hit-rate percentage of the bot
-   *
-   * @beta
-   */
-  getCaptchaHitCount: () => number
 }
 
 /**
@@ -343,23 +160,6 @@ interface IResponse {
    * The captured xhr/data requests made by the page {@link Xhr}
    */
   xhrs: Xhr[]
-}
-
-/**
- * Manages a pool of {@link IDomainPath} mapped to an url each
- *
- * @beta
- */
-interface IDomainPathRouter {
-
-  /**
-   * returns a {@link IDomainPath} that matches the url, else returns undefined
-   *
-   * @param url - the HTTP URL which is to be fetched
-   * @returns a {@link IDomainPath} if found, else returns undefined
-   *
-   */
-  getDomainPath: (url: string) => IDomainPath | undefined
 }
 
 /**
@@ -516,7 +316,7 @@ interface URLParams {
   inputs?: string
 
   /**
-   * The HTML input selector to which puppeteer should enter alphabets from your {@link IDomainPath}.pageHandler function.
+   * The HTML input selector to which puppeteer should enter alphabets from your {@link DomainPath}.pageHandler function.
    *
    * @remarks
    * Since input selectors may change with each load(randomization of HTML selector string),
@@ -634,89 +434,6 @@ interface BrowserConfig {
   urlParams?: URLParams
 }
 
-/**
- * The interface that controls the behaviour and page-handling for a particular domain/subdomain/url
- *
- * @remarks
- * This is responsible for handling the page that is fetched.
- * If different behaviours are required for different URLs
- * (say some pages have pagination, while others require you to expand links)
- * then, you should have multiple DomainPaths and attach them to the requried URL
- * via a DomainPathHandler {@link DomainPathRouter}
- *
- * @example
- * ```ts
- * // create 2 DomainPaths
- * class PaginationDomainPath implements IDomainPath {
- *   pageHandler(page...) {
- *     // handle pagination and other page specific actions here
- *   }
- * }
- * class ExpandableDomainPath implements IDomainPath {
- *   pageHandler(page...) {
- *     // handle expanding links or page specific inputs here
- *   }
- * }
- *
- * const domainPathRouter = new DomainPathRouter({
- *   'www.example.com/pagination/': new PaginationDomainPath('pagination'),
- *   'www.example.com/links/': new ExpandableDomainPath('expanding-links')
- * })
- *
- * Now, get the right domainPath by url and use it. Refer to docs
- * ```
- *
- * @beta
- */
-interface IDomainPath {
-
-  /**
-   * Name of the domain. Useful for differentiating DomainPaths while logging
-   */
-  domain: string
-
-  /**
-   * Form a {@link IResponse} object from the puppeteer page
-   *
-   * @remarks
-   * Override this to add custom data/metadata to your Authless response {@link IResponse}
-   *
-   * @param page - the puppeteer page from which to extract the response object
-   * @returns a {@link IResponse} if found, else returns undefined
-   */
-  getJsonResponse: (page: Page) => Promise<IResponse>
-
-  /**
-   * Over-ride default page setup
-   *
-   * @remarks
-   * Override this to add custom page listeners on response etc.
-   * This happens before we navigate to the target URL.
-   * Call super.setupPage if you would like to use default response/resourceType blocking
-   *
-   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
-   * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user
-   */
-  setupPage: (page: Page, puppeteerParams: PuppeteerParams) => Promise<void>
-
-  /**
-   * Code to handle page interactions
-   *
-   * @remarks
-   * This is responsible for checking/doing authentication
-   * and interacting with the page.
-   * You can have different DomainPaths with different behaviour
-   * and call the appropriate one based on the URL you wish to fetch
-   * The puppeteer instance will be reused and only new pages are instantiated here
-   *
-   *
-   * @param page - The puppeteer page to which we can attach listeners or change behaviour of
-   * @param bot - Optional. The {@link IBot} to use for authentication.
-   * @param config - Optional. The {@link BrowserConfig} passed by the user
-   */
-  pageHandler: (page: Page, bot?: IBot, config?: BrowserConfig) => Promise<IResponse | null>
-}
-
 type URL = string
 type URLs = URL[]
 
@@ -821,14 +538,9 @@ export {
   PuppeteerParams,
   BrowserConfig,
   BotConfig,
-  IBot,
-  IBotRouter,
-  IDomainPath,
-  IDomainPathRouter,
   Xhr,
   RequestContainer,
   IResponse,
-  IAuthlessCore,
   ICache,
   FetchParams,
 }

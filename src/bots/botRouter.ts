@@ -1,14 +1,18 @@
 import { AnonBot } from '../bots/anonBot'
 import { Bot } from '../bots/bot'
-import { IBotRouter } from '../types'
 
 /**
- * Implementation of the IBotRouter interface
+ * Manages a pool(zero or more) Bots {@link Bot}
+ * Is responsible for rotating the bots used in a round-robin fashion.
  *
  * @beta
  */
-export class BotRouter implements IBotRouter {
-  botMap: {[url: string]: Bot}
+export class BotRouter {
+
+  /**
+   * A map of urls to Bot instances
+   */
+  private readonly botMap: {[url: string]: Bot}
 
   /**
    * Create a BotRouter instance.
@@ -59,7 +63,17 @@ export class BotRouter implements IBotRouter {
     }, {})
   }
 
-  getBotForUrl (url: string): Bot {
+  /**
+   * Provides a bot which can handle a particular url
+   *
+   * @remarks
+   * Picks a bot from the pool of {@link Bot} to return one
+   * that can handle the url provided and is below the bots' allowed rate-limit
+   *
+   * @returns a valid bot if found, else returns undefined
+   *
+   */
+  public getBotForUrl (url: string): Bot {
     const matchedUrlKeys = Object.keys(this.botMap)
       .sort((a, b) => a.length - b.length)
       .filter(domainUrl => url.includes(domainUrl))
@@ -73,7 +87,20 @@ export class BotRouter implements IBotRouter {
     return new AnonBot()
   }
 
-  getBotByUsername (name: string): Bot {
+  /**
+   * Provides a bot with a particular username
+   *
+   * @remarks
+   * Picks a bot from the pool of {@link Bot} which has the username provided
+   * that can handle the url provided.
+   * This is useful when we want to check if a bot is healthy
+   * in term of its usageRate, loginHitCount, captchaHitCount etc
+   *
+   * @param username - the username string of the bot to get
+   * @returns a valid bot if found, else returns undefined
+   *
+   */
+  public getBotByUsername (name: string): Bot {
 
     const matchedUrl = Object.keys(this.botMap).find(url => {
       const bot = this.botMap[url]

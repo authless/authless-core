@@ -1,14 +1,17 @@
 import { DomainPath } from './domainPath'
-import { IDomainPathRouter } from '../types'
 
 /**
- * Implementation of the IDomainPathRouter interface
+ * Manages a pool of {@link DomainPath} mapped to an url each
  *
  * @beta
  */
 
-export class DomainPathRouter implements IDomainPathRouter {
-  domainMap: {[url: string ]: DomainPath}
+export class DomainPathRouter {
+
+  /**
+   * The map of urls to DomainPath instances.
+   */
+  private domainMap: {[url: string ]: DomainPath}
 
   /**
    * Create a DomainPathRouter instance.
@@ -33,10 +36,20 @@ export class DomainPathRouter implements IDomainPathRouter {
     this.domainMap = domainMap
   }
 
-  addDomainPathRouter (router: DomainPathRouter): void {
+  /**
+   * Add DomainPaths from another DomainPathRouter
+   */
+  public addDomainPathRouter (router: DomainPathRouter): void {
     this.domainMap = {...this.domainMap, ...router.domainMap}
   }
 
+  /**
+   * returns a {@link DomainPath} that matches the url, else returns undefined
+   *
+   * @param url - the HTTP URL which is to be fetched
+   * @returns a {@link DomainPath} if found, else returns undefined
+   *
+   */
   public getDomainPath (url: string): DomainPath | undefined {
     const matchedUrlKeys = Object.keys(this.domainMap)
       .sort((a, b) => b.length - a.length)
