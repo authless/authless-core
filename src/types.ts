@@ -157,6 +157,11 @@ interface IResponse {
   page: IResponsePage
 
   /**
+   * The main page response as a json object {@link Xhr}
+   */
+  main: Xhr
+
+  /**
    * The captured xhr/data requests made by the page {@link Xhr}
    */
   xhrs: Xhr[]

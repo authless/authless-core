@@ -175,9 +175,11 @@ export class DomainPath {
    * Override this to add custom data/metadata to your Authless response {@link IResponse}
    *
    * @param page - the puppeteer page from which to extract the response object
-   * @returns a {@link IResponse} if found, else returns undefined
+   * @param mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}
+   *
+   * @returns the generated {@link IAuthlessResponse}
    */
-  public async convertPageToResponse (page: PuppeteerPage): Promise<IAuthlessResponse> {
+  public async convertPageToResponse (page: PuppeteerPage, mainResponse: PuppeteerResponse): Promise<IAuthlessResponse> {
     return {
       meta: {
         timestamp: Date.now()
@@ -189,6 +191,7 @@ export class DomainPath {
         cookies: await page.cookies(),
         title: await page.title(),
       },
+      main: await DomainPath.convertResponseToJson(mainResponse),
       xhrs: this.responses
     }
   }
