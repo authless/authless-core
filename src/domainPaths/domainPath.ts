@@ -179,10 +179,11 @@ export class DomainPath {
    *
    * @returns the generated {@link IAuthlessResponse}
    */
-  public async convertPageToResponse (page: PuppeteerPage, mainResponse: PuppeteerResponse): Promise<IAuthlessResponse> {
+  public async convertPageToResponse (page: PuppeteerPage, mainResponse: PuppeteerResponse, bot: Bot): Promise<IAuthlessResponse> {
     return {
       meta: {
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        username: bot.username ?? 'anonymous',
       },
       page: {
         url: page.url(),
@@ -236,13 +237,12 @@ export class DomainPath {
    *
    *
    * @param page - The puppeteer page to which we can attach listeners or change behaviour of
-   * @param bot - Optional. The {@link Bot} to use for authentication.
+   * @param selectedBot - Optional. The {@link Bot} to use for authentication.
    * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
   // eslint-disable-next-line class-methods-use-this
-  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<IAuthlessResponse | null> {
-    // default implementation to process the page
-    return null
+  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<IAuthlessResponse> {
+    throw new Error('not implemented')
   }
 
 }

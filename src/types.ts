@@ -102,6 +102,10 @@ interface BotConfig {
  */
 interface IResponseMeta {
   timestamp: number
+  username: string
+  fromCache?: boolean
+  hitLogin?: boolean
+  hitCaptcha?: boolean
 }
 
 /**
