@@ -1,4 +1,4 @@
-import { FetchParams, ICache } from '../types'
+import { FetchParams, ICache, IResponse } from '../types'
 import fetch from 'node-fetch'
 
 /**
@@ -55,10 +55,16 @@ export class AuthlessClient {
    * extractOrSave(authlessResponse)
    * ```
    */
-  async fetch (params: FetchParams): Promise<any> {
+  async fetch (params: FetchParams): Promise<IResponse> {
     const cachedData = await this.cache?.get(params.url)
-    if(typeof cachedData !== 'undefined') {
-      return cachedData
+    if(typeof cachedData !== 'undefined' && !(cachedData instanceof Error)) {
+      return {
+        ...cachedData,
+        meta: {
+          ...cachedData.meta,
+          fromCache: true,
+        }
+      }
     }
     const body = AuthlessClient.makeParams(params)
     try {
