@@ -1,4 +1,4 @@
-import { FetchParams, ICache } from '../src/types'
+import { FetchParams, ICache, IResponse } from '../src/types'
 import { AuthlessClient } from '../src/client/client'
 
 const urlParams: FetchParams = {
@@ -8,15 +8,42 @@ const urlParams: FetchParams = {
   alphabetSelector: '#some-selector'
 }
 
+const sampleResponse: IResponse = {
+  meta: {
+    timestamp: Date.now(),
+    username: 'some-username'
+  },
+  page: {
+    title: 'Page title',
+    url: 'http://www.page-url.com',
+    content: '',
+    cookies: [],
+    viewport: { height: 900, width: 900 },
+  },
+  main: {
+    headers: {},
+    url: 'http://www.page-url.com',
+    status: 200,
+    statusText: 'OK',
+    text: '',
+    // eslint-disable-next-line no-undefined
+    request: undefined,
+    fromCache: false,
+    fromServiceWorker: false,
+    securityDetails: null,
+  },
+  xhrs: []
+}
+
 const cache: ICache = {
   put: async (key: string, data: any) => {
     return 'ok'
   },
   get: async (key: string) => {
-    return {'some-url': 'the-data'}
+    return sampleResponse
   },
   delete: async (key: string) => {
-    return {'deleted-url': 'the-data'}
+    return sampleResponse
   },
   deleteAll: async () => {
     return 100
