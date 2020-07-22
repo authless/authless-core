@@ -16,7 +16,7 @@ interface ICache {
    * @returns
    * 'ok' if successful, else returns an Error object
    */
-  put: (key: string, data: any) => Promise<'ok' | Error>
+  put: (key: string, data: IResponse) => Promise<'ok' | Error>
 
   /**
    * Get a value from the cache
@@ -26,7 +26,7 @@ interface ICache {
    * @returns
    * The data that was fetched if successful, else returns an Error object
    */
-  get: (key: string) => Promise<any | Error>
+  get: (key: string) => Promise<IResponse | Error>
 
   /**
    * Delete a value from the cache
@@ -36,7 +36,7 @@ interface ICache {
    * @returns
    * The data that was deleted if successful, else returns an Error object
    */
-  delete: (key: string) => Promise<any | Error>
+  delete: (key: string) => Promise<IResponse | Error>
 
   /**
    * Delete all values from the cache
