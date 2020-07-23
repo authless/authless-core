@@ -1,9 +1,21 @@
+/* eslint-disable max-lines */
 import {
   IResourcePayload,
   IResourceResponse,
   ResourcePayload,
   ResourceResponse
 } from './resource'
+import {
+  IResponseMeta,
+  RequestContainer,
+  Xhr
+} from './types'
+import {
+  Page as PuppeteerPage,
+  Request as PuppeteerRequest,
+  Response as PuppeteerResponse
+} from 'puppeteer'
+import { Bot } from './bots/bot'
 
 /**
  * The raw response from a service including any (xhrs) requests and responses and meta information.
@@ -62,7 +74,7 @@ export interface IResponse {
  *
  * @beta
  */
-export abstract class Response implements IResponse {
+export class Response implements IResponse {
   meta: IResponseMeta
   page: IResponsePage
   main: IResponseResponse
@@ -82,21 +94,79 @@ export abstract class Response implements IResponse {
   toResources (): ResourceResponse<ResourcePayload> {
     throw new Error('not implemented yet')
   }
-}
 
-/**
- * Sub-type of {@link IResponse}.
- *
- * @privateRemarks
- *
- * - Serializable: TRUE
- * - Serialization Format: Avro
- *
- * @beta
- */
-export interface IResponseMeta {
-  account: string
-  time: number
+  static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer | undefined> {
+    try{
+      const requestData = {
+        headers: request.headers(),
+        isNavigationRequest: request.isNavigationRequest(),
+        method: request.method(),
+        postData: request.postData(),
+        resourceType: request.resourceType(),
+        url: request.url()
+      }
+      return requestData
+    } catch (e) {
+      console.log('error: unable to extract request data from Xhr response')
+    }
+  }
+
+  static async convertResponseToJson (response: PuppeteerResponse): Promise<Xhr> {
+
+    const securityDetails = {
+      issuer: response.securityDetails()?.issuer(),
+      protocol: response.securityDetails()?.protocol(),
+      subjectName: response.securityDetails()?.subjectName(),
+      validFrom: response.securityDetails()?.validFrom(),
+      validTo: response.securityDetails()?.validTo(),
+    }
+    const returnObj: Xhr = {
+      url: response.url(),
+      status: response.status(),
+      statusText: response.statusText(),
+      headers: response.headers(),
+      securityDetails: securityDetails,
+      fromCache: response.fromCache(),
+      fromServiceWorker: response.fromServiceWorker(),
+      // eslint-disable-next-line no-undefined
+      text: undefined,
+      // eslint-disable-next-line no-undefined
+      request: undefined,
+    }
+    returnObj.request = await Response.convertRequestToJson(response.request())
+    return returnObj
+  }
+
+  /**
+   * Form a {@link IResponse} object from the puppeteer page
+   *
+   * @remarks
+   * Override this to add custom data/metadata to your Authless response {@link IResponse}
+   *
+   * @param page - the puppeteer page from which to extract the response object
+   * @param mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}
+   *
+   * @returns the generated {@link AuthlessResponse}
+   */
+  public static async convertPageToResponse (page: PuppeteerPage, data: {mainResponse: PuppeteerResponse, bot: Bot, responses: Xhr[]}): Promise<Response> {
+    const { mainResponse, bot, responses } = data
+    return new Response({
+      meta: {
+        timestamp: Date.now(),
+        username: bot.username ?? 'anonymous',
+      },
+      page: {
+        url: page.url(),
+        viewport: page.viewport(),
+        content: await page.content(),
+        cookies: await page.cookies(),
+        title: await page.title(),
+      },
+      main: await Response.convertResponseToJson(mainResponse),
+      xhrs: responses
+    })
+  }
+
 }
 
 /**

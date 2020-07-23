@@ -1,14 +1,12 @@
 import {
-  IResponse as IAuthlessResponse,
-  PuppeteerParams,
-  RequestContainer,
-  Xhr,
-} from '../types'
-import {
   Page as PuppeteerPage,
-  Request as PuppeteerRequest,
   Response as PuppeteerResponse,
 } from 'puppeteer'
+import {
+  PuppeteerParams,
+  Xhr,
+} from '../types'
+import { Response as AuthlessResponse } from '../response'
 import { Bot } from '../bots/bot'
 
 /**
@@ -63,7 +61,7 @@ export class DomainPath {
    * by passing blockResourceTypes in {@link PuppeteerParams}
    */
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
-  private responses: Xhr[]
+  responses: Xhr[]
 
   /**
    * Create a DomainPath instance.
@@ -83,52 +81,10 @@ export class DomainPath {
     this.responses = []
   }
 
-  private static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer | undefined> {
-    try{
-      const requestData = {
-        headers: request.headers(),
-        isNavigationRequest: request.isNavigationRequest(),
-        method: request.method(),
-        postData: request.postData(),
-        resourceType: request.resourceType(),
-        url: request.url()
-      }
-      return requestData
-    } catch (e) {
-      console.log('error: unable to extract request data from Xhr response')
-    }
-  }
-
-  private static async convertResponseToJson (response: PuppeteerResponse): Promise<Xhr> {
-
-    const securityDetails = {
-      issuer: response.securityDetails()?.issuer(),
-      protocol: response.securityDetails()?.protocol(),
-      subjectName: response.securityDetails()?.subjectName(),
-      validFrom: response.securityDetails()?.validFrom(),
-      validTo: response.securityDetails()?.validTo(),
-    }
-    const returnObj: Xhr = {
-      url: response.url(),
-      status: response.status(),
-      statusText: response.statusText(),
-      headers: response.headers(),
-      securityDetails: securityDetails,
-      fromCache: response.fromCache(),
-      fromServiceWorker: response.fromServiceWorker(),
-      // eslint-disable-next-line no-undefined
-      text: undefined,
-      // eslint-disable-next-line no-undefined
-      request: undefined,
-    }
-    returnObj.request = await DomainPath.convertRequestToJson(response.request())
-    return returnObj
-  }
-
   private addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
     console.log(`-- setting up to block resourceTypes: ${JSON.stringify(blockResourceTypes)}`)
     const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
-      const returnObj = await DomainPath.convertResponseToJson(response)
+      const returnObj = await AuthlessResponse.convertResponseToJson(response)
       if(typeof returnObj.request !== 'undefined') {
         if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
           try {
@@ -166,35 +122,6 @@ export class DomainPath {
           })
       }
     })
-  }
-
-  /**
-   * Form a {@link IResponse} object from the puppeteer page
-   *
-   * @remarks
-   * Override this to add custom data/metadata to your Authless response {@link IResponse}
-   *
-   * @param page - the puppeteer page from which to extract the response object
-   * @param mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}
-   *
-   * @returns the generated {@link IAuthlessResponse}
-   */
-  public async convertPageToResponse (page: PuppeteerPage, mainResponse: PuppeteerResponse, bot: Bot): Promise<IAuthlessResponse> {
-    return {
-      meta: {
-        timestamp: Date.now(),
-        username: bot.username ?? 'anonymous',
-      },
-      page: {
-        url: page.url(),
-        viewport: page.viewport(),
-        content: await page.content(),
-        cookies: await page.cookies(),
-        title: await page.title(),
-      },
-      main: await DomainPath.convertResponseToJson(mainResponse),
-      xhrs: this.responses
-    }
   }
 
   /**
@@ -241,7 +168,7 @@ export class DomainPath {
    * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
   // eslint-disable-next-line class-methods-use-this
-  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<IAuthlessResponse> {
+  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<AuthlessResponse> {
     throw new Error('not implemented')
   }
 
