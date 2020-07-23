@@ -36,7 +36,7 @@ const responseSerialized = fs.readJsonSync(
 describe('Response', () => {
   test('it can be initialized', () => {
     const response = new TestResponse(responseSerialized)
-    expect(response.meta.time).toBe(1583140599365)
+    expect(response.meta.timestamp).toBe(1583140599365)
   })
 
   test('it transforms to ResourceResponse', () => {
