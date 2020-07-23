@@ -32,8 +32,13 @@ const bot2 = new Bot({
   urls: urls2,
   credentials: { username: 'user2', password: 'pass2'}
 })
+const bot3 = new Bot({
+  ...defaultBotConfig,
+  urls: urls2,
+  credentials: { username: 'user3', password: 'pass3'}
+})
 
-const botRouter = new BotRouter([bot1, bot2])
+const botRouter = new BotRouter([bot1, bot2, bot3])
 // ------------------------- end setup ----------------------------
 // ----------------------------------------------------------------
 
@@ -66,4 +71,15 @@ test('getBotByUsername when username is available', () => {
 test('getBotByUsername when username is not available', () => {
   const bot = botRouter.getBotByUsername('unknown-user')
   expect(bot).toBeInstanceOf(AnonBot)
+})
+
+test('bots are cycled through', () => {
+  const bot1 = botRouter.getBotForUrl('https://example.com/subdomain/')
+  const bot2 = botRouter.getBotForUrl('https://example.com/subdomain/')
+  const bot3 = botRouter.getBotForUrl('https://example.com/subdomain/')
+  expect(bot1).toBeDefined()
+  expect(bot2).toBeDefined()
+  expect(bot3).toBeDefined()
+  expect(bot1.username).not.toBe(bot2.username)
+  expect(bot1.username).toBe(bot3.username)
 })

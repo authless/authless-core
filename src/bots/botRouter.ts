@@ -11,8 +11,17 @@ export class BotRouter {
 
   /**
    * A map of urls to Bot instances
+   *
+   * @remarks
+   * Each url is mapped to the bots which can handle it
+   * and the index of the current bot to be returned
    */
-  private readonly botMap: {[url: string]: Bot}
+  private readonly botMap: {
+    [url: string]: {
+      index: number
+      bots: Bot[]
+    }
+  }
 
   /**
    * Create a BotRouter instance.
@@ -28,26 +37,27 @@ export class BotRouter {
    * })
    * ```
    *
-   * Internally, we store it as a map of \{url: Bot\}
+   * Internally, we store it as a map of \{url: Bot-Data\}
    * by converting a structure of form
    * ```ts
    * [
    *   Bot1{urls: ['url1', 'url2', 'url3'..]},
-   *   Bot2{urls: ['url4', 'url5', 'url6'..]}
+   *   Bot2{urls: ['url4', 'url5', 'url6'..]},
+   *   Bot3{urls: ['url1', 'url4'..]}
    * ]
    * ```
    * to
    * ```ts
    * {
-   *   'url1': Bot1,
-   *   'url2': Bot1,
-   *   'url3': Bot1,
-   *   'url4': Bot2,
-   *   'url5': Bot2,
-   *   'url6': Bot2
+   *   'url1': { index: 0, bots: [Bot1, Bot3] },
+   *   'url2': { index: 0, bots: [Bot1] },
+   *   'url3': { index: 0, bots: [Bot1] },
+   *   'url4': { index: 0, bots: [Bot1, Bot3] },
+   *   'url5': { index: 0, bots: [Bot1] },
+   *   'url6': { index: 0, bots: [Bot1] },
    * }
    * ```
-   * as it makes it easier to fetch by url
+   * as it makes it easier to fetch by url and cycle though Bots
    *
    * @beta
    */
@@ -57,7 +67,11 @@ export class BotRouter {
     }
     this.botMap = bots.reduce((acc, bot) => {
       bot.urls.forEach(url => {
-        acc[url] = bot
+        if(url in acc) {
+          acc[url].bots = acc[url].bots.concat(bot)
+        } else {
+          acc[url] = {index: 0, bots: [bot]}
+        }
       })
       return acc
     }, {})
@@ -81,7 +95,11 @@ export class BotRouter {
     if(matchedUrlKeys.length > 0) {
       const matchedUrl = matchedUrlKeys[0]
       if(typeof matchedUrl !== 'undefined') {
-        return this.botMap[matchedUrl]
+        let bots = this.botMap[matchedUrl].bots
+        let botIndex = this.botMap[matchedUrl].index
+        const returnBot = bots[botIndex]
+        this.botMap[matchedUrl].index = (botIndex + 1) % bots.length
+        return returnBot
       }
     }
     return new AnonBot()
@@ -102,13 +120,9 @@ export class BotRouter {
    */
   public getBotByUsername (name: string): Bot {
 
-    const matchedUrl = Object.keys(this.botMap).find(url => {
-      const bot = this.botMap[url]
-      return bot.username === name
+    const matchedBotData = Object.values(this.botMap).find(botsData => {
+      return typeof botsData.bots.find(bot => bot.username === name) !== 'undefined'
     })
-    if(typeof matchedUrl !== 'undefined') {
-      return this.botMap[matchedUrl]
-    }
-    return new AnonBot()
+    return matchedBotData?.bots.find(bot => bot.username === name) ?? (new AnonBot())
   }
 }
