@@ -95,7 +95,14 @@ export class Response implements IResponse {
     throw new Error('not implemented yet')
   }
 
-  static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer | undefined> {
+  /**
+   * Create a {@link RequestContainer} JSON structure from the puppeteer request
+   *
+   * @param request - The puppeteer request from which to form the {@link RequestContainer}
+   * @returns
+   * A {@link RequestContainer} if possible, throws on error
+   */
+  static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer> {
     try{
       const requestData = {
         headers: request.headers(),
@@ -108,9 +115,17 @@ export class Response implements IResponse {
       return requestData
     } catch (e) {
       console.log('error: unable to extract request data from Xhr response')
+      throw e
     }
   }
 
+  /**
+   * Convert a puppeteer page response into a JSON object of type {@link Xhr}
+   *
+   * @param response - The puppeteer response from which to generate the {@link Xhr} JSON object
+   * @returns
+   * A JSON object with the response metadata and content {@link Xhr}
+   */
   static async convertResponseToJson (response: PuppeteerResponse): Promise<Xhr> {
 
     const securityDetails = {
