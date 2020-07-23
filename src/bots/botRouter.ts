@@ -95,11 +95,9 @@ export class BotRouter {
     if(matchedUrlKeys.length > 0) {
       const matchedUrl = matchedUrlKeys[0]
       if(typeof matchedUrl !== 'undefined') {
-        let bots = this.botMap[matchedUrl].bots
-        let botIndex = this.botMap[matchedUrl].index
-        const returnBot = bots[botIndex]
-        this.botMap[matchedUrl].index = (botIndex + 1) % bots.length
-        return returnBot
+        const {index, bots} = this.botMap[matchedUrl]
+        this.botMap[matchedUrl].index = (index + 1) % bots.length
+        return bots[index]
       }
     }
     return new AnonBot()
