@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
 import {
-  IResourcePayload,
-  IResourceResponse,
-  ResourcePayload,
-  ResourceResponse
+  IResource,
+  IResourceCollection,
+  Resource,
+  ResourceCollection
 } from './resource'
 import {
   IResponseMeta,
@@ -22,7 +22,7 @@ import { Bot } from './bots/bot'
  *
  * @remarks
  *
- * A {@link IResponse} can be transformed into a {@link IResourceResponse}
+ * A {@link IResponse} can be transformed into a {@link IResourceCollection}
  * which extracts the most relevant data from an {@link IResponse}.
  *
  * Service repositories should create their own response class implementing {@link IResponse}.
@@ -66,7 +66,7 @@ export interface IResponse {
   /**
    * Creates a {@link IResponseResponse} from an {@link IResponse} instance.
    */
-  toResources(): IResourceResponse<IResourcePayload>
+  toResources(): IResourceCollection<IResource>
 }
 
 /**
@@ -91,7 +91,7 @@ export class Response implements IResponse {
    * see {@link IResponse.toResources}. Needs to be implemented by services.
    */
   /* eslint-disable-next-line class-methods-use-this */
-  toResources (): ResourceResponse<ResourcePayload> {
+  toResources (): ResourceCollection<Resource> {
     throw new Error('not implemented yet')
   }
 

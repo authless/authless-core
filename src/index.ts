@@ -16,11 +16,11 @@ export { AuthlessServer } from './server/server'
 export { AuthlessClient } from './client/client'
 
 export {
-  IResourcePayload,
-  IResourceResponse,
+  IResource,
+  IResourceCollection,
+  Resource,
+  ResourceCollection,
   ResourceConstructor,
-  ResourceResponse,
-  ResourcePayload
 } from './resource'
 export {
   Response,
