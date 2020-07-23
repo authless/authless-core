@@ -2,8 +2,6 @@
 import {
   IResource,
   IResourceCollection,
-  Resource,
-  ResourceCollection
 } from './resource'
 import {
   IResponseMeta,
@@ -91,7 +89,7 @@ export class Response implements IResponse {
    * see {@link IResponse.toResources}. Needs to be implemented by services.
    */
   /* eslint-disable-next-line class-methods-use-this */
-  toResources (): ResourceCollection<Resource> {
+  toResources (): IResourceCollection<IResource> {
     throw new Error('not implemented yet')
   }
 
