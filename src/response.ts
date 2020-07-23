@@ -161,7 +161,7 @@ export class Response implements IResponse {
    *
    * @returns the generated {@link AuthlessResponse}
    */
-  public static async convertPageToResponse (page: PuppeteerPage, data: {mainResponse: PuppeteerResponse, bot: Bot, responses: Xhr[]}): Promise<Response> {
+  public static async fromPage (page: PuppeteerPage, data: {mainResponse: PuppeteerResponse, bot: Bot, responses: Xhr[]}): Promise<Response> {
     const { mainResponse, bot, responses } = data
     return new Response({
       meta: {
