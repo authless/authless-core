@@ -28,7 +28,6 @@ export {
   IResponseResponse,
   IResponseRequest,
   IResponsePage,
-  IResponseMeta
 } from './response'
 
 export {

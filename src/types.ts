@@ -549,6 +549,7 @@ export {
   BotConfig,
   Xhr,
   RequestContainer,
+  IResponseMeta,
   IResponse,
   ICache,
   FetchParams,
