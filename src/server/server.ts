@@ -125,19 +125,7 @@ export class AuthlessServer {
       return
     }
 
-    if (typeof username !== 'string') {
-      const error = `error: username must be provided as a query parameter string. invalid value: ${username?.toLocaleString() ?? 'undefined'}`
-      console.log(error)
-      expressResponse
-        .status(422)
-        .send(error)
-        .end()
-      return
-    }
-
     // try to fetch the sevice for this url
-    console.log('this.domainPathRouter')
-    console.log(Object.keys(this))
     const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
     if(typeof selectedDomainPath === 'undefined') {
       throw new Error('Service not found')
@@ -146,7 +134,7 @@ export class AuthlessServer {
     // get bot when username not provided explicitly
     let selectedBot = this.botRouter.getBotForUrl(url)
     // get bot when username is provided
-    if(typeof username !== 'undefined') {
+    if(typeof username === 'string') {
       selectedBot = this.botRouter.getBotByUsername(username)
     }
 
