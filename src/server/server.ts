@@ -152,8 +152,8 @@ export class AuthlessServer {
     }
 
     let responseFormat: URLParams['responseFormat'] = 'json'
-    if(urlParams.responseFormat === 'png') {
-      responseFormat = urlParams.responseFormat
+    if(urlParams?.responseFormat === 'png') {
+      responseFormat = urlParams?.responseFormat
     }
     // let service handle the page
     const authlessResponse = await selectedDomainPath.pageHandler(
@@ -165,22 +165,25 @@ export class AuthlessServer {
     )
 
     if (responseFormat === 'json') {
-      expressResponse.set('Content-Type', 'application/json; charset=utf-8')
-      return expressResponse
+      expressResponse
         .status(200)
+        .set('Content-Type', 'application/json; charset=utf-8')
         .send({
           meta: authlessResponse.meta,
           page: authlessResponse.page,
           main: authlessResponse.main,
           xhrs: authlessResponse.xhrs,
         })
-        .set('Content-Type', 'text/html')
         .end()
-    }
-    expressResponse.set('Content-Type', 'text/html')
-    if (urlParams?.responseFormat === 'png') {
+    } else if (responseFormat === 'png') {
       expressResponse
+        .status(200)
+        .set('Content-Type', 'image/png')
         .end(await page.screenshot({fullPage: true}), 'binary')
+    } else {
+      expressResponse
+        .status(501)
+        .end('Can only handle responseFormat of type json or png')
     }
     await page.close()
   }
