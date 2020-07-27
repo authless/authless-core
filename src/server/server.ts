@@ -187,6 +187,7 @@ export class AuthlessServer {
       console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
     }
     await page.close()
+    await browser.close()
   }
 
   public run (): void {
