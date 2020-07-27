@@ -1,12 +1,11 @@
 import * as path from 'path'
-import { Browser, Page, Response } from 'puppeteer'
 import { BrowserConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
-import { AnonBot } from '../bots/anonBot'
 import { Bot } from '../bots/bot'
 import { BotRouter } from '../bots/botRouter'
+import { Browser } from 'puppeteer'
 import { DomainPath } from '../domainPaths/domainPath'
 import { DomainPathRouter } from '../domainPaths/domainPathRouter'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
@@ -54,41 +53,13 @@ export class AuthlessServer {
     }
   }
 
-  private async getJsonResponse (page: Page, bot?: Bot): Promise<string> {
-    let username = bot?.username ?? 'anonymous'
-    return JSON.stringify({
-      meta: {
-        url: page.url(),
-        username
-      },
-      content: await page.content(),
-      xhrs: this.responses
-    })
-  }
-
-  // eslint-disable-next-line max-params
-  private async makeExpressResponse (expressResponse: ExpressResponse, page: Page, bot?: Bot, urlParams?: URLParams): Promise<any> {
-    const responseFormat = urlParams?.responseFormat ?? 'html'
-    if (responseFormat === 'json') {
-      expressResponse.set('Content-Type', 'application/json; charset=utf-8')
-      const jsonResponse = await this.getJsonResponse(page, bot)
-      return expressResponse.status(200).send(jsonResponse)
-    }
-
-    expressResponse.set('Content-Type', 'text/html')
-    if (urlParams?.responseFormat === 'png') {
-      return expressResponse.end(await page.screenshot({fullPage: true}), 'binary')
-    }
-    expressResponse.set('Content-Type', 'text/html')
-  }
-
   static async launchBrowser (domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser> {
     const { puppeteerParams } = config ?? {}
     let defaultPlugins: PuppeteerExtraPlugin[] = []
-    if(config?.useStealthPlugin ?? false) {
+    if(config?.useStealthPlugin ?? true) {
       defaultPlugins.push(StealthPlugin())
     }
-    if(config?.useAdBlockerPlugin ?? false) {
+    if(config?.useAdBlockerPlugin ?? true) {
       defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
     }
     if(typeof config?.proxy !== 'undefined') {
@@ -140,7 +111,7 @@ export class AuthlessServer {
       .end()
   }
 
-  private async scrape (expressRequest: ExpressRequest, expressResponse: ExpressResponse): Promise<void> {
+  private async scrape (expressRequest: ExpressRequest, expressResponse: ExpressResponse): Promise<any> {
     const urlParams = expressRequest.query
     const { url, username } = urlParams
 
@@ -165,6 +136,8 @@ export class AuthlessServer {
     }
 
     // try to fetch the sevice for this url
+    console.log('this.domainPathRouter')
+    console.log(Object.keys(this))
     const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
     if(typeof selectedDomainPath === 'undefined') {
       throw new Error('Service not found')
@@ -175,46 +148,27 @@ export class AuthlessServer {
     // get bot when username is provided
     if(typeof username !== 'undefined') {
       selectedBot = this.botRouter.getBotByUsername(username)
-      if(selectedBot instanceof AnonBot) {
-        throw new Error(`User not found for user ${username}`)
-      }
     }
 
     // initialise the browser
-    const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot)
+    const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot, {
+      puppeteerParams: {
+        executablePath: '/Applications/Chromium.app/Contents/MacOS/Chromium',
+        headless: false
+      }
+    })
     const page = await browser.newPage()
 
     if(typeof this.puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(this.puppeteerParams?.viewPort)
     }
 
-    const saveResponse = async (response: Response): Promise<void> => {
-      let parsedResponse: string | unknown = ''
-      try {
-        parsedResponse = await response.json()
-        console.log(`${response.url()}: response was json`)
-      } catch(e1) {
-        console.log(`${response.url()}: response was not json`)
-        try {
-          parsedResponse = await response.text()
-          console.log(`${response.url()}: response was text`)
-        } catch (e2) {
-          console.log(`${response.url()}: response was not json`)
-        }
-      }
-
-      this.responses.push(parsedResponse)
-    }
-    // attach handler to save responses
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    page.on('response', saveResponse)
-
     let responseFormat: URLParams['responseFormat'] = 'json'
     if(urlParams.responseFormat === 'png') {
       responseFormat = urlParams.responseFormat
     }
     // let service handle the page
-    await selectedDomainPath.pageHandler(
+    const authlessResponse = await selectedDomainPath.pageHandler(
       page,
       selectedBot,
       {
@@ -222,13 +176,25 @@ export class AuthlessServer {
       }
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    page.off('response', saveResponse)
-
-    await this.makeExpressResponse(expressResponse, page, selectedBot, urlParams as unknown as URLParams)
-    expressResponse
-      .status(200)
-      .send(await page.content())
+    if (responseFormat === 'json') {
+      expressResponse.set('Content-Type', 'application/json; charset=utf-8')
+      return expressResponse
+        .status(200)
+        .send({
+          meta: authlessResponse.meta,
+          page: authlessResponse.page,
+          main: authlessResponse.main,
+          xhrs: authlessResponse.xhrs,
+        })
+        .set('Content-Type', 'text/html')
+        .end()
+    }
+    expressResponse.set('Content-Type', 'text/html')
+    if (urlParams?.responseFormat === 'png') {
+      expressResponse
+        .end(await page.screenshot({fullPage: true}), 'binary')
+    }
+    await page.close()
   }
 
   public run (): void {
@@ -239,7 +205,7 @@ export class AuthlessServer {
 
     app.get('/ping', AuthlessServer.ping)
     app.get('/speedtest', AuthlessServer.speedtest)
-    app.get('/url', this.scrape)
+    app.get('/url', async (req, res) => await this.scrape(req, res))
 
     // start express
     app.listen(PORT, () => {
