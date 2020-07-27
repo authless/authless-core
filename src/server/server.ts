@@ -140,50 +140,51 @@ export class AuthlessServer {
 
     // initialise the browser
     const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot, {
-      puppeteerParams: {
-        executablePath: '/Applications/Chromium.app/Contents/MacOS/Chromium',
-        headless: false
-      }
+      puppeteerParams: this.puppeteerParams
     })
     const page = await browser.newPage()
 
-    if(typeof this.puppeteerParams?.viewPort !== 'undefined') {
-      await page.setViewport(this.puppeteerParams?.viewPort)
-    }
-
-    let responseFormat: URLParams['responseFormat'] = 'json'
-    if(urlParams?.responseFormat === 'png') {
-      responseFormat = urlParams?.responseFormat
-    }
-    // let service handle the page
-    const authlessResponse = await selectedDomainPath.pageHandler(
-      page,
-      selectedBot,
-      {
-        urlParams: { url, responseFormat }
+    try {
+      if(typeof this.puppeteerParams?.viewPort !== 'undefined') {
+        await page.setViewport(this.puppeteerParams?.viewPort)
       }
-    )
 
-    if (responseFormat === 'json') {
-      expressResponse
-        .status(200)
-        .set('Content-Type', 'application/json; charset=utf-8')
-        .send({
-          meta: authlessResponse.meta,
-          page: authlessResponse.page,
-          main: authlessResponse.main,
-          xhrs: authlessResponse.xhrs,
-        })
-        .end()
-    } else if (responseFormat === 'png') {
-      expressResponse
-        .status(200)
-        .set('Content-Type', 'image/png')
-        .end(await page.screenshot({fullPage: true}), 'binary')
-    } else {
-      expressResponse
-        .status(501)
-        .end('Can only handle responseFormat of type json or png')
+      let responseFormat: URLParams['responseFormat'] = 'json'
+      if(urlParams?.responseFormat === 'png') {
+        responseFormat = urlParams?.responseFormat
+      }
+      // let service handle the page
+      const authlessResponse = await selectedDomainPath.pageHandler(
+        page,
+        selectedBot,
+        {
+          urlParams: { url, responseFormat }
+        }
+      )
+
+      if (responseFormat === 'json') {
+        expressResponse
+          .status(200)
+          .set('Content-Type', 'application/json; charset=utf-8')
+          .send({
+            meta: authlessResponse.meta,
+            page: authlessResponse.page,
+            main: authlessResponse.main,
+            xhrs: authlessResponse.xhrs,
+          })
+          .end()
+      } else if (responseFormat === 'png') {
+        expressResponse
+          .status(200)
+          .set('Content-Type', 'image/png')
+          .end(await page.screenshot({fullPage: true}), 'binary')
+      } else {
+        expressResponse
+          .status(501)
+          .end('Can only handle responseFormat of type json or png')
+      }
+    } catch (err) {
+      console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
     }
     await page.close()
   }
