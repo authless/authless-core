@@ -1,13 +1,10 @@
 import * as path from 'path'
+import { AnonBot, Bot, BotRouter, DomainPath, DomainPathRouter } from '../index'
 import { BrowserConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
-import { Bot } from '../bots/bot'
-import { BotRouter } from '../bots/botRouter'
 import { Browser } from 'puppeteer'
-import { DomainPath } from '../domainPaths/domainPath'
-import { DomainPathRouter } from '../domainPaths/domainPathRouter'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
@@ -136,6 +133,9 @@ export class AuthlessServer {
     // get bot when username is provided
     if(typeof username === 'string') {
       selectedBot = this.botRouter.getBotByUsername(username)
+      if(selectedBot instanceof AnonBot) {
+        throw new Error(`No Bot found for username: ${username}`)
+      }
     }
 
     // initialise the browser
