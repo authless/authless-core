@@ -74,9 +74,9 @@ export class AuthlessClient {
       })
       let data: any = ''
       if(params.responseFormat === 'json') {
-        data = response.json()
+        data = await response.json()
       } else {
-        data = response.text()
+        data = await response.text()
       }
       // check response status code before saving?
       await this.cache?.put(params.url, data)
