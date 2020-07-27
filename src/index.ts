@@ -8,6 +8,7 @@
  * @packageDocumentation
  */
 
+export { AnonBot } from './bots/anonBot'
 export { Bot } from './bots/bot'
 export { BotRouter } from './bots/botrouter'
 export { DomainPath } from './domainPaths/domainPath'
