@@ -66,11 +66,10 @@ export class AuthlessClient {
         }
       }
     }
-    const body = AuthlessClient.makeParams(params)
+    const query = AuthlessClient.makeParams(params)
     try {
-      const response = await fetch(params.serverUrl, {
+      const response = await fetch(`${params.serverUrl}?${query}`, {
         method: 'GET',
-        body
       })
       let data: any = ''
       if(params.responseFormat === 'json') {
