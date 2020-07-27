@@ -68,8 +68,7 @@ export class AuthlessClient {
     }
     const body = AuthlessClient.makeParams(params)
     try {
-      const response = await fetch({
-        url: params.serverUrl,
+      const response = await fetch(params.serverUrl, {
         method: 'GET',
         body
       })
