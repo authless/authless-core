@@ -125,7 +125,11 @@ export class AuthlessServer {
     // try to fetch the sevice for this url
     const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
     if(typeof selectedDomainPath === 'undefined') {
-      throw new Error('Service not found')
+      expressResponse
+        .status(501)
+        .send('Service not found')
+        .end()
+      return
     }
 
     // get bot when username not provided explicitly
@@ -134,7 +138,11 @@ export class AuthlessServer {
     if(typeof username === 'string') {
       selectedBot = this.botRouter.getBotByUsername(username)
       if(selectedBot instanceof AnonBot) {
-        throw new Error(`No Bot found for username: ${username}`)
+        expressResponse
+          .status(501)
+          .send(`No Bot found for username: ${username}`)
+          .end()
+        return
       }
     }
 
@@ -185,6 +193,10 @@ export class AuthlessServer {
       }
     } catch (err) {
       console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
+      expressResponse
+        .status(501)
+        .send('Server Error')
+        .end()
     }
     await page.close()
     await browser.close()
