@@ -63,7 +63,7 @@ test('AuthlessClient is instantiated correctly with cache', () => {
 
 test('fetches a URL correctly', () => {
   const queryParams = AuthlessClient.makeParams(urlParams)
-  expect(queryParams).toBe('u=www.google.com&responseFormat=json&alphabetSelector=#some-selector')
+  expect(queryParams).toBe('url=www.google.com&responseFormat=json&alphabetSelector=#some-selector')
 })
 
 test('fetches a URL correctly', () => {
