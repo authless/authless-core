@@ -11,9 +11,9 @@
     "object-hash": "^2.0.3",
     "puppeteer": "^4.0.1",
     "puppeteer-extra": "^3.1.9",
-    "puppeteer-extra-plugin-adblocker": "^2.11.3",
+    "puppeteer-extra-plugin-adblocker": "^2.11.4",
     "puppeteer-extra-plugin-proxy": "^1.0.2",
-    "puppeteer-extra-plugin-stealth": "^2.4.9"
+    "puppeteer-extra-plugin-stealth": "^2.4.11"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
