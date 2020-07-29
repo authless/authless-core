@@ -1,6 +1,6 @@
 import { AnonBot } from '../../src/bots/anonBot'
 import { Bot } from '../../src/bots/bot'
-import { BotRouter } from '../../src/bots/botrouter'
+import { BotRouter } from '../../src/bots/botRouter'
 
 // ----------------------------------------------------------------
 // --------------------------- setup ------------------------------

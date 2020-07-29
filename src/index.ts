@@ -10,7 +10,7 @@
 
 export { AnonBot } from './bots/anonBot'
 export { Bot } from './bots/bot'
-export { BotRouter } from './bots/botrouter'
+export { BotRouter } from './bots/botRouter'
 export { DomainPath } from './domainPaths/domainPath'
 export { DomainPathRouter } from './domainPaths/domainPathRouter'
 export { AuthlessServer } from './server/server'
