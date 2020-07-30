@@ -4,65 +4,119 @@
 
 ```ts
 
-import FMW from 'find-my-way';
+import { Browser } from 'puppeteer';
+import { Cookie } from 'puppeteer';
+import { Headers as Headers_2 } from 'puppeteer';
+import { HttpMethod } from 'puppeteer';
+import { LaunchOptions } from 'puppeteer';
+import { Page } from 'puppeteer';
+import { PuppeteerExtraPlugin } from 'puppeteer-extra';
+import { ResourceType } from 'puppeteer';
+import { Viewport } from 'puppeteer';
 
-// @alpha (undocumented)
-class Account_2 {
-    constructor(config: AccountConfig);
+// @public
+export class AuthlessClient {
+    constructor(cache?: ICache);
     // (undocumented)
-    authenticate(page: any): Promise<boolean>;
-    // (undocumented)
-    config: AccountConfig;
-    // (undocumented)
-    debug: any;
-    // (undocumented)
-    decreaseRateLimitBy1(): Promise<any>;
-    // (undocumented)
-    getRateLimitId(): string;
-    // (undocumented)
-    getRateLimitStatus(): Promise<any>;
-    // (undocumented)
-    isAuthenticated(page: any): Promise<boolean>;
-    // (undocumented)
-    isThrottled(): Promise<boolean>;
-    // (undocumented)
-    launchBrowser(virginProfile?: boolean): Promise<any>;
-    // (undocumented)
-    rateLimiter: any;
-    // (undocumented)
-    service: Service;
+    cache?: ICache;
+    fetch(params: FetchParams): Promise<any>;
+    // Warning: (ae-forgotten-export) The symbol "FetchParams" needs to be exported by the entry point index.d.ts
+    static makeParams(params: FetchParams): string;
 }
 
-export { Account_2 as Account }
+// @beta
+export class AuthlessServer {
+    constructor(domainPathRouter: DomainPathRouter, botRouter: BotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]);
+    // (undocumented)
+    botRouter: BotRouter;
+    // (undocumented)
+    domainPathRouter: DomainPathRouter;
+    // (undocumented)
+    static launchBrowser(domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser>;
+    // (undocumented)
+    logger: any;
+    // (undocumented)
+    puppeteerParams?: PuppeteerParams;
+    // (undocumented)
+    puppeteerPlugins?: PuppeteerExtraPlugin[];
+    // (undocumented)
+    responses: any[];
+    // (undocumented)
+    run(): void;
+    }
 
-// @alpha (undocumented)
-export interface AccountConfig {
-    // (undocumented)
-    password: string;
-    // (undocumented)
-    proxy?: {
+// @beta
+export class Bot {
+    constructor(botConfig: BotConfig);
+    browserConfig?: BrowserConfig;
+    foundCaptcha(found: Boolean): void;
+    foundLogin(found: Boolean): void;
+    getCaptchaHitCount(): number;
+    getLoginHitCount(): number;
+    isBelowRateLimit(): Boolean;
+    password?: string;
+    urls: string[];
+    username?: string;
+    wasUsed(): void;
+}
+
+// @beta
+export interface BotConfig {
+    browserConfig?: BrowserConfig;
+    credentials?: {
         username: string;
+        password: string;
     };
-    // (undocumented)
-    username: string;
+    rateLimit?: number;
+    urls: string[];
 }
 
-// @alpha (undocumented)
-export class Authless {
-    // (undocumented)
-    $getService(serviceName: string): Service | undefined;
-    $getServiceFromUrl(url: string): Service;
-    constructor(router: any);
-    findAccountById(id: string): Account_2;
-    findAccountByUrl(url: string): Account_2;
-    // (undocumented)
-    listAccounts(): Account_2[];
-    // (undocumented)
-    router: Router;
-    useBrowserWithAccount(accountObject: Account_2 | {
-        account: Account_2;
-        virginProfile?: boolean;
-    }, asyncFn: any): Promise<any>;
+// @beta
+export class BotRouter {
+    constructor(bots: Bot[]);
+    getBotByUsername(name: string): Bot;
+    getBotForUrl(url: string): Bot;
+}
+
+// @beta
+export interface BrowserConfig {
+    adBlockerConfig?: {
+        blockTrackers: boolean;
+    };
+    // Warning: (ae-forgotten-export) The symbol "ProxyConfig" needs to be exported by the entry point index.d.ts
+    proxy?: ProxyConfig;
+    puppeteerParams?: PuppeteerParams;
+    puppeteerPlugins?: PuppeteerExtraPlugin[];
+    urlParams?: URLParams;
+    useAdBlockerPlugin?: boolean;
+    useStealthPlugin?: boolean;
+}
+
+// @beta
+export class DomainPath {
+    constructor(domain: string);
+    domain: string;
+    // Warning: (ae-forgotten-export) The symbol "IResponse" needs to be exported by the entry point index.d.ts
+    getJsonResponse(page: Page): Promise<IResponse_2>;
+    pageHandler(page: Page, selectedBot?: Bot, config?: any): Promise<IResponse_2 | null>;
+    setupPage(page: Page, puppeteerParams: PuppeteerParams): Promise<void>;
+}
+
+// @beta
+export class DomainPathRouter {
+    constructor(domainMap: {
+        [url: string]: DomainPath;
+    });
+    addDomainPathRouter(router: DomainPathRouter): void;
+    getDomainPath(url: string): DomainPath | undefined;
+}
+
+// @public
+export interface ICache {
+    delete: (key: string) => Promise<any | Error>;
+    deleteAll: (before?: number) => Promise<number | Error>;
+    get: (key: string) => Promise<any | Error>;
+    put: (key: string, data: any) => Promise<'ok' | Error>;
 }
 
 // @beta (undocumented)
@@ -98,30 +152,40 @@ export interface IResponseMeta {
 export interface IResponsePage {
     // (undocumented)
     content: string;
+    // Warning: (ae-forgotten-export) The symbol "ICookie" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    cookies: any[];
+    cookies: ICookie[];
     // (undocumented)
     title: string;
     // (undocumented)
     url: string;
+    // Warning: (ae-forgotten-export) The symbol "IViewport" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    viewport?: any;
+    viewport?: IViewport;
 }
 
 // @beta
 export interface IResponseRequest {
+    // Warning: (ae-forgotten-export) The symbol "IHeaders" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    headers: string;
+    headers: IHeaders;
     // (undocumented)
     isNavigationRequest: boolean;
+    // Warning: (ae-forgotten-export) The symbol "IHttpMethod" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    method: string;
+    method: IHttpMethod;
     // (undocumented)
     postData: any;
     // (undocumented)
     redirectChain: IResponseRequest[];
+    // Warning: (ae-forgotten-export) The symbol "IResourceType" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    resourceType: string;
+    resourceType: IResourceType;
     // (undocumented)
     url: string;
 }
@@ -129,23 +193,42 @@ export interface IResponseRequest {
 // @beta
 export interface IResponseResponse {
     // (undocumented)
-    fromCache: string;
+    fromCache: boolean;
     // (undocumented)
-    fromServiceWorker: string;
+    fromServiceWorker: boolean;
     // (undocumented)
-    headers: any;
+    headers: IHeaders;
     // (undocumented)
     request: IResponseRequest;
+    // Warning: (ae-forgotten-export) The symbol "ISecurityDetails" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    securityDetails: any;
+    securityDetails: ISecurityDetails;
     // (undocumented)
-    status: string;
+    status: number;
     // (undocumented)
     statusText: string;
     // (undocumented)
     text: string;
     // (undocumented)
-    url: number;
+    url: string;
+}
+
+// Warning: (ae-forgotten-export) The symbol "InterceptOptions" needs to be exported by the entry point index.d.ts
+//
+// @beta
+export type PuppeteerParams = LaunchOptions & InterceptOptions & {
+    viewPort?: Viewport;
+};
+
+// @public
+export interface RequestContainer {
+    headers: Headers_2;
+    isNavigationRequest: boolean;
+    method: HttpMethod;
+    resourceType: ResourceType;
+    // Warning: (ae-forgotten-export) The symbol "URL" needs to be exported by the entry point index.d.ts
+    url: URL_2;
 }
 
 // @beta (undocumented)
@@ -179,61 +262,34 @@ abstract class Response_2 implements IResponse {
 
 export { Response_2 as Response }
 
-// @alpha (undocumented)
-export class Route {
-    constructor(method: any, path: any, service: any);
-    // (undocumented)
-    method: string;
-    // (undocumented)
-    path: string;
-    // (undocumented)
-    service: Service;
+// @beta
+export interface URLParams {
+    // @alpha
+    alphabetSelector?: string;
+    // @alpha
+    inputs?: string;
+    referer?: string;
+    responseFormat: 'json' | 'png';
+    url: string;
+    // @deprecated
+    username?: string;
 }
 
-// @alpha (undocumented)
-export interface Router extends FMW.Instance<FMW.HTTPVersion.V1> {
-    // (undocumented)
-    serviceMap: Map<string, Service>;
-}
+// @public (undocumented)
+export type URLs = URL_2[];
 
-// @alpha (undocumented)
-export class Router extends FMW.prototype.constructor {
-    constructor(routes: any);
-}
-
-// Warning: (ae-forgotten-export) The symbol "SpawnSet" needs to be exported by the entry point index.d.ts
-//
-// @alpha (undocumented)
-export class Service extends SpawnSet<Account_2> {
-    // (undocumented)
-    add(account: any): this;
-    // (undocumented)
-    authenticate(page: any, account: any): Promise<boolean>;
-    // (undocumented)
-    getMatchingUrls(): string[];
-    // Warning: (ae-forgotten-export) The symbol "RouteConstructor" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    static getRoutes(service: any, Route: RouteConstructor): Route[];
-    // (undocumented)
-    getRoutes(): Route[];
-    // (undocumented)
-    hasCookies(page: any): Promise<boolean>;
-    // (undocumented)
-    isAuthenticated(page: any): Promise<boolean>;
-    // (undocumented)
-    name: string;
-    // (undocumented)
-    serviceDomain: string;
-    // (undocumented)
-    spawnAccount(): Account_2;
-}
-
-// @alpha (undocumented)
-export class ServiceDefault extends Service {
-    constructor();
-    // (undocumented)
-    getMatchingUrls(): string[];
+// @beta
+export interface Xhr {
+    fromCache: boolean;
+    fromServiceWorker: boolean;
+    headers: Headers_2;
+    request: RequestContainer | undefined;
+    // Warning: (ae-forgotten-export) The symbol "SecurityDetails" needs to be exported by the entry point index.d.ts
+    securityDetails: SecurityDetails | null;
+    status: number;
+    statusText: string;
+    text: string | undefined;
+    url: string;
 }
 
 

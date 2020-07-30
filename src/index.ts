@@ -8,17 +8,20 @@
  * @packageDocumentation
  */
 
-export { Account, AccountConfig } from './account'
-export { Service } from './service'
-export { Route, Router } from './router'
-export { Authless } from './authless'
-export { ServiceDefault } from './services'
+export { AnonBot } from './bots/anonBot'
+export { Bot } from './bots/bot'
+export { BotRouter } from './bots/botRouter'
+export { DomainPath } from './domainPaths/domainPath'
+export { DomainPathRouter } from './domainPaths/domainPathRouter'
+export { AuthlessServer } from './server/server'
+export { AuthlessClient } from './client/client'
+
 export {
-  IResourcePayload,
-  IResourceResponse,
+  IResource,
+  IResourceCollection,
+  Resource,
+  ResourceCollection,
   ResourceConstructor,
-  ResourceResponse,
-  ResourcePayload
 } from './resource'
 export {
   Response,
@@ -26,5 +29,15 @@ export {
   IResponseResponse,
   IResponseRequest,
   IResponsePage,
-  IResponseMeta
 } from './response'
+
+export {
+  ICache,
+  URLParams,
+  PuppeteerParams,
+  BrowserConfig,
+  BotConfig,
+  Xhr,
+  URLs,
+  RequestContainer,
+} from './types'

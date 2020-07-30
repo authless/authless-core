@@ -1,1 +1,0 @@
-export { ServiceDefault } from './default'

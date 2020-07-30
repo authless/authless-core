@@ -2,30 +2,30 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import {
+  Resource,
+  ResourceCollection,
   ResourceConstructor,
-  ResourcePayload,
-  ResourceResponse,
   Response
 } from '../src'
 
 class TestResponse extends Response {
   /* eslint-disable-next-line class-methods-use-this */
-  toResources (): TestResourceResponse {
-    const resources: TestResourcePayload[] = [
-      new TestResourcePayload(),
-      new TestResourcePayload(),
+  toResources (): TestResourceCollection {
+    const resources: TestResource[] = [
+      new TestResource(),
+      new TestResource(),
     ]
-    return new TestResourceResponse(
+    return new TestResourceCollection(
       ResourceConstructor.toHashResourcePair(resources)
     )
   }
 }
 
-class TestResourcePayload extends ResourcePayload {
+class TestResource extends Resource {
 
 }
 
-class TestResourceResponse extends ResourceResponse<TestResourcePayload> {
+class TestResourceCollection extends ResourceCollection<TestResource> {
 
 }
 
@@ -36,12 +36,12 @@ const responseSerialized = fs.readJsonSync(
 describe('Response', () => {
   test('it can be initialized', () => {
     const response = new TestResponse(responseSerialized)
-    expect(response.meta.time).toBe(1583140599365)
+    expect(response.meta.timestamp).toBe(1583140599365)
   })
 
-  test('it transforms to ResourceResponse', () => {
+  test('it transforms to ResourceCollection', () => {
     const response = new TestResponse(responseSerialized)
     const resources = response.toResources()
-    expect(resources).toBeInstanceOf(TestResourceResponse)
+    expect(resources).toBeInstanceOf(TestResourceCollection)
   })
 })

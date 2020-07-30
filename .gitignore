@@ -17,3 +17,4 @@ node_modules
 token.json
 config/dev.toml
 coverage
+docs/markdown/*

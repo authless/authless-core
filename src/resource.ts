@@ -2,28 +2,28 @@
 import hash from 'object-hash'
 
 /**
- * Holds none, one, or many {@link IResourcePayload | Resources} and is usually created
+ * Holds none, one, or many {@link IResource | Resources} and is usually created
  * via {@link IResponse.toResources}.
  *
  * @beta
  */
-export interface IResourceResponse<T extends IResourcePayload> {
+export interface IResourceCollection<T extends IResource> {
 
   /**
-   * Create an Array of {@link IResourcePayload | Resources}. Omits keys.
+   * Create an Array of {@link IResource | Resources}. Omits keys.
    */
   toArray (): T[]
 }
 
 /**
- * Abstract implementation of {@link IResourceResponse}. Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map | Map}.
+ * Abstract implementation of {@link IResourceCollection}. Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map | Map}.
  *
  * @beta
  */
-export abstract class ResourceResponse<T extends IResourcePayload> extends Map<string, T> {
+export abstract class ResourceCollection<T extends IResource> extends Map<string, T> {
 
   /**
-   * see {@link IResourceResponse}
+   * see {@link IResourceCollection}
    */
   toArray (): T[] {
     return Array.from(this.values())
@@ -33,7 +33,7 @@ export abstract class ResourceResponse<T extends IResourcePayload> extends Map<s
 /**
  * @beta
  */
-export interface IResourcePayload {
+export interface IResource {
 
   /**
    * Creates the sha1 hash of the resource.
@@ -63,10 +63,10 @@ export interface IResourcePayload {
 /**
  * @beta
  */
-export abstract class ResourcePayload implements IResourcePayload {
+export abstract class Resource implements IResource {
 
   /**
-   * See {@link IResourcePayload.sha1}.
+   * See {@link IResource.sha1}.
    *
    * @remarks
    * Does not omit any properties of the resource
@@ -91,20 +91,20 @@ export const ResourceConstructor = {
    * @example
    *
    * ```ts
-   * // to create a ResourceResponse that has only unique and no duplicate resources
-   * const resources: IResourcePayload[] = [{}, {}, ...]
-   * const uniqueResourceResponse = new ResourceResponse(
+   * // to create a ResourceCollection that has only unique and no duplicate resources
+   * const resources: IResource[] = [{}, {}, ...]
+   * const uniqueResourceCollection = new ResourceCollection(
    *   ResourceConstructor.toHashResourcePair(resources)
    * )
    * ```
    *
    * @returns An array for sha1-resource pairs. For example:
    *          [
-   *            [ 'SHA1-1234', {@link IResourcePayload} ],
-   *            [ 'SHA1-5678', {@link IResourcePayload} ],
+   *            [ 'SHA1-1234', {@link IResource} ],
+   *            [ 'SHA1-5678', {@link IResource} ],
    *          ]
    */
-  toHashResourcePair<T extends IResourcePayload>(resources: T[]): Array<[string, T]> {
+  toHashResourcePair<T extends IResource>(resources: T[]): Array<[string, T]> {
     return resources.map(resource => {
       return [hash(resource.sha1(), { algorithm: 'sha1' }), resource]
     })
