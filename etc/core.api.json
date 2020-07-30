@@ -17,175 +17,6 @@
       "members": [
         {
           "kind": "Class",
-          "canonicalReference": "@authless/core!AuthlessClient:class",
-          "docComment": "/**\n * A helper wrapper to access the running Authless-Server and fetch the response {@link IResponse}\n *\n * @remarks\n *\n * Can use a cache {@link ICache} if available and passed to constructor\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "export declare class AuthlessClient "
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "AuthlessClient",
-          "members": [
-            {
-              "kind": "Constructor",
-              "canonicalReference": "@authless/core!AuthlessClient:constructor(1)",
-              "docComment": "/**\n * Takes an optional Cache as a parameter which should satisfy {@link ICache}\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "constructor(cache?: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "ICache",
-                  "canonicalReference": "@authless/core!~ICache:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ");"
-                }
-              ],
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "cache",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "Property",
-              "canonicalReference": "@authless/core!AuthlessClient#cache:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "cache?: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "ICache",
-                  "canonicalReference": "@authless/core!~ICache:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "cache",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              },
-              "isStatic": false
-            },
-            {
-              "kind": "Method",
-              "canonicalReference": "@authless/core!AuthlessClient#fetch:member(1)",
-              "docComment": "/**\n * Fetch the response from the running Authless-Server\n *\n * @remarks\n *\n * Will return a cached value if possible dependind on the cache passed to the AuthlessClient constructor\n *\n * @param params - Parameters to access the Authless-Server and scrape the target {@link FetchParams}\n *\n * @example\n * ```ts\n * const client = new AuthlessClient(cache) // cache is optional\n * const authlessResponse = client.fetch({\n *   serverUrl: 'https://your-authless-server-url.com',\n *   url: 'https://url-to-fetch.com',\n *   responseFormat: 'json',\n * })\n * extractOrSave(authlessResponse)\n * ```\n *\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "fetch(params: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "FetchParams",
-                  "canonicalReference": "@authless/core!~FetchParams:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<any>"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isStatic": false,
-              "returnTypeTokenRange": {
-                "startIndex": 3,
-                "endIndex": 5
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ],
-              "name": "fetch"
-            },
-            {
-              "kind": "Method",
-              "canonicalReference": "@authless/core!AuthlessClient.makeParams:member(1)",
-              "docComment": "/**\n * Makes a HTTP GET query from the passed URLParams {@link URLParams}\n *\n * @param params - Object from which to generate a stringified HTTP Request query\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "static makeParams(params: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "FetchParams",
-                  "canonicalReference": "@authless/core!~FetchParams:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isStatic": true,
-              "returnTypeTokenRange": {
-                "startIndex": 3,
-                "endIndex": 4
-              },
-              "releaseTag": "Public",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "params",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ],
-              "name": "makeParams"
-            }
-          ],
-          "implementsTokenRanges": []
-        },
-        {
-          "kind": "Class",
           "canonicalReference": "@authless/core!AuthlessServer:class",
           "docComment": "/**\n * Helper class to start your running Authless server\n *\n * @remarks\n *\n * This class can be used to create a configurable puppeteer instance with some built-in functionality and plugins\n *\n * @example\n * ```ts\n * await browser = AuthlessServer.launchBrowser(myDomainPath, myBot, {puppeteerParams, puppeteerPlugins, ..})\n * await page = browser.newPage()\n *\n * await domainPath.pageHandler(page, ..)\n * ```\n *\n * @beta\n */\n",
           "excerptTokens": [
@@ -227,7 +58,7 @@
                 {
                   "kind": "Reference",
                   "text": "PuppeteerParams",
-                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                  "canonicalReference": "@authless/core!PuppeteerParams:type"
                 },
                 {
                   "kind": "Content",
@@ -364,7 +195,7 @@
                 {
                   "kind": "Reference",
                   "text": "BrowserConfig",
-                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                  "canonicalReference": "@authless/core!BrowserConfig:interface"
                 },
                 {
                   "kind": "Content",
@@ -463,7 +294,7 @@
                 {
                   "kind": "Reference",
                   "text": "PuppeteerParams",
-                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                  "canonicalReference": "@authless/core!PuppeteerParams:type"
                 },
                 {
                   "kind": "Content",
@@ -591,7 +422,7 @@
                 {
                   "kind": "Reference",
                   "text": "BotConfig",
-                  "canonicalReference": "@authless/core!~BotConfig:interface"
+                  "canonicalReference": "@authless/core!BotConfig:interface"
                 },
                 {
                   "kind": "Content",
@@ -622,7 +453,7 @@
                 {
                   "kind": "Reference",
                   "text": "BrowserConfig",
-                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                  "canonicalReference": "@authless/core!BrowserConfig:interface"
                 },
                 {
                   "kind": "Content",
@@ -893,7 +724,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@authless/core!Bot#wasUsed:member(1)",
-              "docComment": "/**\n * Tells the bot that it was used for authentication.\n *\n * @remarks\n *\n * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.\n *\n * @beta\n */\n",
+              "docComment": "/**\n * Tells the bot that it was used for authentication. Updates {@link Bot.usageTimeStamps}\n *\n * @remarks\n *\n * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.\n *\n * @beta\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -928,7 +759,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "interface BotConfig "
+              "text": "export interface BotConfig "
             }
           ],
           "releaseTag": "Beta",
@@ -946,7 +777,7 @@
                 {
                   "kind": "Reference",
                   "text": "BrowserConfig",
-                  "canonicalReference": "@authless/core!~BrowserConfig:interface"
+                  "canonicalReference": "@authless/core!BrowserConfig:interface"
                 },
                 {
                   "kind": "Content",
@@ -1054,7 +885,7 @@
             {
               "kind": "Constructor",
               "canonicalReference": "@authless/core!BotRouter:constructor(1)",
-              "docComment": "/**\n * Create a BotRouter instance.\n *\n * @param botMap - The map of url to Bot instance\n *\n * @returns An instance of the BotRouter class\n *\n * @example\n * ```ts\n * const botRouter = new BotRouter({\n *   'www.example.com/basic-access/': new Bot('basic-username', 'basic-password'),\n *   'www.example.com/pro-access/': new Bot('pro-username', 'pro-password'),\n * })\n * ```\n *\n * Internally, we store it as a map of \\{url: Bot\\} by converting a structure of form\n * ```ts\n * [\n *   Bot1{urls: ['url1', 'url2', 'url3'..]},\n *   Bot2{urls: ['url4', 'url5', 'url6'..]}\n * ]\n * ```\n *\n * to\n * ```ts\n * {\n *   'url1': Bot1,\n *   'url2': Bot1,\n *   'url3': Bot1,\n *   'url4': Bot2,\n *   'url5': Bot2,\n *   'url6': Bot2\n * }\n * ```\n *\n * as it makes it easier to fetch by url\n *\n * @beta\n */\n",
+              "docComment": "/**\n * Create a BotRouter instance.\n *\n * @param botMap - The map of url to Bot instance\n *\n * @returns An instance of the BotRouter class\n *\n * @example\n * ```ts\n * const botRouter = new BotRouter({\n *   'www.example.com/basic-access/': new Bot('basic-username', 'basic-password'),\n *   'www.example.com/pro-access/': new Bot('pro-username', 'pro-password'),\n * })\n * ```\n *\n * Internally, we store it as a map of \\{url: Bot-Data\\} by converting a structure of form\n * ```ts\n * [\n *   Bot1{urls: ['url1', 'url2', 'url3'..]},\n *   Bot2{urls: ['url4', 'url5', 'url6'..]},\n *   Bot3{urls: ['url1', 'url4'..]}\n * ]\n * ```\n *\n * to\n * ```ts\n * {\n *   'url1': { index: 0, bots: [Bot1, Bot3] },\n *   'url2': { index: 0, bots: [Bot1] },\n *   'url3': { index: 0, bots: [Bot1] },\n *   'url4': { index: 0, bots: [Bot1, Bot3] },\n *   'url5': { index: 0, bots: [Bot1] },\n *   'url6': { index: 0, bots: [Bot1] },\n * }\n * ```\n *\n * as it makes it easier to fetch by url and cycle though Bots\n *\n * @beta\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1186,7 +1017,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "interface BrowserConfig "
+              "text": "export interface BrowserConfig "
             }
           ],
           "releaseTag": "Beta",
@@ -1220,7 +1051,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@authless/core!BrowserConfig#proxy:member",
-              "docComment": "/**\n * Proxy configuration for puppeteer {@link ProxyConfig}\n *\n * @remarks\n *\n * If not provided, the puppeteer will run without a proxy\n */\n",
+              "docComment": "/**\n * Proxy configuration for puppeteer {@link puppeteer#ProxyConfig}\n *\n * @remarks\n *\n * If not provided, the puppeteer will run without a proxy\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1255,7 +1086,7 @@
                 {
                   "kind": "Reference",
                   "text": "PuppeteerParams",
-                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                  "canonicalReference": "@authless/core!PuppeteerParams:type"
                 },
                 {
                   "kind": "Content",
@@ -1311,7 +1142,7 @@
                 {
                   "kind": "Reference",
                   "text": "URLParams",
-                  "canonicalReference": "@authless/core!~URLParams:interface"
+                  "canonicalReference": "@authless/core!URLParams:interface"
                 },
                 {
                   "kind": "Content",
@@ -1449,67 +1280,8 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "@authless/core!DomainPath#getJsonResponse:member(1)",
-              "docComment": "/**\n * Form a {@link IResponse} object from the puppeteer page\n *\n * @remarks\n *\n * Override this to add custom data/metadata to your Authless response {@link IResponse}\n *\n * @param page - the puppeteer page from which to extract the response object\n *\n * @returns a {@link IResponse} if found, else returns undefined\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "getJsonResponse(page: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "PuppeteerPage",
-                  "canonicalReference": "@types/puppeteer!Page:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "): "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<"
-                },
-                {
-                  "kind": "Reference",
-                  "text": "IAuthlessResponse",
-                  "canonicalReference": "@authless/core!~IResponse:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "isStatic": false,
-              "returnTypeTokenRange": {
-                "startIndex": 3,
-                "endIndex": 7
-              },
-              "releaseTag": "Beta",
-              "overloadIndex": 1,
-              "parameters": [
-                {
-                  "parameterName": "page",
-                  "parameterTypeTokenRange": {
-                    "startIndex": 1,
-                    "endIndex": 2
-                  }
-                }
-              ],
-              "name": "getJsonResponse"
-            },
-            {
-              "kind": "Method",
               "canonicalReference": "@authless/core!DomainPath#pageHandler:member(1)",
-              "docComment": "/**\n * Code to handle page interactions\n *\n * @remarks\n *\n * This is responsible for checking/doing authentication and interacting with the page. You can have different DomainPaths with different behaviour and call the appropriate one based on the URL you wish to fetch The puppeteer instance will be reused and only new pages are instantiated here\n *\n * @param page - The puppeteer page to which we can attach listeners or change behaviour of\n *\n * @param bot - Optional. The {@link Bot} to use for authentication.\n *\n * @param config - Optional. The {@link BrowserConfig} passed by the user\n */\n",
+              "docComment": "/**\n * Code to handle page interactions\n *\n * @remarks\n *\n * This is responsible for checking/doing authentication and interacting with the page. You can have different DomainPaths with different behaviour and call the appropriate one based on the URL you wish to fetch The puppeteer instance will be reused and only new pages are instantiated here\n *\n * @param page - The puppeteer page to which we can attach listeners or change behaviour of\n *\n * @param selectedBot - Optional. The {@link Bot} to use for authentication.\n *\n * @param config - Optional. The {@link BrowserConfig} passed by the user\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -1552,12 +1324,12 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "IAuthlessResponse",
-                  "canonicalReference": "@authless/core!~IResponse:interface"
+                  "text": "AuthlessResponse",
+                  "canonicalReference": "@authless/core!Response:class"
                 },
                 {
                   "kind": "Content",
-                  "text": " | null>"
+                  "text": ">"
                 },
                 {
                   "kind": "Content",
@@ -1597,6 +1369,37 @@
               "name": "pageHandler"
             },
             {
+              "kind": "Property",
+              "canonicalReference": "@authless/core!DomainPath#responses:member",
+              "docComment": "/**\n * Save the array of xhr responses as needed. Certain resourceTypes can be blocked by passing blockResourceTypes in {@link PuppeteerParams}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "responses: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Xhr",
+                  "canonicalReference": "@authless/core!Xhr:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "responses",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
               "kind": "Method",
               "canonicalReference": "@authless/core!DomainPath#setupPage:member(1)",
               "docComment": "/**\n * Over-ride default page setup\n *\n * @remarks\n *\n * Override this to add custom page listeners on response etc. This happens before we navigate to the target URL. Call super.setupPage if you would like to use default response/resourceType blocking\n *\n * @param page - The puppeteer page to which we can attach listeners or change behaviour of\n *\n * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user\n */\n",
@@ -1617,7 +1420,7 @@
                 {
                   "kind": "Reference",
                   "text": "PuppeteerParams",
-                  "canonicalReference": "@authless/core!~PuppeteerParams:type"
+                  "canonicalReference": "@authless/core!PuppeteerParams:type"
                 },
                 {
                   "kind": "Content",
@@ -1816,208 +1619,20 @@
         },
         {
           "kind": "Interface",
-          "canonicalReference": "@authless/core!ICache:interface",
-          "docComment": "/**\n * A Cache interface which can be passed to AuthlessClient class\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "interface ICache "
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "ICache",
-          "members": [
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!ICache#delete:member",
-              "docComment": "/**\n * Delete a value from the cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @returns The data that was deleted if successful, else returns an Error object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "delete: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "(key: string) => "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<any | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Error",
-                  "canonicalReference": "!Error:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "delete",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 6
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!ICache#deleteAll:member",
-              "docComment": "/**\n * Delete all values from the cache\n *\n * @param before - Optional. Number representing the Unix timestamp in milliseconds. All data saved before this will be deleted\n *\n * @returns The number of keys that were removed\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "deleteAll: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "(before?: number) => "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<number | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Error",
-                  "canonicalReference": "!Error:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "deleteAll",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 6
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!ICache#get:member",
-              "docComment": "/**\n * Get a value from the cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @returns The data that was fetched if successful, else returns an Error object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "get: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "(key: string) => "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<any | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Error",
-                  "canonicalReference": "!Error:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "get",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 6
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!ICache#put:member",
-              "docComment": "/**\n * Add a value to cache\n *\n * @param key - The string key of the cache. Will usually be the URL fetched\n *\n * @param data - The data to be saved\n *\n * @returns 'ok' if successful, else returns an Error object\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "put: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "(key: string, data: any) => "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Promise",
-                  "canonicalReference": "!Promise:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": "<'ok' | "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Error",
-                  "canonicalReference": "!Error:interface"
-                },
-                {
-                  "kind": "Content",
-                  "text": ">"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "put",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 6
-              }
-            }
-          ],
-          "extendsTokenRanges": []
-        },
-        {
-          "kind": "Interface",
-          "canonicalReference": "@authless/core!IResourcePayload:interface",
+          "canonicalReference": "@authless/core!IResource:interface",
           "docComment": "/**\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface IResourcePayload "
+              "text": "export interface IResource "
             }
           ],
           "releaseTag": "Beta",
-          "name": "IResourcePayload",
+          "name": "IResource",
           "members": [
             {
               "kind": "MethodSignature",
-              "canonicalReference": "@authless/core!IResourcePayload#sha1:member(1)",
+              "canonicalReference": "@authless/core!IResource#sha1:member(1)",
               "docComment": "/**\n * Creates the sha1 hash of the resource.\n *\n * @remarks\n *\n * If the resource has noisy attributes such as trackingIDs or debugging info that is not relevant to the resource as such, the implementation may decide to omit such attributes to produce the same sha1 hash for resources that would e.g. otherwise have different trackingID values.\n *\n * @example\n * ```ts\n * // example implementation of the sha1 function which omits the `trackingNumber` property\n * function sha1 (object): string {\n *   const clone = { ...object }\n *   Reflect.deleteProperty(clone, 'trackingNumber')\n *   return super.sha1(clone, { algorithm: 'sha1' })\n * }\n *\n * // Returns true\n * sha1({value: 1, trackingNumber: '123'}) === sha1({value: 1, trackingNumber: '456'})\n * ```\n *\n */\n",
               "excerptTokens": [
                 {
@@ -2047,17 +1662,17 @@
         },
         {
           "kind": "Interface",
-          "canonicalReference": "@authless/core!IResourceResponse:interface",
-          "docComment": "/**\n * Holds none, one, or many {@link IResourcePayload | Resources} and is usually created via {@link IResponse.toResources}.\n *\n * @beta\n */\n",
+          "canonicalReference": "@authless/core!IResourceCollection:interface",
+          "docComment": "/**\n * Holds none, one, or many {@link IResource | Resources} and is usually created via {@link IResponse.toResources}.\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export interface IResourceResponse<T extends "
+              "text": "export interface IResourceCollection<T extends "
             },
             {
               "kind": "Reference",
-              "text": "IResourcePayload",
-              "canonicalReference": "@authless/core!IResourcePayload:interface"
+              "text": "IResource",
+              "canonicalReference": "@authless/core!IResource:interface"
             },
             {
               "kind": "Content",
@@ -2078,12 +1693,12 @@
               }
             }
           ],
-          "name": "IResourceResponse",
+          "name": "IResourceCollection",
           "members": [
             {
               "kind": "MethodSignature",
-              "canonicalReference": "@authless/core!IResourceResponse#toArray:member(1)",
-              "docComment": "/**\n * Create an Array of {@link IResourcePayload | Resources}. Omits keys.\n */\n",
+              "canonicalReference": "@authless/core!IResourceCollection#toArray:member(1)",
+              "docComment": "/**\n * Create an Array of {@link IResource | Resources}. Omits keys.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2113,7 +1728,7 @@
         {
           "kind": "Interface",
           "canonicalReference": "@authless/core!IResponse:interface",
-          "docComment": "/**\n * The raw response from a service including any (xhrs) requests and responses and meta information.\n *\n * @remarks\n *\n * A {@link IResponse} can be transformed into a {@link IResourceResponse} which extracts the most relevant data from an {@link IResponse}.\n *\n * Service repositories should create their own response class implementing {@link IResponse}.\n *\n * @beta\n */\n",
+          "docComment": "/**\n * The raw response from a service including any (xhrs) requests and responses and meta information.\n *\n * @remarks\n *\n * A {@link IResponse} can be transformed into a {@link IResourceCollection} which extracts the most relevant data from an {@link IResponse}.\n *\n * Service repositories should create their own response class implementing {@link IResponse}.\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
@@ -2177,7 +1792,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@authless/core!IResponse#meta:member",
-              "docComment": "/**\n * Meta data about response. See {@link IResponseMeta}.\n */\n",
+              "docComment": "/**\n * Meta data about response. See {@link IResponse.meta}.\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -2237,8 +1852,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "IResourceResponse",
-                  "canonicalReference": "@authless/core!IResourceResponse:interface"
+                  "text": "IResourceCollection",
+                  "canonicalReference": "@authless/core!IResourceCollection:interface"
                 },
                 {
                   "kind": "Content",
@@ -2246,8 +1861,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "IResourcePayload",
-                  "canonicalReference": "@authless/core!IResourcePayload:interface"
+                  "text": "IResource",
+                  "canonicalReference": "@authless/core!IResource:interface"
                 },
                 {
                   "kind": "Content",
@@ -2295,72 +1910,6 @@
               "propertyTypeTokenRange": {
                 "startIndex": 1,
                 "endIndex": 3
-              }
-            }
-          ],
-          "extendsTokenRanges": []
-        },
-        {
-          "kind": "Interface",
-          "canonicalReference": "@authless/core!IResponseMeta:interface",
-          "docComment": "/**\n * Sub-type of {@link IResponse}.\n *\n * @beta\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "export interface IResponseMeta "
-            }
-          ],
-          "releaseTag": "Beta",
-          "name": "IResponseMeta",
-          "members": [
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!IResponseMeta#account:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "account: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "string"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Beta",
-              "name": "account",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!IResponseMeta#time:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "time: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "number"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Beta",
-              "name": "time",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
               }
             }
           ],
@@ -2959,11 +2508,11 @@
         {
           "kind": "TypeAlias",
           "canonicalReference": "@authless/core!PuppeteerParams:type",
-          "docComment": "/**\n * Config options control puppeteer launch/request-handling options\n *\n * @remarks\n *\n * Puppeteer launch options includes all options that of type {@link LaunchOptions} Options to block domains/resourceTypes from loading {@link InterceptOptions} Options to control theh viewport {@link Viewport}\n *\n * @example\n * ```ts\n * {\n *    executablePath: '/Path/To/Your/Chromium', // optional\n *    headless: false, // default true,\n *    // other options that can be passed to puppeteer(options)\n *\n *    blockDomains: ['social-media-buttons.com', 'large-image-host.com'],\n *    blockResourceTypes: ['image', 'media', 'font'],\n *    viewPort: { width: 1020, height: 800 }\n * }\n * ```\n *\n * @beta\n */\n",
+          "docComment": "/**\n * Config options control puppeteer launch/request-handling options\n *\n * @remarks\n *\n * Puppeteer launch options includes all options that of type {@link puppeteer#LaunchOptions} Options to block domains/resourceTypes from loading {@link puppeteer#InterceptOptions} Options to control theh viewport {@link puppeteer#Viewport}\n *\n * @example\n * ```ts\n * {\n *    executablePath: '/Path/To/Your/Chromium', // optional\n *    headless: false, // default true,\n *    // other options that can be passed to puppeteer(options)\n *\n *    blockDomains: ['social-media-buttons.com', 'large-image-host.com'],\n *    blockResourceTypes: ['image', 'media', 'font'],\n *    viewPort: { width: 1020, height: 800 }\n * }\n * ```\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "declare type PuppeteerParams = "
+              "text": "export declare type PuppeteerParams = "
             },
             {
               "kind": "Reference",
@@ -3005,193 +2554,18 @@
           }
         },
         {
-          "kind": "Interface",
-          "canonicalReference": "@authless/core!RequestContainer:interface",
-          "docComment": "/**\n * HTTP request metadata of the ajax/asset requests made by the puppeteer page\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "interface RequestContainer "
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "RequestContainer",
-          "members": [
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!RequestContainer#headers:member",
-              "docComment": "/**\n * An object with HTTP headers associated with the request. All header names are lower-case.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "headers: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "Headers",
-                  "canonicalReference": "@types/puppeteer!Headers:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "headers",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!RequestContainer#isNavigationRequest:member",
-              "docComment": "/**\n * Whether this request is driving frame's navigation.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "isNavigationRequest: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "boolean"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "isNavigationRequest",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!RequestContainer#method:member",
-              "docComment": "/**\n * Returns the request's method (GET, POST, etc.)\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "method: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "HttpMethod",
-                  "canonicalReference": "@types/puppeteer!HttpMethod:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "method",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!RequestContainer#resourceType:member",
-              "docComment": "/**\n * Contains the request's resource type as it was perceived by the rendering engine. (doc, xhr, image, media, eventsource etc)\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "resourceType: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "ResourceType",
-                  "canonicalReference": "@types/puppeteer!ResourceType:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "resourceType",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            },
-            {
-              "kind": "PropertySignature",
-              "canonicalReference": "@authless/core!RequestContainer#url:member",
-              "docComment": "/**\n * Contains the URL of the request.\n */\n",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "url: "
-                },
-                {
-                  "kind": "Reference",
-                  "text": "URL",
-                  "canonicalReference": "@authless/core!~URL:type"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Public",
-              "name": "url",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              }
-            }
-          ],
-          "extendsTokenRanges": []
-        },
-        {
-          "kind": "Variable",
-          "canonicalReference": "@authless/core!ResourceConstructor:var",
-          "docComment": "/**\n * @beta\n */\n",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "ResourceConstructor: "
-            },
-            {
-              "kind": "Content",
-              "text": "{\n    toHashResourcePair<T extends "
-            },
-            {
-              "kind": "Reference",
-              "text": "IResourcePayload",
-              "canonicalReference": "@authless/core!IResourcePayload:interface"
-            },
-            {
-              "kind": "Content",
-              "text": ">(resources: T[]): [string, T][];\n}"
-            }
-          ],
-          "releaseTag": "Beta",
-          "name": "ResourceConstructor",
-          "variableTypeTokenRange": {
-            "startIndex": 1,
-            "endIndex": 4
-          }
-        },
-        {
           "kind": "Class",
-          "canonicalReference": "@authless/core!ResourcePayload:class",
+          "canonicalReference": "@authless/core!Resource:class",
           "docComment": "/**\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare abstract class ResourcePayload implements "
+              "text": "export declare abstract class Resource implements "
             },
             {
               "kind": "Reference",
-              "text": "IResourcePayload",
-              "canonicalReference": "@authless/core!IResourcePayload:interface"
+              "text": "IResource",
+              "canonicalReference": "@authless/core!IResource:interface"
             },
             {
               "kind": "Content",
@@ -3199,12 +2573,12 @@
             }
           ],
           "releaseTag": "Beta",
-          "name": "ResourcePayload",
+          "name": "Resource",
           "members": [
             {
               "kind": "Method",
-              "canonicalReference": "@authless/core!ResourcePayload#sha1:member(1)",
-              "docComment": "/**\n * See {@link IResourcePayload.sha1}.\n *\n * @remarks\n *\n * Does not omit any properties of the resource\n */\n",
+              "canonicalReference": "@authless/core!Resource#sha1:member(1)",
+              "docComment": "/**\n * See {@link IResource.sha1}.\n *\n * @remarks\n *\n * Does not omit any properties of the resource\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3255,17 +2629,17 @@
         },
         {
           "kind": "Class",
-          "canonicalReference": "@authless/core!ResourceResponse:class",
-          "docComment": "/**\n * Abstract implementation of {@link IResourceResponse}. Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map | Map}.\n *\n * @beta\n */\n",
+          "canonicalReference": "@authless/core!ResourceCollection:class",
+          "docComment": "/**\n * Abstract implementation of {@link IResourceCollection}. Extends {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map | Map}.\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare abstract class ResourceResponse<T extends "
+              "text": "export declare abstract class ResourceCollection<T extends "
             },
             {
               "kind": "Reference",
-              "text": "IResourcePayload",
-              "canonicalReference": "@authless/core!IResourcePayload:interface"
+              "text": "IResource",
+              "canonicalReference": "@authless/core!IResource:interface"
             },
             {
               "kind": "Content",
@@ -3295,12 +2669,12 @@
               }
             }
           ],
-          "name": "ResourceResponse",
+          "name": "ResourceCollection",
           "members": [
             {
               "kind": "Method",
-              "canonicalReference": "@authless/core!ResourceResponse#toArray:member(1)",
-              "docComment": "/**\n * see {@link IResourceResponse}\n */\n",
+              "canonicalReference": "@authless/core!ResourceCollection#toArray:member(1)",
+              "docComment": "/**\n * see {@link IResourceCollection}\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -3333,13 +2707,43 @@
           "implementsTokenRanges": []
         },
         {
+          "kind": "Variable",
+          "canonicalReference": "@authless/core!ResourceConstructor:var",
+          "docComment": "/**\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "ResourceConstructor: "
+            },
+            {
+              "kind": "Content",
+              "text": "{\n    toHashResourcePair<T extends "
+            },
+            {
+              "kind": "Reference",
+              "text": "IResource",
+              "canonicalReference": "@authless/core!IResource:interface"
+            },
+            {
+              "kind": "Content",
+              "text": ">(resources: T[]): [string, T][];\n}"
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "ResourceConstructor",
+          "variableTypeTokenRange": {
+            "startIndex": 1,
+            "endIndex": 4
+          }
+        },
+        {
           "kind": "Class",
           "canonicalReference": "@authless/core!Response_2:class",
           "docComment": "/**\n * see {@link IResponse}\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare abstract class Response implements "
+              "text": "export declare class Response implements "
             },
             {
               "kind": "Reference",
@@ -3383,6 +2787,225 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Response_2.convertRequestToJson:member(1)",
+              "docComment": "/**\n * Create a {@link RequestContainer} JSON structure from the puppeteer request\n *\n * @param request - The puppeteer request from which to form the {@link RequestContainer}\n *\n * @returns A {@link RequestContainer} if possible, throws on error\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static convertRequestToJson(request: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerRequest",
+                  "canonicalReference": "@types/puppeteer!Request:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "RequestContainer",
+                  "canonicalReference": "@authless/core!RequestContainer:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 7
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "request",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "convertRequestToJson"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Response_2.convertResponseToJson:member(1)",
+              "docComment": "/**\n * Convert a puppeteer page response into a JSON object of type {@link Xhr}\n *\n * @param response - The puppeteer response from which to generate the {@link Xhr} JSON object\n *\n * @returns A JSON object with the response metadata and content {@link Xhr}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static convertResponseToJson(response: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerResponse",
+                  "canonicalReference": "@types/puppeteer!Response:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Xhr",
+                  "canonicalReference": "@authless/core!Xhr:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 7
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "response",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ],
+              "name": "convertResponseToJson"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Response_2.fromPage:member(1)",
+              "docComment": "/**\n * Form a {@link IResponse} object from the puppeteer page\n *\n * @remarks\n *\n * Override this to add custom data/metadata to your Authless response {@link IResponse}.\n *\n * @param page - the puppeteer page from which to extract the response object\n *\n * @param mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}\n *\n * @returns the generated {@link Response}\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static fromPage(page: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerPage",
+                  "canonicalReference": "@types/puppeteer!Page:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ", data: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n        mainResponse: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerResponse",
+                  "canonicalReference": "@types/puppeteer!Response:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n        bot: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Bot",
+                  "canonicalReference": "@authless/core!Bot:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";\n        responses: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Xhr",
+                  "canonicalReference": "@authless/core!Xhr:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[];\n    }"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Response",
+                  "canonicalReference": "@authless/core!Response:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 11,
+                "endIndex": 15
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "page",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                },
+                {
+                  "parameterName": "data",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 3,
+                    "endIndex": 10
+                  }
+                }
+              ],
+              "name": "fromPage"
             },
             {
               "kind": "Property",
@@ -3476,8 +3099,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "ResourceResponse",
-                  "canonicalReference": "@authless/core!ResourceResponse:class"
+                  "text": "IResourceCollection",
+                  "canonicalReference": "@authless/core!IResourceCollection:interface"
                 },
                 {
                   "kind": "Content",
@@ -3485,8 +3108,8 @@
                 },
                 {
                   "kind": "Reference",
-                  "text": "ResourcePayload",
-                  "canonicalReference": "@authless/core!ResourcePayload:class"
+                  "text": "IResource",
+                  "canonicalReference": "@authless/core!IResource:interface"
                 },
                 {
                   "kind": "Content",
@@ -3553,7 +3176,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "interface URLParams "
+              "text": "export interface URLParams "
             }
           ],
           "releaseTag": "Beta",
@@ -3663,43 +3286,13 @@
           "extendsTokenRanges": []
         },
         {
-          "kind": "TypeAlias",
-          "canonicalReference": "@authless/core!URLs:type",
-          "docComment": "",
-          "excerptTokens": [
-            {
-              "kind": "Content",
-              "text": "declare type URLs = "
-            },
-            {
-              "kind": "Reference",
-              "text": "URL",
-              "canonicalReference": "@authless/core!~URL:type"
-            },
-            {
-              "kind": "Content",
-              "text": "[]"
-            },
-            {
-              "kind": "Content",
-              "text": ";"
-            }
-          ],
-          "releaseTag": "Public",
-          "name": "URLs",
-          "typeTokenRange": {
-            "startIndex": 1,
-            "endIndex": 3
-          }
-        },
-        {
           "kind": "Interface",
           "canonicalReference": "@authless/core!Xhr:interface",
           "docComment": "/**\n * Details of the ajax/asset requests made by the puppeteer page\n *\n * @beta\n */\n",
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "interface Xhr "
+              "text": "export interface Xhr "
             }
           ],
           "releaseTag": "Beta",
@@ -3793,7 +3386,7 @@
                 {
                   "kind": "Reference",
                   "text": "RequestContainer",
-                  "canonicalReference": "@authless/core!~RequestContainer:interface"
+                  "canonicalReference": "@authless/core!RequestContainer:interface"
                 },
                 {
                   "kind": "Content",
@@ -3814,7 +3407,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@authless/core!Xhr#securityDetails:member",
-              "docComment": "/**\n * Security or certificate related data. Refer to {@link SecurityDetails}. May be undefined in case of plain HTTP requests\n */\n",
+              "docComment": "/**\n * Security or certificate related data. Refer to {@link puppeteer#SecurityDetails}. May be undefined in case of plain HTTP requests\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

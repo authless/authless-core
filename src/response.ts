@@ -35,7 +35,7 @@ import { Bot } from './bots/bot'
 export interface IResponse {
 
   /**
-   * Meta data about response. See {@link IResponseMeta}.
+   * Meta data about response. See {@link IResponse.meta}.
    */
   meta: IResponseMeta
 
@@ -154,12 +154,13 @@ export class Response implements IResponse {
    * Form a {@link IResponse} object from the puppeteer page
    *
    * @remarks
-   * Override this to add custom data/metadata to your Authless response {@link IResponse}
    *
-   * @param page - the puppeteer page from which to extract the response object
-   * @param mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}
+   * Override this to add custom data/metadata to your Authless response {@link IResponse}.
    *
-   * @returns the generated {@link AuthlessResponse}
+   * @param   page - the puppeteer page from which to extract the response object
+   * @param   mainResponse - the main puppeteer response from which to extract the Xhr object {@link Xhr}
+   *
+   * @returns the generated {@link Response}
    */
   public static async fromPage (page: PuppeteerPage, data: {mainResponse: PuppeteerResponse, bot: Bot, responses: Xhr[]}): Promise<Response> {
     const { mainResponse, bot, responses } = data

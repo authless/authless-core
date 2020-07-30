@@ -7,6 +7,8 @@ import fetch from 'node-fetch'
  *
  * @remarks
  * Can use a cache {@link ICache} if available and passed to constructor
+ *
+ * @alpha
  */
 export class AuthlessClient {
   cache?: ICache
