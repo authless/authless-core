@@ -3,7 +3,7 @@ import { AnonBot, Bot, BotRouter, DomainPath, DomainPathRouter } from '../index'
 import { BrowserConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
-import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
+// import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import { Browser } from 'puppeteer'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
@@ -168,7 +168,8 @@ export class AuthlessServer {
         page,
         selectedBot,
         {
-          urlParams: { url, responseFormat }
+          urlParams: { url, responseFormat },
+          puppeteerParams: this.puppeteerParams
         }
       )
 
