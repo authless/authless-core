@@ -56,9 +56,11 @@ export class AuthlessServer {
     if(config?.useStealthPlugin ?? true) {
       defaultPlugins.push(StealthPlugin())
     }
-    if(config?.useAdBlockerPlugin ?? true) {
-      defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
-    }
+    // -- Has conflicts with stealth-plugin, re-enable when fixed
+    // -- refer: https://github.com/berstend/puppeteer-extra/issues/90
+    // if(config?.useAdBlockerPlugin ?? true) {
+    //   defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
+    // }
     if(typeof config?.proxy !== 'undefined') {
       defaultPlugins.push(ProxyPlugin(config?.proxy))
     }
