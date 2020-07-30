@@ -9,7 +9,7 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "object-hash": "^2.0.3",
-    "puppeteer": "^4.0.1",
+    "puppeteer": "^5.2.1",
     "puppeteer-extra": "^3.1.9",
     "puppeteer-extra-plugin-adblocker": "^2.11.4",
     "puppeteer-extra-plugin-proxy": "^1.0.2",
