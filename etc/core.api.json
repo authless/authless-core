@@ -413,7 +413,7 @@
             {
               "kind": "Constructor",
               "canonicalReference": "@authless/core!Bot:constructor(1)",
-              "docComment": "/**\n * Create a Bot instance.\n *\n * @param config - Of type {@link BotConfig}. browserConfig takes type {@link BrowserConfig}\n *\n * @returns An instance of the Bot class\n *\n * @example\n * ```ts\n * const bot = new Bot({\n *  credentials: { // optional\n *    username: 'username',\n *    password: 'password'\n *  },\n *  urls: ['www.example.com'],\n *  rateLimit: 100, // optional, per minute\n *  browserConfig: {\n *    executablePath: '/path/to/your/Chromium',\n *    headless: false,\n *    useStealthPlugin: true,\n *    useAdblockerPlugin: true,\n *    blockDomains: [\n *      'some-tracker.io',\n *      'image-host.net',\n *    ],\n *    blockResourceTypes: ['image', 'media', 'stylesheet', 'font'],\n *    proxy: {\n *      address: '99.99.99.99',\n *      port: 9999,\n *      credentials: {\n *        username: 'proxyuser1',\n *        password: 'proxypass1',\n *      },\n *    }\n *  }\n * })\n * ```\n *\n * @beta\n */\n",
+              "docComment": "/**\n * Create a Bot instance.\n *\n * @param config - Of type {@link BotConfig}. browserConfig takes type {@link BrowserConfig}\n *\n * @returns An instance of the Bot class\n *\n * @example\n * ```ts\n * const bot = new Bot({\n *  credentials: { // optional\n *    username: 'username',\n *    password: 'password'\n *  },\n *  urls: ['www.example.com'],\n *  rateLimit: 100, // optional, per hour\n *  browserConfig: {\n *    executablePath: '/path/to/your/Chromium',\n *    headless: false,\n *    useStealthPlugin: true,\n *    useAdblockerPlugin: true,\n *    blockDomains: [\n *      'some-tracker.io',\n *      'image-host.net',\n *    ],\n *    blockResourceTypes: ['image', 'media', 'stylesheet', 'font'],\n *    proxy: {\n *      address: '99.99.99.99',\n *      port: 9999,\n *      credentials: {\n *        username: 'proxyuser1',\n *        password: 'proxypass1',\n *      },\n *    }\n *  }\n * })\n * ```\n *\n * @beta\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -613,6 +613,34 @@
               "overloadIndex": 1,
               "parameters": [],
               "name": "getLoginHitCount"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/core!Bot#getUsage:member(1)",
+              "docComment": "/**\n * Returns the number of times this was used in the last hour\n *\n * @returns The number of times this bot was used in the last hour\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getUsage(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "getUsage"
             },
             {
               "kind": "Method",
@@ -819,7 +847,7 @@
             {
               "kind": "PropertySignature",
               "canonicalReference": "@authless/core!BotConfig#rateLimit:member",
-              "docComment": "/**\n * The limit per minute under which a bot can be used.\n *\n * @remarks\n *\n * If the usage is above the limit, the bot-router will not return this bots till an appropriate amount of time has passed\n */\n",
+              "docComment": "/**\n * The limit per hour under which a bot can be used.\n *\n * @remarks\n *\n * If the usage is above the limit, the bot-router will not return this bots till an appropriate amount of time has passed\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -965,7 +993,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@authless/core!BotRouter#getBotForUrl:member(1)",
-              "docComment": "/**\n * Provides a bot which can handle a particular url\n *\n * @remarks\n *\n * Picks a bot from the pool of {@link Bot} to return one that can handle the url provided and is below the bots' allowed rate-limit\n *\n * @returns a valid bot if found, else returns undefined\n */\n",
+              "docComment": "/**\n * Provides a bot which can handle a particular url\n *\n * @remarks\n *\n * Picks a bot from the pool of {@link Bot} to return one that can handle the url provided and is below the bots' allowed rate-limit. Also calls wasUsed() of the returned Bot so that its usage is updated.\n *\n * @returns a valid bot if found, else returns undefined\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

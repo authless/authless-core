@@ -1,7 +1,8 @@
 import { BotConfig, BrowserConfig } from '../types'
 
-// 1 minutes = 60_000 milliseconds
-const ONE_MINUTE = 60_000
+// 1 minute = 60_000 milliseconds
+// 1 hour = 60 * 60_000 milliseconds = 3_600_000
+const ONE_HOUR = 3_600_000
 
 /**
  * Represents a user account used in authless.
@@ -57,7 +58,7 @@ export class Bot {
   private readonly rateLimit: number = 0
 
   /**
-   * The array containing the timestamps that this bot was used at in the last one minute.
+   * The array containing the timestamps that this bot was used at in the last one hour.
    * Allows us to check if the rate-limit has been exceeded.
    */
   private usageTimeStamps: number[]
@@ -76,7 +77,7 @@ export class Bot {
    *    password: 'password'
    *  },
    *  urls: ['www.example.com'],
-   *  rateLimit: 100, // optional, per minute
+   *  rateLimit: 100, // optional, per hour
    *  browserConfig: {
    *    executablePath: '/path/to/your/Chromium',
    *    headless: false,
@@ -126,7 +127,7 @@ export class Bot {
   public wasUsed (): void {
     const now = Date.now()
     this.usageTimeStamps.push(now)
-    this.usageTimeStamps = this.usageTimeStamps.filter(ts => (now - ts) <= ONE_MINUTE)
+    this.usageTimeStamps = this.usageTimeStamps.filter(ts => (now - ts) <= ONE_HOUR)
   }
 
   /**
@@ -171,6 +172,16 @@ export class Bot {
   }
 
   /**
+   * Returns the number of times this was used in the last hour
+   *
+   * @returns The number of times this bot was used in the last hour
+   */
+  public getUsage (): number {
+    const now = Date.now()
+    return this.usageTimeStamps.filter(ts => (now - ts) <= ONE_HOUR).length
+  }
+
+  /**
    * To check if bot usage-rate is below the allowed limit
    *
    * @remarks
@@ -186,8 +197,7 @@ export class Bot {
     if(this.rateLimit === 0) {
       return true
     }
-    this.wasUsed()
-    if(this.usageTimeStamps.length < this.rateLimit) {
+    if(this.getUsage() < this.rateLimit) {
       return true
     }
     return false

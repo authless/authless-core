@@ -81,7 +81,7 @@ export interface BotConfig {
   urls: string[]
 
   /**
-   * The limit per minute under which a bot can be used.
+   * The limit per hour under which a bot can be used.
    *
    * @remarks
    * If the usage is above the limit, the bot-router will not return this bots

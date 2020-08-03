@@ -30,11 +30,13 @@ const bot1 = new Bot({
 const bot2 = new Bot({
   ...defaultBotConfig,
   urls: urls2,
+  rateLimit: 3,
   credentials: { username: 'user2', password: 'pass2'}
 })
 const bot3 = new Bot({
   ...defaultBotConfig,
   urls: urls2,
+  rateLimit: 10,
   credentials: { username: 'user3', password: 'pass3'}
 })
 
@@ -73,13 +75,37 @@ test('getBotByUsername when username is not available', () => {
   expect(bot).toBeInstanceOf(AnonBot)
 })
 
-test('bots are cycled through', () => {
-  const bot1 = botRouter.getBotForUrl('https://example.com/subdomain/')
-  const bot2 = botRouter.getBotForUrl('https://example.com/subdomain/')
-  const bot3 = botRouter.getBotForUrl('https://example.com/subdomain/')
-  expect(bot1).toBeDefined()
-  expect(bot2).toBeDefined()
-  expect(bot3).toBeDefined()
-  expect(bot1.username).not.toBe(bot2.username)
-  expect(bot1.username).toBe(bot3.username)
+test('bots are returned based on usage and rate limits', () => {
+  // 'user2' has a rate-limit of 3. user3 has a rate-limit of 10
+  // it takes 6 tries to use up 'user2' for an hour
+  // after that only 'user3' should be returned for 7 tries.
+  // any requests for a bot after that should return an AnonBot()
+
+  // use up 3 of 'user2' and 3 of 'user3'
+  Array(6).fill(1).forEach((x, index) => {
+    expect(
+      ['user2', 'user3'].includes(
+        botRouter.getBotForUrl(urls2[0]).username ?? 'anon'
+      )
+    ).toBeTruthy()
+  })
+  // user2: isBelowRateLimit is false, used up
+  expect(botRouter.getBotByUsername('user2').isBelowRateLimit()).toBeFalsy()
+  // user3: isBelowRateLimit is true, 7 left this hour
+  expect(botRouter.getBotByUsername('user3').isBelowRateLimit()).toBeTruthy()
+
+  // use up 7 of 'user3' which should total to its rate of 10
+  Array(7).fill(1).forEach((x, index) => {
+    expect(botRouter.getBotForUrl(urls2[0]).username).toBe('user3')
+  })
+  // user2: isBelowRateLimit is false, used up
+  expect(botRouter.getBotByUsername('user2').isBelowRateLimit()).toBeFalsy()
+  // user3: isBelowRateLimit is false, used up
+  expect(botRouter.getBotByUsername('user3').isBelowRateLimit()).toBeFalsy()
+
+  // no more bots left with their below rate limit
+  // only AnonBot() instances wil be returned
+  Array(7).fill(1).forEach((x, index) => {
+    expect(botRouter.getBotForUrl(urls2[0])).toBeInstanceOf(AnonBot)
+  })
 })
