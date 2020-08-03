@@ -17,10 +17,7 @@ export class BotRouter {
    * and the index of the current bot to be returned
    */
   private readonly botMap: {
-    [url: string]: {
-      index: number
-      bots: Bot[]
-    }
+    [url: string]: Bot[]
   }
 
   /**
@@ -68,9 +65,9 @@ export class BotRouter {
     this.botMap = bots.reduce((acc, bot) => {
       bot.urls.forEach(url => {
         if(url in acc) {
-          acc[url].bots = acc[url].bots.concat(bot)
+          acc[url] = acc[url].concat(bot)
         } else {
-          acc[url] = {index: 0, bots: [bot]}
+          acc[url] = [bot]
         }
       })
       return acc
@@ -82,7 +79,8 @@ export class BotRouter {
    *
    * @remarks
    * Picks a bot from the pool of {@link Bot} to return one
-   * that can handle the url provided and is below the bots' allowed rate-limit
+   * that can handle the url provided and is below the bots' allowed rate-limit.
+   * Also calls wasUsed() of the returned Bot so that its usage is updated.
    *
    * @returns a valid bot if found, else returns undefined
    *
@@ -95,9 +93,14 @@ export class BotRouter {
     if(matchedUrlKeys.length > 0) {
       const matchedUrl = matchedUrlKeys[0]
       if(typeof matchedUrl !== 'undefined') {
-        const {index, bots} = this.botMap[matchedUrl]
-        this.botMap[matchedUrl].index = (index + 1) % bots.length
-        return bots[index]
+        const bots = this.botMap[matchedUrl]
+        const usableBots = bots
+          .filter(bot => bot.isBelowRateLimit())
+          .sort((a, b) => a.getUsage() - b.getUsage())
+        if(usableBots.length > 0) {
+          usableBots[0].wasUsed()
+          return usableBots[0]
+        }
       }
     }
     return new AnonBot()
@@ -119,8 +122,8 @@ export class BotRouter {
   public getBotByUsername (name: string): Bot {
 
     const matchedBotData = Object.values(this.botMap).find(botsData => {
-      return typeof botsData.bots.find(bot => bot.username === name) !== 'undefined'
+      return typeof botsData.find(bot => bot.username === name) !== 'undefined'
     })
-    return matchedBotData?.bots.find(bot => bot.username === name) ?? (new AnonBot())
+    return matchedBotData?.find(bot => bot.username === name) ?? (new AnonBot())
   }
 }
