@@ -198,7 +198,7 @@ export class Bot {
     if(this.rateLimit === 0) {
       return true
     }
-    if(this.usageTimeStamps.length < this.rateLimit) {
+    if(this.getUsage() < this.rateLimit) {
       return true
     }
     return false
