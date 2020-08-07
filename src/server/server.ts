@@ -77,6 +77,7 @@ export class AuthlessServer {
       userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
     }
+    userDataDir = `${userDataDir}-${domainPath.domain}-${bot.username ?? 'anon'}`
     const browser = await puppeteer.launch({
       ...puppeteerParams,
       ...bot.browserConfig,
