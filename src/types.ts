@@ -545,6 +545,7 @@ export {
   URLs,
   URLParams,
   PuppeteerParams,
+  ProxyConfig,
   BrowserConfig,
   BotConfig,
   Xhr,
