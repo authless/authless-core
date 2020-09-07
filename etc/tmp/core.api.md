@@ -62,6 +62,7 @@ export class Bot {
     foundLogin(found: Boolean): void;
     getCaptchaHitCount(): number;
     getLoginHitCount(): number;
+    getUsage(): number;
     isBelowRateLimit(): Boolean;
     password?: string;
     urls: string[];
