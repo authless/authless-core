@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/authless/authless-core/compare/v1.1.0...v1.2.0) (2020-09-07)
+
+
+### Features
+
+* **bot-router:** dispatch bots based on usage ([cfec03d](https://github.com/authless/authless-core/commit/cfec03da889e0c8f762f2b2dfe5b4a3c64bbcf72))
+
 ## [1.1.0](https://github.com/authless/authless-core/compare/v1.0.2...v1.1.0) (2020-07-30)
 
 
