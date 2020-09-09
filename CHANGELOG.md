@@ -1,3 +1,11 @@
+### [1.2.1](https://github.com/authless/authless-core/compare/v1.2.0...v1.2.1) (2020-09-09)
+
+
+### Bug Fixes
+
+* **bot-router:** .getBotForUrl now respects Bot rate-limits ([1f63a1a](https://github.com/authless/authless-core/commit/1f63a1a1456938b9df729487570ac016e48c9f8d))
+* **data-dir:** set data-dir per username ([9da491a](https://github.com/authless/authless-core/commit/9da491a48e88f37948a4d827cc0a43f5d40c330b))
+
 ## [1.2.0](https://github.com/authless/authless-core/compare/v1.1.0...v1.2.0) (2020-09-07)
 
 
