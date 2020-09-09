@@ -117,8 +117,7 @@ export class Bot {
   }
 
   /**
-   * Tells the bot that it was used for authentication.
-   * In turn updates {@link usageTimeStamps}
+   * Tells the bot that it was used for authentication. Updates {@link Bot.usageTimeStamps}
    *
    * @remarks
    * The bot can use this information to calculate its usage-rate w.r.t its rate-limit.

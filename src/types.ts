@@ -4,17 +4,18 @@ import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 
 /**
  * A Cache interface which can be passed to AuthlessClient class
+ *
+ * @alpha
  */
-interface ICache {
+export interface ICache {
 
   /**
    * Add a value to cache
    *
-   * @param key - The string key of the cache. Will usually be the URL fetched
-   * @param data - The data to be saved
+   * @param   key - The string key of the cache. Will usually be the URL fetched
+   * @param   data - The data to be saved
    *
-   * @returns
-   * 'ok' if successful, else returns an Error object
+   * @returns 'ok' if successful, else returns an Error object
    */
   put: (key: string, data: IResponse) => Promise<'ok' | Error>
 
@@ -49,7 +50,10 @@ interface ICache {
   deleteAll: (before?: number) => Promise<number | Error>
 }
 
-type FetchParams = URLParams & {
+/**
+ * @alpha
+ */
+export type FetchParams = URLParams & {
   serverUrl: string
 }
 
@@ -59,7 +63,7 @@ type FetchParams = URLParams & {
  *
  * @beta
  */
-interface BotConfig {
+export interface BotConfig {
 
   /**
    * The credentials for a bot.
@@ -100,7 +104,7 @@ interface BotConfig {
  *
  * @beta
  */
-interface IResponseMeta {
+export interface IResponseMeta {
   timestamp: number
   username: string
   fromCache?: boolean
@@ -148,7 +152,7 @@ interface IResponsePage {
  *
  * @beta
  */
-interface IResponse {
+export interface IResponse {
 
   /**
    * The Authless metadata of the page fetched {@link IResponseMeta}
@@ -243,9 +247,10 @@ interface InterceptOptions {
  * Config options control puppeteer launch/request-handling options
  *
  * @remarks
- * Puppeteer launch options includes all options that of type {@link LaunchOptions}
- * Options to block domains/resourceTypes from loading {@link InterceptOptions}
- * Options to control theh viewport {@link Viewport}
+ *
+ * Puppeteer launch options includes all options that of type {@link puppeteer#LaunchOptions}
+ * Options to block domains/resourceTypes from loading {@link puppeteer#InterceptOptions}
+ * Options to control theh viewport {@link puppeteer#Viewport}
  *
  * @example
  * ```ts
@@ -262,7 +267,7 @@ interface InterceptOptions {
  *
  * @beta
  */
-type PuppeteerParams = LaunchOptions & InterceptOptions & {
+export type PuppeteerParams = LaunchOptions & InterceptOptions & {
 
   /**
    * Optional. Control puppeteer viewport window size
@@ -293,7 +298,7 @@ type PuppeteerParams = LaunchOptions & InterceptOptions & {
  *
  * @beta
  */
-interface URLParams {
+export interface URLParams {
 
   /**
    * The HTTP url to fetch
@@ -380,7 +385,7 @@ interface URLParams {
  *
  * @beta
  */
-interface BrowserConfig {
+export interface BrowserConfig {
 
   /**
    * Options to control puppeteer launch {@link PuppeteerParams}
@@ -425,7 +430,7 @@ interface BrowserConfig {
   puppeteerPlugins?: PuppeteerExtraPlugin[]
 
   /**
-   * Proxy configuration for puppeteer {@link ProxyConfig}
+   * Proxy configuration for puppeteer {@link puppeteer#ProxyConfig}
    *
    * @remarks
    * If not provided, the puppeteer will run without a proxy
@@ -442,9 +447,6 @@ interface BrowserConfig {
    */
   urlParams?: URLParams
 }
-
-type URL = string
-type URLs = URL[]
 
 /**
  * Security details of the ajax/asset requests made by the puppeteer page
@@ -469,11 +471,13 @@ interface SecurityDetails {
 
 /**
  * HTTP request metadata of the ajax/asset requests made by the puppeteer page
+ *
+ * @alpha
  */
-interface RequestContainer {
+export interface RequestContainer {
 
   /** Contains the URL of the request. */
-  url: URL
+  url: string
 
   /**
    * An object with HTTP headers associated with the request.
@@ -499,7 +503,7 @@ interface RequestContainer {
  *
  * @beta
  */
-interface Xhr {
+export interface Xhr {
 
   /** Contains the URL of the request. */
   url: string
@@ -526,7 +530,7 @@ interface Xhr {
   headers: Headers
 
   /**
-   * Security or certificate related data. Refer to {@link SecurityDetails}.
+   * Security or certificate related data. Refer to {@link puppeteer#SecurityDetails}.
    * May be undefined in case of plain HTTP requests
    */
   securityDetails: SecurityDetails | null
@@ -539,19 +543,4 @@ interface Xhr {
 
   /** Metadata about the request. Refer to {@link RequestContainer}. */
   request: RequestContainer | undefined
-}
-
-export {
-  URLs,
-  URLParams,
-  PuppeteerParams,
-  ProxyConfig,
-  BrowserConfig,
-  BotConfig,
-  Xhr,
-  RequestContainer,
-  IResponseMeta,
-  IResponse,
-  ICache,
-  FetchParams,
 }

@@ -11,16 +11,25 @@ import { HttpMethod } from 'puppeteer';
 import { LaunchOptions } from 'puppeteer';
 import { Page } from 'puppeteer';
 import { PuppeteerExtraPlugin } from 'puppeteer-extra';
+import { Request as Request_2 } from 'puppeteer';
 import { ResourceType } from 'puppeteer';
+import { Response as Response_3 } from 'puppeteer';
 import { Viewport } from 'puppeteer';
 
-// @public
+// @alpha
+export class AnonBot extends Bot {
+    constructor(config?: BotConfig);
+    // (undocumented)
+    type: string;
+}
+
+// @alpha
 export class AuthlessClient {
     constructor(cache?: ICache);
     // (undocumented)
     cache?: ICache;
-    fetch(params: FetchParams): Promise<any>;
-    // Warning: (ae-forgotten-export) The symbol "FetchParams" needs to be exported by the entry point index.d.ts
+    // Warning: (ae-forgotten-export) The symbol "IResponse" needs to be exported by the entry point index.d.ts
+    fetch(params: FetchParams): Promise<IResponse_2>;
     static makeParams(params: FetchParams): string;
 }
 
@@ -53,6 +62,7 @@ export class Bot {
     foundLogin(found: Boolean): void;
     getCaptchaHitCount(): number;
     getLoginHitCount(): number;
+    getUsage(): number;
     isBelowRateLimit(): Boolean;
     password?: string;
     urls: string[];
@@ -96,9 +106,8 @@ export interface BrowserConfig {
 export class DomainPath {
     constructor(domain: string);
     domain: string;
-    // Warning: (ae-forgotten-export) The symbol "IResponse" needs to be exported by the entry point index.d.ts
-    getJsonResponse(page: Page): Promise<IResponse_2>;
-    pageHandler(page: Page, selectedBot?: Bot, config?: any): Promise<IResponse_2 | null>;
+    pageHandler(page: Page, selectedBot?: Bot, config?: any): Promise<Response_2>;
+    responses: Xhr[];
     setupPage(page: Page, puppeteerParams: PuppeteerParams): Promise<void>;
 }
 
@@ -111,21 +120,26 @@ export class DomainPathRouter {
     getDomainPath(url: string): DomainPath | undefined;
 }
 
-// @public
+// @alpha (undocumented)
+export type FetchParams = URLParams & {
+    serverUrl: string;
+};
+
+// @alpha
 export interface ICache {
-    delete: (key: string) => Promise<any | Error>;
+    delete: (key: string) => Promise<IResponse_2 | Error>;
     deleteAll: (before?: number) => Promise<number | Error>;
-    get: (key: string) => Promise<any | Error>;
-    put: (key: string, data: any) => Promise<'ok' | Error>;
+    get: (key: string) => Promise<IResponse_2 | Error>;
+    put: (key: string, data: IResponse_2) => Promise<'ok' | Error>;
 }
 
 // @beta (undocumented)
-export interface IResourcePayload {
+export interface IResource {
     sha1(): string;
 }
 
 // @beta
-export interface IResourceResponse<T extends IResourcePayload> {
+export interface IResourceCollection<T extends IResource> {
     toArray(): T[];
 }
 
@@ -134,18 +148,11 @@ export interface IResponse {
     // @deprecated
     content?: string;
     main: IResponseResponse;
+    // Warning: (ae-forgotten-export) The symbol "IResponseMeta" needs to be exported by the entry point index.d.ts
     meta: IResponseMeta;
     page: IResponsePage;
-    toResources(): IResourceResponse<IResourcePayload>;
+    toResources(): IResourceCollection<IResource>;
     xhrs: IResponseResponse[];
-}
-
-// @beta
-export interface IResponseMeta {
-    // (undocumented)
-    account: string;
-    // (undocumented)
-    time: number;
 }
 
 // @beta
@@ -221,41 +228,48 @@ export type PuppeteerParams = LaunchOptions & InterceptOptions & {
     viewPort?: Viewport;
 };
 
-// @public
+// @alpha
 export interface RequestContainer {
     headers: Headers_2;
     isNavigationRequest: boolean;
     method: HttpMethod;
     resourceType: ResourceType;
-    // Warning: (ae-forgotten-export) The symbol "URL" needs to be exported by the entry point index.d.ts
-    url: URL_2;
+    url: string;
 }
 
 // @beta (undocumented)
-export const ResourceConstructor: {
-    toHashResourcePair<T extends IResourcePayload>(resources: T[]): [string, T][];
-};
-
-// @beta (undocumented)
-export abstract class ResourcePayload implements IResourcePayload {
+export abstract class Resource implements IResource {
     sha1(input?: this): string;
 }
 
 // @beta
-export abstract class ResourceResponse<T extends IResourcePayload> extends Map<string, T> {
+export abstract class ResourceCollection<T extends IResource> extends Map<string, T> {
     toArray(): T[];
 }
 
+// @beta (undocumented)
+export const ResourceConstructor: {
+    toHashResourcePair<T extends IResource>(resources: T[]): [string, T][];
+};
+
 // @beta
-abstract class Response_2 implements IResponse {
+class Response_2 implements IResponse {
     constructor(serializedResponse: any);
+    // Warning: (ae-incompatible-release-tags) The symbol "convertRequestToJson" is marked as @beta, but its signature references "RequestContainer" which is marked as @alpha
+    static convertRequestToJson(request: Request_2): Promise<RequestContainer>;
+    static convertResponseToJson(response: Response_3): Promise<Xhr>;
+    static fromPage(page: Page, data: {
+        mainResponse: Response_3;
+        bot: Bot;
+        responses: Xhr[];
+    }): Promise<Response_2>;
     // (undocumented)
     main: IResponseResponse;
     // (undocumented)
     meta: IResponseMeta;
     // (undocumented)
     page: IResponsePage;
-    toResources(): ResourceResponse<ResourcePayload>;
+    toResources(): IResourceCollection<IResource>;
     // (undocumented)
     xhrs: IResponseResponse[];
 }
@@ -275,14 +289,12 @@ export interface URLParams {
     username?: string;
 }
 
-// @public (undocumented)
-export type URLs = URL_2[];
-
 // @beta
 export interface Xhr {
     fromCache: boolean;
     fromServiceWorker: boolean;
     headers: Headers_2;
+    // Warning: (ae-incompatible-release-tags) The symbol "request" is marked as @beta, but its signature references "RequestContainer" which is marked as @alpha
     request: RequestContainer | undefined;
     // Warning: (ae-forgotten-export) The symbol "SecurityDetails" needs to be exported by the entry point index.d.ts
     securityDetails: SecurityDetails | null;

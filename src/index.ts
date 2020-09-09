@@ -39,6 +39,6 @@ export {
   BrowserConfig,
   BotConfig,
   Xhr,
-  URLs,
   RequestContainer,
+  FetchParams
 } from './types'
