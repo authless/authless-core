@@ -180,7 +180,7 @@ export interface IResponse {
  *
  * @beta
  */
-interface ProxyConfig {
+export interface ProxyConfig {
 
   /**
    * The IP address of the proxy

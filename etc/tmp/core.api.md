@@ -35,7 +35,8 @@ export class AuthlessClient {
 
 // @beta
 export class AuthlessServer {
-    constructor(domainPathRouter: DomainPathRouter, botRouter: BotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]);
+    // Warning: (ae-forgotten-export) The symbol "IServerConfig" needs to be exported by the entry point index.d.ts
+    constructor(config: IServerConfig);
     // (undocumented)
     botRouter: BotRouter;
     // (undocumented)
@@ -44,6 +45,8 @@ export class AuthlessServer {
     static launchBrowser(domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser>;
     // (undocumented)
     logger: any;
+    // (undocumented)
+    proxy?: ProxyConfig;
     // (undocumented)
     puppeteerParams?: PuppeteerParams;
     // (undocumented)
@@ -93,7 +96,6 @@ export interface BrowserConfig {
     adBlockerConfig?: {
         blockTrackers: boolean;
     };
-    // Warning: (ae-forgotten-export) The symbol "ProxyConfig" needs to be exported by the entry point index.d.ts
     proxy?: ProxyConfig;
     puppeteerParams?: PuppeteerParams;
     puppeteerPlugins?: PuppeteerExtraPlugin[];
@@ -219,6 +221,16 @@ export interface IResponseResponse {
     text: string;
     // (undocumented)
     url: string;
+}
+
+// @beta
+export interface ProxyConfig {
+    address: string;
+    credentials: {
+        username: string;
+        password: string;
+    };
+    port: number;
 }
 
 // Warning: (ae-forgotten-export) The symbol "InterceptOptions" needs to be exported by the entry point index.d.ts

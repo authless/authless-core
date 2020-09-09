@@ -1,12 +1,20 @@
 import * as path from 'path'
 import { AnonBot, Bot, BotRouter, DomainPath, DomainPathRouter } from '../index'
-import { BrowserConfig, PuppeteerParams, URLParams } from '../types'
+import { BrowserConfig, ProxyConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
 // import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
 import { Browser } from 'puppeteer'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+
+interface IServerConfig {
+  domainPathRouter: DomainPathRouter
+  botRouter: BotRouter
+  puppeteerParams: PuppeteerParams
+  puppeteerPlugins?: PuppeteerExtraPlugin[]
+  proxy?: ProxyConfig
+}
 
 /**
  * Helper class to start your running Authless server
@@ -29,6 +37,7 @@ export class AuthlessServer {
   logger: any
   puppeteerParams?: PuppeteerParams
   puppeteerPlugins?: PuppeteerExtraPlugin[]
+  proxy?: ProxyConfig
   domainPathRouter: DomainPathRouter
   botRouter: BotRouter
   responses: any[]
@@ -39,11 +48,12 @@ export class AuthlessServer {
    * @beta
    */
   // eslint-disable-next-line max-params
-  constructor (domainPathRouter: DomainPathRouter, botRouter: BotRouter, puppeteerParams: PuppeteerParams, puppeteerPlugins?: PuppeteerExtraPlugin[]) {
-    this.domainPathRouter = domainPathRouter
-    this.botRouter = botRouter
-    this.puppeteerParams = puppeteerParams
-    this.puppeteerPlugins = puppeteerPlugins
+  constructor (config: IServerConfig) {
+    this.domainPathRouter = config.domainPathRouter
+    this.botRouter = config.botRouter
+    this.puppeteerParams = config.puppeteerParams
+    this.puppeteerPlugins = config.puppeteerPlugins
+    this.proxy = config.proxy
     this.responses = []
     this.logger = {
       log: (data) => console.log(data)
@@ -77,6 +87,7 @@ export class AuthlessServer {
       userDataDir = path.resolve(
         path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
     }
+    userDataDir = `${userDataDir}-${domainPath.domain}-${bot.username ?? 'anon'}`
     const browser = await puppeteer.launch({
       ...puppeteerParams,
       ...bot.browserConfig,
@@ -150,7 +161,8 @@ export class AuthlessServer {
 
     // initialise the browser
     const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot, {
-      puppeteerParams: this.puppeteerParams
+      puppeteerParams: this.puppeteerParams,
+      proxy: this.proxy
     })
     const page = await browser.newPage()
 

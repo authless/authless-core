@@ -35,6 +35,7 @@ export {
   ICache,
   URLParams,
   PuppeteerParams,
+  ProxyConfig,
   BrowserConfig,
   BotConfig,
   Xhr,
