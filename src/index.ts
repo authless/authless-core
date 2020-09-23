@@ -14,7 +14,6 @@ export { BotRouter } from './bots/botRouter'
 export { DomainPath } from './domainPaths/domainPath'
 export { DomainPathRouter } from './domainPaths/domainPathRouter'
 export { AuthlessServer } from './server/server'
-export { AuthlessClient } from './client/client'
 
 export {
   IResource,
@@ -32,7 +31,6 @@ export {
 } from './response'
 
 export {
-  ICache,
   URLParams,
   PuppeteerParams,
   ProxyConfig,

@@ -1,12 +1,7 @@
-import * as path from 'path'
-import { AnonBot, Bot, BotRouter, DomainPath, DomainPathRouter } from '../index'
-import { BrowserConfig, ProxyConfig, PuppeteerParams, URLParams } from '../types'
+import { AnonBot, BotRouter, DomainPathRouter } from '../index'
+import { ProxyConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
-import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
-// import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker'
-import { Browser } from 'puppeteer'
-import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 
 interface IServerConfig {
   domainPathRouter: DomainPathRouter
@@ -60,45 +55,9 @@ export class AuthlessServer {
     }
   }
 
-  static async launchBrowser (domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser> {
-    const { puppeteerParams } = config ?? {}
-    let defaultPlugins: PuppeteerExtraPlugin[] = []
-    if(config?.useStealthPlugin ?? true) {
-      defaultPlugins.push(StealthPlugin())
-    }
-    // -- Has conflicts with stealth-plugin, re-enable when fixed
-    // -- refer: https://github.com/berstend/puppeteer-extra/issues/90
-    // if(config?.useAdBlockerPlugin ?? true) {
-    //   defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
-    // }
-    if(typeof config?.proxy !== 'undefined') {
-      defaultPlugins.push(ProxyPlugin(config?.proxy))
-    }
-    const plugins = [...defaultPlugins, ...(config?.puppeteerPlugins ?? [])]
-    plugins.forEach((plugin: PuppeteerExtraPlugin) => {
-      puppeteer.use(plugin)
-    })
-
-    let username: string = bot?.username ?? 'anon'
-    // calculate data-dir to store Chrome user data
-    const dataDirName = `${domainPath.domain}-${username}`
-    let userDataDir = puppeteerParams?.userDataDir ?? 'chrome-default-user-data-dir'
-    if (typeof process.env.CHROME_USER_DATA_DIR === 'string') {
-      userDataDir = path.resolve(
-        path.join(process.env.CHROME_USER_DATA_DIR, dataDirName))
-    }
-    userDataDir = `${userDataDir}-${domainPath.domain}-${bot.username ?? 'anon'}`
-    const browser = await puppeteer.launch({
-      ...puppeteerParams,
-      ...bot.browserConfig,
-      userDataDir
-    })
-    return browser
-  }
-
   private static ping (expressRequest: ExpressRequest, expressResponse: ExpressResponse): void {
     const name = expressRequest.query.name ?? 'anonymous user'
-    if(typeof name !== 'string') {
+    if (typeof name !== 'string') {
       const error = `error: url must be provided as a query parameter string. invalid value: ${name?.toLocaleString() ?? 'undefined'}`
       console.log(error)
       expressResponse
@@ -137,7 +96,7 @@ export class AuthlessServer {
 
     // try to fetch the sevice for this url
     const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
-    if(typeof selectedDomainPath === 'undefined') {
+    if (typeof selectedDomainPath === 'undefined') {
       expressResponse
         .status(501)
         .send('Service not found')
@@ -148,9 +107,9 @@ export class AuthlessServer {
     // get bot when username not provided explicitly
     let selectedBot = this.botRouter.getBotForUrl(url)
     // get bot when username is provided
-    if(typeof username === 'string') {
+    if (typeof username === 'string') {
       selectedBot = this.botRouter.getBotByUsername(username)
-      if(selectedBot instanceof AnonBot) {
+      if (selectedBot instanceof AnonBot) {
         expressResponse
           .status(501)
           .send(`No Bot found for username: ${username}`)
@@ -160,19 +119,19 @@ export class AuthlessServer {
     }
 
     // initialise the browser
-    const browser = await AuthlessServer.launchBrowser(selectedDomainPath, selectedBot, {
+    const browser = await selectedBot.launchBrowser({
       puppeteerParams: this.puppeteerParams,
       proxy: this.proxy
     })
     const page = await browser.newPage()
 
     try {
-      if(typeof this.puppeteerParams?.viewPort !== 'undefined') {
+      if (typeof this.puppeteerParams?.viewPort !== 'undefined') {
         await page.setViewport(this.puppeteerParams?.viewPort)
       }
 
       let responseFormat: URLParams['responseFormat'] = 'json'
-      if(urlParams?.responseFormat === 'png') {
+      if (urlParams?.responseFormat === 'png') {
         responseFormat = urlParams?.responseFormat
       }
       // let service handle the page

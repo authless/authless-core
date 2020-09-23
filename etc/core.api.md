@@ -5,7 +5,6 @@
 ```ts
 
 import { Browser } from 'puppeteer';
-import { Cookie } from 'puppeteer';
 import { Headers as Headers_2 } from 'puppeteer';
 import { HttpMethod } from 'puppeteer';
 import { LaunchOptions } from 'puppeteer';
@@ -23,16 +22,6 @@ export class AnonBot extends Bot {
     type: string;
 }
 
-// @alpha
-export class AuthlessClient {
-    constructor(cache?: ICache);
-    // (undocumented)
-    cache?: ICache;
-    // Warning: (ae-forgotten-export) The symbol "IResponse" needs to be exported by the entry point index.d.ts
-    fetch(params: FetchParams): Promise<IResponse_2>;
-    static makeParams(params: FetchParams): string;
-}
-
 // @beta
 export class AuthlessServer {
     // Warning: (ae-forgotten-export) The symbol "IServerConfig" needs to be exported by the entry point index.d.ts
@@ -41,8 +30,6 @@ export class AuthlessServer {
     botRouter: BotRouter;
     // (undocumented)
     domainPathRouter: DomainPathRouter;
-    // (undocumented)
-    static launchBrowser(domainPath: DomainPath, bot: Bot, config?: BrowserConfig): Promise<Browser>;
     // (undocumented)
     logger: any;
     // (undocumented)
@@ -67,6 +54,8 @@ export class Bot {
     getLoginHitCount(): number;
     getUsage(): number;
     isBelowRateLimit(): Boolean;
+    // (undocumented)
+    launchBrowser(defaultBrowserConfig?: BrowserConfig): Promise<Browser>;
     password?: string;
     urls: string[];
     username?: string;
@@ -126,14 +115,6 @@ export class DomainPathRouter {
 export type FetchParams = URLParams & {
     serverUrl: string;
 };
-
-// @alpha
-export interface ICache {
-    delete: (key: string) => Promise<IResponse_2 | Error>;
-    deleteAll: (before?: number) => Promise<number | Error>;
-    get: (key: string) => Promise<IResponse_2 | Error>;
-    put: (key: string, data: IResponse_2) => Promise<'ok' | Error>;
-}
 
 // @beta (undocumented)
 export interface IResource {
@@ -297,7 +278,6 @@ export interface URLParams {
     referer?: string;
     responseFormat: 'json' | 'png';
     url: string;
-    // @deprecated
     username?: string;
 }
 

@@ -1,4 +1,10 @@
+import * as path from 'path'
 import { BotConfig, BrowserConfig } from '../types'
+import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
+import { Browser } from 'puppeteer'
+import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { v4 as uuidv4 } from 'uuid'
 
 // 1 minute = 60_000 milliseconds
 // 1 hour = 60 * 60_000 milliseconds = 3_600_000
@@ -7,7 +13,9 @@ const ONE_HOUR = 3_600_000
 /**
  * Represents a user account used in authless.
  *
- * @remarks Extend this class to create custom Bots
+ * @remarks
+ *
+ * Extend this class to create custom Bots
  * Is usually managed with a {@link BotRouter}
  * and contains meta information about the
  * credentials, usage-data and health-status of an account
@@ -114,6 +122,44 @@ export class Bot {
     }
     this.browserConfig = botConfig.browserConfig
     this.usageTimeStamps = []
+  }
+
+  public async launchBrowser (defaultBrowserConfig: BrowserConfig = {}): Promise<Browser> {
+    const browserConfig = { ...defaultBrowserConfig, ...this.browserConfig }
+
+    // INIT BROWSER PLUGINS
+    let defaultPlugins: PuppeteerExtraPlugin[] = []
+    if (browserConfig.useStealthPlugin === true) {
+      defaultPlugins.push(StealthPlugin())
+    }
+    // -- Has conflicts with stealth-plugin, re-enable when fixed
+    // -- refer: https://github.com/berstend/puppeteer-extra/issues/90
+    // if(browserConfig.useAdBlockerPlugin === true) {
+    //   defaultPlugins.push(AdblockerPlugin(config?.adBlockerConfig ?? {}))
+    // }
+    if (browserConfig.proxy instanceof Object) {
+      defaultPlugins.push(ProxyPlugin(browserConfig.proxy))
+    }
+    const plugins = [...defaultPlugins, ...(browserConfig.puppeteerPlugins ?? [])]
+    plugins.forEach((plugin: PuppeteerExtraPlugin) => {
+      puppeteer.use(plugin)
+    })
+
+    // DETERMINE BROWSER DATA DIRECTORY
+    let chromeUserDataDir = process.env.CHROME_USER_DATA_DIR ??
+      browserConfig.puppeteerParams?.userDataDir ??
+      'chrome-default-user-data-dir'
+    const userDataDirName = this.username ?? uuidv4()
+    const userDataDir = path.join(chromeUserDataDir, userDataDirName)
+
+    // LAUNCH BROWSER
+    console.log(`LAUNCH BROWSER: ${userDataDir}`)
+    const browser = await puppeteer.launch({
+      ...browserConfig.puppeteerParams,
+      ...browserConfig,
+      ...{ userDataDir }
+    })
+    return browser
   }
 
   /**
