@@ -3,54 +3,6 @@ import { Cookie, Headers, HttpMethod, LaunchOptions, ResourceType, Viewport } fr
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 
 /**
- * A Cache interface which can be passed to AuthlessClient class
- *
- * @alpha
- */
-export interface ICache {
-
-  /**
-   * Add a value to cache
-   *
-   * @param   key - The string key of the cache. Will usually be the URL fetched
-   * @param   data - The data to be saved
-   *
-   * @returns 'ok' if successful, else returns an Error object
-   */
-  put: (key: string, data: IResponse) => Promise<'ok' | Error>
-
-  /**
-   * Get a value from the cache
-   *
-   * @param key - The string key of the cache. Will usually be the URL fetched
-   *
-   * @returns
-   * The data that was fetched if successful, else returns an Error object
-   */
-  get: (key: string) => Promise<IResponse | Error>
-
-  /**
-   * Delete a value from the cache
-   *
-   * @param key - The string key of the cache. Will usually be the URL fetched
-   *
-   * @returns
-   * The data that was deleted if successful, else returns an Error object
-   */
-  delete: (key: string) => Promise<IResponse | Error>
-
-  /**
-   * Delete all values from the cache
-   *
-   * @param before - Optional. Number representing the Unix timestamp in milliseconds. All data saved before this will be deleted
-   *
-   * @returns
-   * The number of keys that were removed
-   */
-  deleteAll: (before?: number) => Promise<number | Error>
-}
-
-/**
  * @alpha
  */
 export type FetchParams = URLParams & {
@@ -333,11 +285,13 @@ export interface URLParams {
    * The HTML input selector to which puppeteer should enter alphabets from your {@link DomainPath}.pageHandler function.
    *
    * @remarks
+   *
    * Since input selectors may change with each load(randomization of HTML selector string),
    * the selector may be passed here as strings and page handler can be customized to
    * enter values if it receives any selector via the alphabetSelector option
    *
    * @example
+   *
    * ```ts
    * { alphabetSelector: '.my-input-selector' }
    * ```
@@ -369,13 +323,6 @@ export interface URLParams {
 
   /**
    * The username whose credentials will be used for the fetch
-   *
-   * @remarks
-   * Adding a proper referer makes your request much less likely to get flagged
-   * as a bot. Try to add a reasonable referer URL
-   *
-   * @deprecated Can be avoided as the required bot can be got using botRouter.getBotByUsername(username)
-   * and passed to the pageHandler
    */
   username?: string
 }
