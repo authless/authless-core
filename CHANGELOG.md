@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/authless/authless-core/compare/v1.2.1...v1.3.0) (2020-09-23)
+
+
+### Features
+
+* **client:** remove AuthlessClient -> @authless/client ([43108ac](https://github.com/authless/authless-core/commit/43108acfde46b49adc239a09bb400b173bb4ef76))
+
 ### [1.2.1](https://github.com/authless/authless-core/compare/v1.2.0...v1.2.1) (2020-09-09)
 
 
