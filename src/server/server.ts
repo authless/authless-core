@@ -2,6 +2,7 @@ import { AnonBot, BotRouter, DomainPathRouter } from '../index'
 import { ProxyConfig, PuppeteerParams, URLParams } from '../types'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
+import { v4 as uuidv4 } from 'uuid'
 
 interface IServerConfig {
   domainPathRouter: DomainPathRouter
@@ -124,6 +125,14 @@ export class AuthlessServer {
       proxy: this.proxy
     })
     const page = await browser.newPage()
+    await page.evaluateOnNewDocument(() => {
+      /* eslint-disable-next-line no-proto */
+      const newProto = (navigator as any).__proto__
+      /* eslint-disable-next-line prefer-reflect */
+      delete newProto.webdriver;
+      /* eslint-disable-next-line no-proto */
+      (navigator as any).__proto__ = newProto
+    })
 
     try {
       if (typeof this.puppeteerParams?.viewPort !== 'undefined') {
@@ -167,6 +176,10 @@ export class AuthlessServer {
       }
     } catch (err) {
       console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
+      const screenshotPath = `/tmp/${uuidv4() as string}.png`
+      console.log('saving error screenshot ...')
+      await page.screenshot({path: screenshotPath})
+      console.log(`saved error screenshot to: ${screenshotPath}`)
       expressResponse
         .status(501)
         .send('Server Error')

@@ -154,12 +154,13 @@ export class Bot {
 
     // LAUNCH BROWSER
     console.log(`LAUNCH BROWSER: ${userDataDir}`)
-    const browser = await puppeteer.launch({
+    const launchOptions = {
       ...browserConfig.puppeteerParams,
       ...browserConfig,
       ...{ userDataDir }
-    })
-    return browser
+    }
+    console.log(`LAUNCH OPTIONS: ${JSON.stringify(launchOptions, null, 2)}`)
+    return await puppeteer.launch(launchOptions)
   }
 
   /**
