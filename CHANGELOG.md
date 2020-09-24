@@ -1,3 +1,11 @@
+### [1.3.1](https://github.com/authless/authless-core/compare/v1.3.0...v1.3.1) (2020-09-24)
+
+
+### Bug Fixes
+
+* **bot:** print puppeteer launch options ([1124d18](https://github.com/authless/authless-core/commit/1124d1876c765f66508b70c41c0e642f40c7957c))
+* **server:** fix headless timeout ([8bf050b](https://github.com/authless/authless-core/commit/8bf050ba0a5fa99c93e15573262bc13a304cf55f))
+
 ## [1.3.0](https://github.com/authless/authless-core/compare/v1.2.1...v1.3.0) (2020-09-23)
 
 
