@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { BotConfig, BrowserConfig } from '../types'
-import puppeteer, { PuppeteerExtraPlugin } from 'puppeteer-extra'
-import { Browser } from 'puppeteer'
+import { PuppeteerExtraPlugin, addExtra } from 'puppeteer-extra'
+import puppeteer, { Browser } from 'puppeteer'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { v4 as uuidv4 } from 'uuid'
@@ -141,9 +141,8 @@ export class Bot {
       defaultPlugins.push(ProxyPlugin(browserConfig.proxy))
     }
     const plugins = [...defaultPlugins, ...(browserConfig.puppeteerPlugins ?? [])]
-    plugins.forEach((plugin: PuppeteerExtraPlugin) => {
-      puppeteer.use(plugin)
-    })
+    const customPuppeteer = addExtra(puppeteer)
+    plugins.forEach((plugin: PuppeteerExtraPlugin) => customPuppeteer.use(plugin))
 
     // DETERMINE BROWSER DATA DIRECTORY
     let chromeUserDataDir = process.env.CHROME_USER_DATA_DIR ??
@@ -160,7 +159,7 @@ export class Bot {
       ...{ userDataDir }
     }
     console.log(`LAUNCH OPTIONS: ${JSON.stringify(launchOptions, null, 2)}`)
-    return await puppeteer.launch(launchOptions)
+    return await customPuppeteer.launch(launchOptions)
   }
 
   /**
