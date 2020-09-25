@@ -1,3 +1,10 @@
+### [1.4.1](https://github.com/authless/authless-core/compare/v1.4.0...v1.4.1) (2020-09-25)
+
+
+### Bug Fixes
+
+* register plugins new for each launch ([ee64138](https://github.com/authless/authless-core/commit/ee64138dba9d243a305f4f65d7f5a30050fd20e0))
+
 ## [1.4.0](https://github.com/authless/authless-core/compare/v1.3.1...v1.4.0) (2020-09-25)
 
 
