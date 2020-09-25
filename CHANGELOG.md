@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/authless/authless-core/compare/v1.3.1...v1.4.0) (2020-09-25)
+
+
+### Features
+
+* **server:** remove server in favor of own repo ([d3fba97](https://github.com/authless/authless-core/commit/d3fba978f5767d1257eab7b71456ed0bd4ca3e72))
+
 ### [1.3.1](https://github.com/authless/authless-core/compare/v1.3.0...v1.3.1) (2020-09-24)
 
 
