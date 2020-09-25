@@ -23,28 +23,6 @@ export class AnonBot extends Bot {
 }
 
 // @beta
-export class AuthlessServer {
-    // Warning: (ae-forgotten-export) The symbol "IServerConfig" needs to be exported by the entry point index.d.ts
-    constructor(config: IServerConfig);
-    // (undocumented)
-    botRouter: BotRouter;
-    // (undocumented)
-    domainPathRouter: DomainPathRouter;
-    // (undocumented)
-    logger: any;
-    // (undocumented)
-    proxy?: ProxyConfig;
-    // (undocumented)
-    puppeteerParams?: PuppeteerParams;
-    // (undocumented)
-    puppeteerPlugins?: PuppeteerExtraPlugin[];
-    // (undocumented)
-    responses: any[];
-    // (undocumented)
-    run(): void;
-    }
-
-// @beta
 export class Bot {
     constructor(botConfig: BotConfig);
     browserConfig?: BrowserConfig;
