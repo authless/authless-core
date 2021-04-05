@@ -14,7 +14,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
+    "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^8.3.4",
     "@microsoft/api-documenter": "^7.8.56",
     "@microsoft/api-extractor": "^7.9.22",
